@@ -1,19 +1,19 @@
-STARVISION web
+## STARVISION web
 
 backend: express + mysql
 frontend: reactjs
 
-### Development for Frontend
+### 1. Development for Frontend
 
 `yarn frontend`
 source: ./frontend
 
-### Development for backend
+### 2. Development for backend
 
 `yarn start`
 source ./
 
-### Deploy (require forever installed)
+### 3. Deploy (require forever installed)
 
 yarn build
 yarn depploy
