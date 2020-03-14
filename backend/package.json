@@ -4,8 +4,6 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "react": "cd frontend && npm start",
-    "build": "NODE_ENV=production && cd frontend && rm -rf build && npm run build",
     "deploy": "NODE_ENV=production forever start ./bin/www"
   },
   "dependencies": {
