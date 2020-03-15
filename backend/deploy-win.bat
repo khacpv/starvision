@@ -1,3 +1,5 @@
+git pull origin master
+
 set NODE_ENV="production"
 cd ../frontend
 call npm run build

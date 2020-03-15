@@ -1,3 +1,5 @@
+git pull origin master
+
 set NODE_ENV="development"
 set PORT=3001
 cd ../frontend
