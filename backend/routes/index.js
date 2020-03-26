@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const UserController = require('../controllers/auth_controller');
+const CustomerController = require('../controllers/customer_controller');
+const passport = require("passport");
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+module.exports = (app) =>{
+  app.use('/customer', passport.authenticate('jwt', { session: false }), CustomerController);
+  app.use('/token', UserController);
+  // app.use('/', passport.authenticate('jwt', { session: false }), IndexController);
+}
