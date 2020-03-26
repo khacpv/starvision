@@ -1,4 +1,6 @@
 "use strict";
+var bcrypt = require("bcryptjs");
+var salt = bcrypt.genSaltSync(10);
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -13,16 +15,13 @@ module.exports = {
       }], {});
     */
     return queryInterface.bulkInsert(
-      "Roles",
+      "Users",
       [
         {
-          name: "admin"
-        },
-        {
-          name: "doctor"
-        },
-        {
-          name: "user"
+          EMAIL: "admin@example.com",
+          FULLNAME:"Admin",
+          TAIKHOAN: "admin",
+          MATKHAU: bcrypt.hashSync("123456", salt)
         }
       ],
       {}
@@ -37,6 +36,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-    return queryInterface.bulkDelete("People", null, {});
+    return queryInterface.bulkDelete("Users", null, {});
   }
 };

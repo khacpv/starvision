@@ -12,7 +12,6 @@ module.exports = function (passport) {
   passport.use(
     new JwtStrategy(opts, (async (jwt_payload, done) => {
       // console.log("payload received", jwt_payload.id);
-
       const user = await User.findByPk(jwt_payload.id);
       if (user) {
         return done(null, user);
