@@ -1,50 +1,45 @@
 const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
-const User = models.User;
+const Customer = models.Customer;
+const Dttc = models.Dttc;
 
-router.get("/", (req, res) => {
-  User.findAll({})
-    .then(data => {
-      res.send({ code: 200, msg: "success", items: data });
-    })
-    .catch(err => res.json(err));
-});
 
-router.get("/:id", (req, res) => {
-    User.findByPk(req.params.id)
-    .then(data => {
-      res.send({ code: 200, msg: "success", items: data });
-    })
-    .catch(err => res.json(err));
-});
+router.get("/", async (req, res) => {
+  let userId = req.query.id;
 
-router.post("/", (req, res) => {
-    User.create({
-        name: req.body.name
-    })
-    .then(data => {
-        res.send({ code: 200, msg: "success", items: data });
-    })
-    .catch(err => res.json(err));
-});
-
-router.put("/:id", (req, res) => {
-  User.update({ name: req.body.name }, { where: { id: req.params.id } })
-    .then(data => {
-      res.send({ code: 200, msg: "success", items: data });
-    })
-    .catch(err => res.json(err));
-});
-
-router.delete("/:id", (req, res) => {
-  User.destroy({
-    where: { id: req.params.id }
+  let user = await Customer.findOne({
+    where: { 
+      id: userId
+    },
+    include: [
+      {
+        model: Dttc,
+        as: 'Dttc'
+      }
+    ]
   })
-    .then(data => {
-      res.send({ code: 200, msg: "success"});
+
+  if (user){
+    res.send({
+      status: "success",
+      data:[
+          {
+            Id_Dttc: user.ID_DTTC,
+            Id_bacsi: user.MABS,
+            Ten_DTTC: user.Dttc.TENDTTC,
+            Tenbacsi: user.TENKHACHHANG,
+            Mabacsi: user.MABS,
+            Diachi: user.DIACHI,
+            Sodienthoai: user.DIDONG
+          }
+      ]
     })
-    .catch(err => res.json(err));
+  }
+  res.send({
+    status: "error",
+    data: ''
+  })
 });
 
 module.exports = router;

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const DTTC = sequelize.define('DTTC', {
+  const Dttc = sequelize.define('Dttc', {
     TENDTTC: DataTypes.STRING,
     MADTTC: DataTypes.STRING,
     DIACHI: DataTypes.STRING,
@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     ENABLE_DTTC: DataTypes.INTEGER,
     ID_CHINHANH: DataTypes.INTEGER
   }, {});
-  DTTC.associate = function(models) {
+  Dttc.associate = function(models) {
     // associations can be defined here
   };
-  return DTTC;
+  return Dttc;
 };

@@ -1,41 +1,50 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Dttcs', {
+    return queryInterface.createTable('Customers', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      TENDTTC: {
+      customer_code: {
         type: Sequelize.STRING
       },
-      MADTTC: {
+      customer_name: {
         type: Sequelize.STRING
       },
-      DIACHI: {
+      mobile: {
         type: Sequelize.STRING
       },
-      DIDONG: {
+      address: {
         type: Sequelize.STRING
       },
-      EMAIL: {
+      birthday: {
         type: Sequelize.STRING
       },
-      JD_CHUCVU: {
+      gender: {
+        type: Sequelize.STRING
+      },
+      note: {
+        type: Sequelize.TEXT
+      },
+      doctor_name: {
+        type: Sequelize.STRING
+      },
+      doctor_id: {
+        type: Sequelize.STRING
+      },
+      dttc_name: {
+        type: Sequelize.STRING
+      },
+      dttc_id: {
+        type: Sequelize.STRING
+      },
+      customer_type: {
         type: Sequelize.INTEGER
       },
-      JD_PHONGBAN: {
-        type: Sequelize.INTEGER
-      },
-      QUYENNGUOIDUNG: {
-        type: Sequelize.STRING
-      },
-      ENABLE_DTTC: {
-        type: Sequelize.INTEGER
-      },
-      ID_CHINHANH: {
+      data_group: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -45,10 +54,13 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      deletedAt: {
+        type: Sequelize.DATE
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('DTTCs');
+    return queryInterface.dropTable('Customers');
   }
 };

@@ -8,67 +8,64 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ID_NGUOIDUNG_NHOM: {
+      group_user_id: {
         type: Sequelize.INTEGER
       },
-      ID_PHONGBAN: {
+      department_id: {
         type: Sequelize.INTEGER
       },
-      ID_DTTC: {
+      dttc_id: {
         type: Sequelize.INTEGER
       },
-      TEN_DTTC: {
+      email: {
         type: Sequelize.STRING
       },
-      EMAIL: {
+      fullname: {
         type: Sequelize.STRING
       },
-      FULLNAME: {
+      username: {
         type: Sequelize.STRING
       },
-      TAIKHOAN: {
+      password: {
         type: Sequelize.STRING
       },
-      MATKHAU: {
-        type: Sequelize.STRING
-      },
-      HOATDONG: {
+      action: {
         type: Sequelize.INTEGER
       },
-      XUATDULIEU: {
+      export: {
         type: Sequelize.INTEGER
       },
-      HINHNEN: {
+      wallpaper: {
         type: Sequelize.STRING
       },
-      FONTNAME: {
+      fontname: {
         type: Sequelize.STRING
       },
-      FONTSIZE: {
-        type: Sequelize.FLOAT
-      },
-      FORECOLOR: {
+      fontsize: {
         type: Sequelize.INTEGER
       },
-      BACKCOLOR: {
+      forecolor: {
         type: Sequelize.INTEGER
       },
-      GHICHU: {
+      backcolor: {
+        type: Sequelize.INTEGER
+      },
+      note: {
         type: Sequelize.TEXT
       },
-      QUYEN: {
+      role: {
         type: Sequelize.INTEGER
       },
-      QUYENDULIEU: {
+      role_data: {
         type: Sequelize.STRING
       },
-      HTMLCHUKY: {
+      html_signature: {
         type: Sequelize.STRING
       },
-      CHUKY: {
+      signature: {
         type: Sequelize.STRING
       },
-      ID_KHO: {
+      id_storage: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -81,7 +78,7 @@ module.exports = {
       },
       deletedAt: {
         type: Sequelize.DATE
-      },
+      },      
     });
   },
   down: (queryInterface, Sequelize) => {
