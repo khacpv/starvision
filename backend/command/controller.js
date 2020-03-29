@@ -3,6 +3,7 @@ var filesfiles = fs.readdirSync("../models/");
 const path = require("path");
 
 var arrayModel = [];
+let arrayKey = [];
 const modelName = process.argv[2];
 
 readFile = function() {
@@ -10,7 +11,7 @@ readFile = function() {
     if (err) throw err;
 
     var result = data.replace(/MODEL_SAMPLE/g, modelName);
-
+    result = result.replace(/LOOP_PROPERTY/g, arrayKey);
     writeFile(result);
   });
 };
@@ -33,9 +34,32 @@ getListModel = () => {
   });
 };
 
-main = () => {
-  getListModel();
+getListModelKey = () =>{
+  let fileName = modelName.toLocaleLowerCase();
+  fileName = "../models/" + fileName + ".js";
+  
+  let regex_match = /\s*:/g;
+  let regex_unmatch = /(\w+)\s*:\s*(["']).+\2,?/g;
+  
+  var lineReader = require('readline').createInterface({
+    input: require('fs').createReadStream(fileName)
+  });
+  
+  lineReader.on('line', function (line) {
+    // console.log('Line from file:', line);
+    if (line.match(regex_match) && !line.match(regex_unmatch)){
+      let key = line.split(":");
+      let result = key[0].trim();
+      result = result+": req.body."+ result + "\r\n";
+      arrayKey.push(result);
+    }
+  });
 
+}
+
+main = async () => {
+  await getListModel();
+  await getListModelKey();
   if (arrayModel.includes(modelName.toLocaleLowerCase())) {
     readFile();
     console.log("Proccessed");

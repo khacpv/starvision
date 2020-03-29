@@ -21,7 +21,7 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
     MODEL_SAMPLE.create({
-        name: req.body.name
+        LOOP_PROPERTY
     })
     .then(data => {
         res.send({ code: 200, msg: "success", items: data });
@@ -30,7 +30,15 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  MODEL_SAMPLE.update({ name: req.body.name }, { where: { id: req.params.id } })
+  MODEL_SAMPLE.update(
+    { 
+      LOOP_PROPERTY
+    }, 
+    { 
+      where: { 
+        id: req.params.id
+      } 
+    })
     .then(data => {
       res.send({ code: 200, msg: "success", items: data });
     })
