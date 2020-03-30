@@ -10,8 +10,8 @@ const config = require("../config/config");
 const jwt = require("jsonwebtoken");
 
 router.post("/", async (req, res) => {
-  let username = req.query.username;
-  let password = req.query.password;
+  let username = req.body.username;
+  let password = req.body.password;
 
   let user = await User.findOne({
     where: {
