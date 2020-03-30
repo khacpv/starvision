@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
-const DTTC = models.DTTC;
+const Dttc = models.Dttc;
 
 router.get("/", (req, res) => {
-  DTTC.findAll({})
+  Dttc.findAll({})
     .then(data => {
       res.send({ code: 200, msg: "success", items: data });
     })
@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-    DTTC.findByPk(req.params.id)
+    Dttc.findByPk(req.params.id)
     .then(data => {
       res.send({ code: 200, msg: "success", items: data });
     })
@@ -20,7 +20,7 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    DTTC.create({
+    Dttc.create({
         name: req.body.name
     })
     .then(data => {
@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  DTTC.update({ name: req.body.name }, { where: { id: req.params.id } })
+  Dttc.update({ name: req.body.name }, { where: { id: req.params.id } })
     .then(data => {
       res.send({ code: 200, msg: "success", items: data });
     })
@@ -38,7 +38,7 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-  DTTC.destroy({
+  Dttc.destroy({
     where: { id: req.params.id }
   })
     .then(data => {

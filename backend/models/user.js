@@ -1,27 +1,26 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    ID_NGUOIDUNG_NHOM: DataTypes.INTEGER,
-    ID_PHONGBAN: DataTypes.INTEGER,
-    ID_DTTC: DataTypes.INTEGER,
-    TEN_DTTC: DataTypes.STRING,
-    EMAIL: DataTypes.STRING,
-    FULLNAME: DataTypes.STRING,
-    TAIKHOAN: DataTypes.STRING,
-    MATKHAU: DataTypes.STRING,
-    HOATDONG: DataTypes.INTEGER,
-    XUATDULIEU: DataTypes.INTEGER,
-    HINHNEN: DataTypes.STRING,
-    FONTNAME: DataTypes.STRING,
-    FONTSIZE: DataTypes.FLOAT,
-    FORECOLOR: DataTypes.INTEGER,
-    BACKCOLOR: DataTypes.INTEGER,
-    GHICHU: DataTypes.TEXT,
-    QUYEN: DataTypes.INTEGER,
-    QUYENDULIEU: DataTypes.STRING,
-    HTMLCHUKY: DataTypes.STRING,
-    CHUKY: DataTypes.STRING,
-    ID_KHO: DataTypes.INTEGER
+    group_user_id: DataTypes.INTEGER,
+    department_id: DataTypes.INTEGER,
+    dttc_id: DataTypes.INTEGER,
+    email: DataTypes.STRING,
+    fullname: DataTypes.STRING,
+    username: DataTypes.STRING,
+    password: DataTypes.STRING,
+    action: DataTypes.INTEGER,
+    export: DataTypes.INTEGER,
+    wallpaper: DataTypes.STRING,
+    fontname: DataTypes.STRING,
+    fontsize: DataTypes.INTEGER,
+    forecolor: DataTypes.INTEGER,
+    backcolor: DataTypes.INTEGER,
+    note: DataTypes.TEXT,
+    role: DataTypes.INTEGER,
+    role_data: DataTypes.STRING,
+    html_signature: DataTypes.STRING,
+    signature: DataTypes.STRING,
+    id_storage: DataTypes.INTEGER
   }, {
     paranoid: true
   });

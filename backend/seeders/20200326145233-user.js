@@ -18,10 +18,10 @@ module.exports = {
       "Users",
       [
         {
-          EMAIL: "admin@example.com",
-          FULLNAME:"Admin",
-          TAIKHOAN: "admin",
-          MATKHAU: bcrypt.hashSync("123456", salt)
+          email: "admin@example.com",
+          fullname:"Admin",
+          username: "admin",
+          password: bcrypt.hashSync("123456", salt)
         }
       ],
       {}

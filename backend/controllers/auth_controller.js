@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
 
   let user = await User.findOne({
     where: {
-      TAIKHOAN: username
+      username: username
     }
   });
   if (!user) {
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
       msg: "Authentication failed. User not found."
     });
   } else {
-    if (bcrypt.compareSync(password, user.MATKHAU)) {
+    if (bcrypt.compareSync(password, user.password)) {
       var token = jwt.sign(user.dataValues, config.app.secret            );
 
       res.status(200).send({
@@ -32,10 +32,10 @@ router.post("/", async (req, res) => {
         message: "",
         data: {
           token: token,
-          user_email: user.EMAIL,
-          user_nicename: user.FULLNAME,
+          user_email: user.email,
+          user_nicename: user.fullname,
           user_id: user.id,
-          user_display_name: user.TAIKHOAN
+          user_display_name: user.username
         }
       });
     } else {
