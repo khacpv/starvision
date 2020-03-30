@@ -2,35 +2,53 @@ const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
 const MODEL_SAMPLE = models.MODEL_SAMPLE;
+const { check, validationResult } = require("express-validator");
 
-router.get("/", (req, res) => {
-  MODEL_SAMPLE.findAll({})
-    .then(data => {
-      res.send({ code: 200, msg: "success", items: data });
-    })
-    .catch(err => res.json(err));
+router.get("/", async (req, res) => {
+  let result = MODEL_SAMPLE.findAll({})
+  if (result) {
+    res.send({ code: 200, msg: "success", items: result });
+  })
+  res.send({ code: 400, msg: "error"});
 });
 
-router.get("/:id", (req, res) => {
-    MODEL_SAMPLE.findByPk(req.params.id)
-    .then(data => {
+router.get("/:id", async (req, res) => {
+    let result = await MODEL_SAMPLE.findByPk(req.params.id)
+    if (result) {
       res.send({ code: 200, msg: "success", items: data });
     })
-    .catch(err => res.json(err));
+    res.send({ code: 400, msg: "error"});
 });
 
-router.post("/", (req, res) => {
-    MODEL_SAMPLE.create({
+router.post("/", async (req, res) => {
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send({
+      status: "error",
+      message: errors.array()[0].msg,
+      data: ""
+    });
+  }
+
+    let result = await MODEL_SAMPLE.create({
         LOOP_PROPERTY
-    })
-    .then(data => {
-        res.send({ code: 200, msg: "success", items: data });
-    })
-    .catch(err => res.json(err));
+    });
+    if (result){
+      res.send({ code: 200, msg: "success", items: result });
+    }
+    res.send({ code: 400, msg: "error" });
 });
 
-router.put("/:id", (req, res) => {
-  MODEL_SAMPLE.update(
+router.put("/:id", async (req, res) => {
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send({
+      status: "error",
+      message: errors.array()[0].msg,
+      data: ""
+    });
+  }
+  let result = MODEL_SAMPLE.update(
     { 
       LOOP_PROPERTY
     }, 
@@ -38,21 +56,22 @@ router.put("/:id", (req, res) => {
       where: { 
         id: req.params.id
       } 
-    })
-    .then(data => {
-      res.send({ code: 200, msg: "success", items: data });
-    })
-    .catch(err => res.json(err));
+    });
+    if (result){
+      res.send({ code: 200, msg: "success", items: result });
+    }
+
+    res.send({ code: 200, msg: "error"});
 });
 
-router.delete("/:id", (req, res) => {
-  MODEL_SAMPLE.destroy({
+router.delete("/:id", async (req, res) => {
+  let result = await MODEL_SAMPLE.destroy({
     where: { id: req.params.id }
-  })
-    .then(data => {
+  });
+    if (result) {
       res.send({ code: 200, msg: "success"});
     })
-    .catch(err => res.json(err));
+    res.send({ code: 400, msg: "error"});
 });
 
 module.exports = router;

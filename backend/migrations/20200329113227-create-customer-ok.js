@@ -8,109 +8,109 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      mabacsi: {
+      doctor_code: {
         type: Sequelize.STRING
       },
-      idbacsi: {
+      doctor_id: {
         type: Sequelize.STRING
       },
-      khid: {
+      customer_id: {
         type: Sequelize.STRING
       },
-      iddttc: {
+      dttc_id: {
         type: Sequelize.STRING
       },
-      ngaykham: {
+      date_examination: {
         type: Sequelize.STRING
       },
-      Ref_SPH_R: {
+      ref_sph_r: {
         type: Sequelize.DOUBLE
       },
-      Ref_CYL_R: {
+      ref_cyl_r: {
         type: Sequelize.DOUBLE
       },
-      Ref_AX_R: {
+      ref_ax_r: {
         type: Sequelize.DOUBLE
       },
-      BCVA_VA_R: {
+      bcva_va_r: {
         type: Sequelize.STRING
       },
-      BCVA_SPH_R: {
+      bcva_sph_r: {
         type: Sequelize.DOUBLE
       },
-      BCVA_CYL_R: {
+      bcva_cyl_r: {
         type: Sequelize.DOUBLE
       },
-      BCVA_AX_R: {
+      bcva_ax_r: {
         type: Sequelize.DOUBLE
       },
-      D_K1_R: {
+      d_k1_r: {
         type: Sequelize.DOUBLE
       },
-      D_K2_R: {
+      d_k2_r: {
         type: Sequelize.DOUBLE
       },
-      D_AVE_R: {
+      d_ave_r: {
         type: Sequelize.DOUBLE
       },
-      D_HVID_R: {
+      d_hvid_r: {
         type: Sequelize.DOUBLE
       },
-      customOk_Lense_R: {
+      customok_lense_r: {
         type: Sequelize.STRING
       },
-      customOk_Kcode_R: {
+      customok_kcode_r: {
         type: Sequelize.STRING
       },
-      customOk_Power_R: {
+      customok_power_r: {
         type: Sequelize.STRING
       },
-      customOk_Size_R: {
+      customok_size_r: {
         type: Sequelize.STRING
       },
-      Ref_SPH_L: {
+      ref_sph_l: {
         type: Sequelize.DOUBLE
       },
-      Ref_CYL_L: {
+      ref_cyl_l: {
         type: Sequelize.DOUBLE
       },
-      Ref_AX_L: {
+      ref_ax_l: {
         type: Sequelize.DOUBLE
       },
-      BCVA_VA_L: {
+      bcva_va_l: {
         type: Sequelize.STRING
       },
-      BCVA_SPH_L: {
+      bcva_sph_l: {
         type: Sequelize.DOUBLE
       },
-      BCVA_CYL_L: {
+      bcva_cyl_l: {
         type: Sequelize.DOUBLE
       },
-      BCVA_AX_L: {
+      bcva_ax_l: {
         type: Sequelize.DOUBLE
       },
-      D_K1_L: {
+      d_k1_l: {
         type: Sequelize.DOUBLE
       },
-      D_K2_L: {
+      d_k2_l: {
         type: Sequelize.DOUBLE
       },
-      D_AVE_L: {
+      d_ave_l: {
         type: Sequelize.DOUBLE
       },
-      D_HVID_L: {
+      d_hvid_l: {
         type: Sequelize.DOUBLE
       },
-      customOk_Lense_L: {
+      customok_lense_l: {
         type: Sequelize.STRING
       },
-      customOk_Kcode_L: {
+      customok_kcode_l: {
         type: Sequelize.STRING
       },
-      customOk_Power_L: {
+      customok_power_l: {
         type: Sequelize.STRING
       },
-      customOk_Size_L: {
+      customok_size_l: {
         type: Sequelize.STRING
       },
       createdAt: {
