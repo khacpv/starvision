@@ -31,6 +31,9 @@ require('./config/db');
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
+app.use('/', function(req,res){
+	res.json({status: 'OK'});
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
