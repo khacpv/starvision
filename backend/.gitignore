@@ -105,3 +105,4 @@ dist
 
 # generate file
 command/
+config/config.json
