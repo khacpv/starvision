@@ -14,8 +14,26 @@ import {
     InputGroupText,
     Row
 } from 'reactstrap';
+import {authService} from "../../../services";
+import qs from 'qs';
 
 class Login extends Component {
+
+    state = {
+        username: '',
+        password: ''
+    };
+
+    login() {
+        const {username, password} = this.state;
+        authService.login(qs.stringify({username, password})).then(result => {
+            authService.setToken(result.data.token, result.data);
+            this.props.history.push('/dashboard')
+        }).catch((error) => {
+            console.log(error)
+        });
+    }
+
     render() {
         return (
             <div className="app flex-row align-items-center">
@@ -34,7 +52,7 @@ class Login extends Component {
                                                         <i className="icon-user"/>
                                                     </InputGroupText>
                                                 </InputGroupAddon>
-                                                <Input type="text" placeholder="Tài khoản" autoComplete="username"/>
+                                                <Input onChange={(event) => this.state.username = event.target.value} type="text" placeholder="Tài khoản" autoComplete="username"/>
                                             </InputGroup>
                                             <InputGroup className="mb-4">
                                                 <InputGroupAddon addonType="prepend">
@@ -42,12 +60,12 @@ class Login extends Component {
                                                         <i className="icon-lock"/>
                                                     </InputGroupText>
                                                 </InputGroupAddon>
-                                                <Input type="password" placeholder="Mật khẩu"
+                                                <Input onChange={(event) => this.state.password = event.target.value} type="password" placeholder="Mật khẩu"
                                                        autoComplete="current-password"/>
                                             </InputGroup>
                                             <Row>
                                                 <Col xs="6">
-                                                    <Button color="primary" className="px-4">Hoàn tất</Button>
+                                                    <Button onClick={() => this.login()} color="primary" className="px-4">Hoàn tất</Button>
                                                 </Col>
                                                 <Col xs="6" className="text-right">
                                                     <Button color="link" className="px-0">Quên mật khẩu?</Button>

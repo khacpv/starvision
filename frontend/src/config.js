@@ -1,3 +1,3 @@
 export default {
-    domain : 'https://www.api.vegiare.net/api/v1',
+    domain : 'http://starvision-dev.oicsoft.com',
 }

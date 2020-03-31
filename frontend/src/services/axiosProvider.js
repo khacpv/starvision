@@ -1,6 +1,5 @@
 import axios from 'axios';
 import config from '../config';
-import Cookies from 'js-cookie';
 
 const axiosProvider = axios.create({
     baseURL: config.domain,
@@ -9,8 +8,7 @@ const axiosProvider = axios.create({
 axiosProvider.interceptors.request.use(function (config) {
     // Do something before request is sent
     let token = localStorage.getItem('token');
-    let lang = Cookies.get('next-i18next');
-    config.headers.common['Accept-Language'] = lang || 'vi';
+    config.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
     if (token) {
         config.headers.common['Authorization'] = `Bearer ${token}`;
     }
@@ -29,10 +27,10 @@ axiosProvider.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
     // Do something with response error
-    if (error.response && +error.response.status === 403) {
+    if (error.response && +error.response.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('profile');
-        return window.location.replace('/');
+        return window.location.replace('/#/login');
     }
     return Promise.reject(error);
 });

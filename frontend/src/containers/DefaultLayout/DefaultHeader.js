@@ -32,7 +32,7 @@ class DefaultHeader extends Component {
             <NavLink to="/dashboard" className="nav-link" >FITTING</NavLink>
           </NavItem>
           <NavItem className="px-3">
-            <Link to="/users" className="nav-link">FOLLOW UP</Link>
+            <Link to="/follow-up" className="nav-link">FOLLOW UP</Link>
           </NavItem>
           <NavItem className="px-3">
             <NavLink to="#" className="nav-link">ORDER</NavLink>

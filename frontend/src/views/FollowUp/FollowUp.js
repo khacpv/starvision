@@ -28,7 +28,7 @@ import {CustomTooltips} from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-class Dashboard extends Component {
+class FollowUp extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -129,45 +129,45 @@ class Dashboard extends Component {
                                     <div>
                                         <Table responsive className='table-solid'>
                                             <thead>
-                                                <tr>
-                                                    <th className='table-solid'></th>
-                                                    <th className='table-solid'>VA</th>
-                                                    <th className='table-solid'>SPH</th>
-                                                    <th className='table-solid'>CYL</th>
-                                                    <th className='table-solid'>AX</th>
-                                                </tr>
+                                            <tr>
+                                                <th className='table-solid'></th>
+                                                <th className='table-solid'>VA</th>
+                                                <th className='table-solid'>SPH</th>
+                                                <th className='table-solid'>CYL</th>
+                                                <th className='table-solid'>AX</th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <th className='table-solid'>Refactometer</th>
-                                                    <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
-                                                    </td>
-                                                    <td className='table-solid'>
-                                                        <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
-                                                    </td>
-                                                    <td className='table-solid'>
-                                                        <Input type="text" name="note" id="note" placeholder="" />
-                                                    </td>
-                                                    <td className='table-solid'>
-                                                        <Input type="text" name="note" id="note" placeholder="" />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th className='table-solid'>BCVA</th>
-                                                    <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
-                                                    </td>
-                                                    <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
-                                                    </td>
-                                                    <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
-                                                    </td>
-                                                    <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <th className='table-solid'>Refactometer</th>
+                                                <td className='table-solid'>
+                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                </td>
+                                                <td className='table-solid'>
+                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                </td>
+                                                <td className='table-solid'>
+                                                    <Input type="text" name="note" id="note" placeholder="" />
+                                                </td>
+                                                <td className='table-solid'>
+                                                    <Input type="text" name="note" id="note" placeholder="" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th className='table-solid'>BCVA</th>
+                                                <td className='table-solid'>
+                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                </td>
+                                                <td className='table-solid'>
+                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                </td>
+                                                <td className='table-solid'>
+                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                </td>
+                                                <td className='table-solid'>
+                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         </Table>
                                         <Table responsive className='table-solid'>
@@ -347,9 +347,6 @@ class Dashboard extends Component {
                                     <i style={{margin: 'auto', display: 'block'}} className="fa fa-search"/>
                                 </div>
                             </Row>
-                            <div>
-                                <Button style={{ 'margin-top': 15}}>Thêm bệnh nhân</Button>
-                            </div>
                             <div style={{'margin-top': 20}}>
                                 <Table responsive className='table-solid'>
                                     <thead>
@@ -373,4 +370,4 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+export default FollowUp;
