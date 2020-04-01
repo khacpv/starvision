@@ -252,11 +252,10 @@ router.post(
     });
 
     if (customerOk) {
-      let returnData = await FormatResponse(customerOk);
       return res.send({
-        status: "success",
-        message: "",
-        data: returnData
+        status : 'success',
+        message : '',
+        data : ""
       });
     }
     res.send({ code: 400, msg: "error" });

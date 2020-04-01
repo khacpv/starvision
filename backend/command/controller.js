@@ -41,7 +41,7 @@ getListModelKey = () =>{
   let regex_match = /\s*:/g;
   let regex_unmatch = /(\w+)\s*:\s*(["']).+\2,?/g;
   
-  var lineReader = require('readline').createInterface({
+  let lineReader = require('readline').createInterface({
     input: require('fs').createReadStream(fileName)
   });
   
@@ -54,12 +54,32 @@ getListModelKey = () =>{
       arrayKey.push(result);
     }
   });
+}
 
+addRoute = () =>{
+  var fs = require('fs')
+  fs.readFile("../routes/index.js", 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    let tmpModel = modelName.toLocaleLowerCase();
+    let replacement = "__GENERATE_ROUTE__ \r\n" + "app.use('/"+tmpModel+"', passport.authenticate('jwt', { session: false }), "+tmpModel.charAt(0).toUpperCase() + tmpModel.slice(1)+"Controller);";
+    let controller_replacement = "__INIT_CONTROLLER__ \r\n" + "const "+tmpModel.charAt(0).toUpperCase() + tmpModel.slice(1)+"Controller = require('../controllers/"+tmpModel+"_controller')";
+    
+    var result = data.replace(/__GENERATE_ROUTE__/g, replacement);
+    result = result.replace(/__INIT_CONTROLLER__/g, controller_replacement);
+    
+    fs.writeFile("../routes/index.js", result, 'utf8', function (err) {
+       if (err) return console.log(err);
+    });
+  });
 }
 
 main = async () => {
   await getListModel();
   await getListModelKey();
+  await addRoute();
+
   if (arrayModel.includes(modelName.toLocaleLowerCase())) {
     readFile();
     console.log("Proccessed");
