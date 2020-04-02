@@ -40,14 +40,27 @@ class FollowUp extends Component {
     loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
     render() {
+        let klist = [];
+        for (let k = 40; k <= 47.25 ; k+= 0.25) {
+            klist.push(<option>{k.toFixed(2)}</option>)
+        }
+        let plist = [
+            <option>{-3}</option>,
+            <option>{-7}</option>,
+            <option>{3}</option>
+        ];
+        let slist = [];
+        for (let s = 10.4; s <= 11.6 ; s+= 0.20) {
+            slist.push(<option>{s.toFixed(2)}</option>)
+        }
         return (
             <div className="animated fadeIn">
                 <Row>
                     <Col xs='8' style={{backgroundColor: 'white', padding: '15px 15px 15px 15px'}}>
                         <Form>
-                            <div style={{ 'text-align': 'center', 'font-size': 20, 'font-weight': 'bold', 'padding-top': 30}}>
-                                ORTHOR-K FITTING
-                            </div>
+                            <h1 style={{ 'text-align': 'center', 'font-weight': 'bold', 'padding-top': 30}}>
+                                FOLLOW UP
+                            </h1>
                             <Row style={{ padding: 15}}>
                                 <Col xs={4}>
                                     <FormGroup row>
@@ -109,49 +122,56 @@ class FollowUp extends Component {
                                     </FormGroup>
                                 </Col>
                             </Row>
-                            <Row>
-                                <Col xs={8}>
-                                    <FormGroup row>
-                                        <Label for="note" xs={3}>Ghi chú:</Label>
-                                        <Col xs={9}>
-                                            <Input type="text" name="note" id="note" placeholder="" />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-                                <Col xs={4}/>
-                            </Row>
                         </Form>
                         <Form>
                             <Row>
                                 <Col xs={6}>
-                                    <Label>OS - Mắt trái</Label>
-                                    <div>Refactometer/Current Glasse VA/BCVA</div>
+                                    <h3>
+                                        OS - Mắt trái
+                                    </h3>
+                                    <Table responsive className='table-solid'>
+                                        <thead>
+                                        <tr>
+                                            <th className='table-solid'>K-code</th>
+                                            <th className='table-solid'>Power</th>
+                                            <th className='table-solid'>Size</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td className='table-solid'>
+                                                <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                            </td>
+                                            <td className='table-solid'>
+                                                <Input type="text" name="note" id="note" placeholder="" />
+                                            </td>
+                                            <td className='table-solid'>
+                                                <Input type="text" name="note" id="note" placeholder="" />
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </Table>
                                     <div>
                                         <Table responsive className='table-solid'>
-                                            <thead>
-                                            <tr>
-                                                <th className='table-solid'></th>
-                                                <th className='table-solid'>VA</th>
-                                                <th className='table-solid'>SPH</th>
-                                                <th className='table-solid'>CYL</th>
-                                                <th className='table-solid'>AX</th>
-                                            </tr>
-                                            </thead>
                                             <tbody>
                                             <tr>
-                                                <th className='table-solid'>Refactometer</th>
+                                                <th className='table-solid'>Fitting</th>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="select" name="select" id="exampleSelect">
+                                                        {klist}
+                                                    </Input>
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="select" name="select" id="exampleSelect">
+                                                        {plist}
+                                                    </Input>
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="select" name="select" id="exampleSelect">
+                                                        {slist}
+                                                    </Input>
                                                 </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
-                                                </td>
+                                                <td className='table-solid'/>
                                             </tr>
                                             <tr>
                                                 <th className='table-solid'>BCVA</th>
@@ -168,59 +188,38 @@ class FollowUp extends Component {
                                                     <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                             </tr>
-                                            </tbody>
-                                        </Table>
-                                        <Table responsive className='table-solid'>
-                                            <thead>
                                             <tr>
-                                                <th className='table-solid'>K1</th>
-                                                <th className='table-solid'>K2</th>
-                                                <th className='table-solid'>AVE</th>
-                                                <th className='table-solid'>HVID</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
+                                                <th className='table-solid'>Over Refraction:</th>
                                                 <td className='table-solid'>
                                                     <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
-                                                </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
-                                                </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </Table>
-                                        <div>
-                                            Custom OK OS - Mắt trái
-                                        </div>
-                                        <Table responsive className='table-solid'>
-                                            <thead>
-                                            <tr>
-                                                <th className='table-solid'>Lense</th>
-                                                <th className='table-solid'>K-code</th>
-                                                <th className='table-solid'>Power</th>
-                                                <th className='table-solid'>Size</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className='table-solid'>
                                                     <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
                                                 </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
+                                                <td className='table-solid'/>
+                                            </tr>
+                                            <tr>
+                                                <th className='table-solid'>Comments</th>
+                                                <td className='table-solid' colspan="4">
+                                                    <div>
+                                                        <h5>Size:</h5>
+                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <h5 style={{'margin-top': 5}}>Alignment zone:</h5>
+                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <h5 style={{'margin-top': 5}}>Compress zone:</h5>
+                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <h5 style={{'margin-top': 5}}>Kết luận:</h5>
+                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    </div>
                                                 </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
+                                            </tr>
+                                            <tr>
+                                                <th className='table-solid'>Video</th>
+                                                <td className='table-solid'colspan="4">
+                                                    <Input type="file" name="file" id="exampleFile" />
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -228,34 +227,50 @@ class FollowUp extends Component {
                                     </div>
                                 </Col>
                                 <Col xs={6}>
-                                    <Label>OD - Mắt phải</Label>
-                                    <div>Refactometer/Current Glasse VA/BCVA</div>
+                                    <h3>OD - Mắt phải</h3>
+                                    <Table responsive className='table-solid'>
+                                        <thead>
+                                        <tr>
+                                            <th className='table-solid'>K-code</th>
+                                            <th className='table-solid'>Power</th>
+                                            <th className='table-solid'>Size</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td className='table-solid'>
+                                                <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                            </td>
+                                            <td className='table-solid'>
+                                                <Input type="text" name="note" id="note" placeholder="" />
+                                            </td>
+                                            <td className='table-solid'>
+                                                <Input type="text" name="note" id="note" placeholder="" />
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </Table>
                                     <div>
                                         <Table responsive className='table-solid'>
-                                            <thead>
-                                            <tr>
-                                                <th className='table-solid'></th>
-                                                <th className='table-solid'>VA</th>
-                                                <th className='table-solid'>SPH</th>
-                                                <th className='table-solid'>CYL</th>
-                                                <th className='table-solid'>AX</th>
-                                            </tr>
-                                            </thead>
                                             <tbody>
                                             <tr>
-                                                <th className='table-solid'>Refactometer</th>
+                                                <th className='table-solid'>Fitting</th>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="select" name="select" id="exampleSelect">
+                                                        {klist}
+                                                    </Input>
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="select" name="select" id="exampleSelect">
+                                                        {plist}
+                                                    </Input>
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="select" name="select" id="exampleSelect">
+                                                        {slist}
+                                                    </Input>
                                                 </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
-                                                </td>
+                                                <td className='table-solid'/>
                                             </tr>
                                             <tr>
                                                 <th className='table-solid'>BCVA</th>
@@ -272,59 +287,38 @@ class FollowUp extends Component {
                                                     <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                             </tr>
-                                            </tbody>
-                                        </Table>
-                                        <Table responsive className='table-solid'>
-                                            <thead>
                                             <tr>
-                                                <th className='table-solid'>K1</th>
-                                                <th className='table-solid'>K2</th>
-                                                <th className='table-solid'>AVE</th>
-                                                <th className='table-solid'>HVID</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
+                                                <th className='table-solid'>Over Refraction:</th>
                                                 <td className='table-solid'>
                                                     <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
-                                                </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
-                                                </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </Table>
-                                        <div>
-                                            Custom OK OS - Mắt phải
-                                        </div>
-                                        <Table responsive className='table-solid'>
-                                            <thead>
-                                            <tr>
-                                                <th className='table-solid'>Lense</th>
-                                                <th className='table-solid'>K-code</th>
-                                                <th className='table-solid'>Power</th>
-                                                <th className='table-solid'>Size</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td className='table-solid'>
                                                     <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
                                                 </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
+                                                <td className='table-solid'/>
+                                            </tr>
+                                            <tr>
+                                                <th className='table-solid'>Comments</th>
+                                                <td className='table-solid' colspan="4">
+                                                    <div>
+                                                        <h5>Size:</h5>
+                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <h5 style={{'margin-top': 5}}>Alignment zone:</h5>
+                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <h5 style={{'margin-top': 5}}>Compress zone:</h5>
+                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <h5 style={{'margin-top': 5}}>Kết luận:</h5>
+                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    </div>
                                                 </td>
-                                                <td className='table-solid'>
-                                                    <Input type="text" name="note" id="note" placeholder="" />
+                                            </tr>
+                                            <tr>
+                                                <th className='table-solid'>Video</th>
+                                                <td className='table-solid'colspan="4">
+                                                    <Input type="file" name="file" id="exampleFile" />
                                                 </td>
                                             </tr>
                                             </tbody>

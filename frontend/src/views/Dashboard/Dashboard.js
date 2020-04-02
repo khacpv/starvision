@@ -27,17 +27,28 @@ import {
 import {CustomTooltips} from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {customerService} from "../../services/index";
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             fittingDate: new Date(),
-            a: null
+            customerName: ''
         };
     }
 
     loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
+
+    searchCustomer() {
+        customerService.searchCustomer(this.state.customerName, '')
+            .then(result => {
+                console.log(result)
+            }).catch(error => {
+                console.log(error)
+            }
+        )
+    }
 
     render() {
         return (
@@ -45,9 +56,9 @@ class Dashboard extends Component {
                 <Row>
                     <Col xs='8' style={{backgroundColor: 'white', padding: '15px 15px 15px 15px'}}>
                         <Form>
-                            <div style={{ 'text-align': 'center', 'font-size': 20, 'font-weight': 'bold', 'padding-top': 30}}>
+                            <h1 style={{ 'text-align': 'center', 'font-weight': 'bold', 'padding-top': 30}}>
                                 ORTHOR-K FITTING
-                            </div>
+                            </h1>
                             <Row style={{ padding: 15}}>
                                 <Col xs={4}>
                                     <FormGroup row>
@@ -124,8 +135,8 @@ class Dashboard extends Component {
                         <Form>
                             <Row>
                                 <Col xs={6}>
-                                    <Label>OS - Mắt trái</Label>
-                                    <div>Refactometer/Current Glasse VA/BCVA</div>
+                                    <h2>OS - Mắt trái</h2>
+                                    <h3>Refactometer/Current Glasse VA/BCVA</h3>
                                     <div>
                                         <Table responsive className='table-solid'>
                                             <thead>
@@ -141,10 +152,10 @@ class Dashboard extends Component {
                                                 <tr>
                                                     <th className='table-solid'>Refactometer</th>
                                                     <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <Input type="text" name="note" id="note" placeholder="" />
                                                     </td>
                                                     <td className='table-solid'>
-                                                        <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                        <Input type="text" name="note" id="note" placeholder="" />
                                                     </td>
                                                     <td className='table-solid'>
                                                         <Input type="text" name="note" id="note" placeholder="" />
@@ -156,16 +167,16 @@ class Dashboard extends Component {
                                                 <tr>
                                                     <th className='table-solid'>BCVA</th>
                                                     <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <Input type="text" name="note" id="note" placeholder="" />
                                                     </td>
                                                     <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <Input type="text" name="note" id="note" placeholder="" />
                                                     </td>
                                                     <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <Input type="text" name="note" id="note" placeholder="" />
                                                     </td>
                                                     <td className='table-solid'>
-                                                        <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                        <Input type="text" name="note" id="note" placeholder="" />
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -182,10 +193,10 @@ class Dashboard extends Component {
                                             <tbody>
                                             <tr>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
                                                     <Input type="text" name="note" id="note" placeholder="" />
@@ -196,9 +207,9 @@ class Dashboard extends Component {
                                             </tr>
                                             </tbody>
                                         </Table>
-                                        <div>
+                                        <h3>
                                             Custom OK OS - Mắt trái
-                                        </div>
+                                        </h3>
                                         <Table responsive className='table-solid'>
                                             <thead>
                                             <tr>
@@ -211,10 +222,10 @@ class Dashboard extends Component {
                                             <tbody>
                                             <tr>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
                                                     <Input type="text" name="note" id="note" placeholder="" />
@@ -228,8 +239,8 @@ class Dashboard extends Component {
                                     </div>
                                 </Col>
                                 <Col xs={6}>
-                                    <Label>OD - Mắt phải</Label>
-                                    <div>Refactometer/Current Glasse VA/BCVA</div>
+                                    <h2>OD - Mắt phải</h2>
+                                    <h3>Refactometer/Current Glasse VA/BCVA</h3>
                                     <div>
                                         <Table responsive className='table-solid'>
                                             <thead>
@@ -245,10 +256,10 @@ class Dashboard extends Component {
                                             <tr>
                                                 <th className='table-solid'>Refactometer</th>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
                                                     <Input type="text" name="note" id="note" placeholder="" />
@@ -260,16 +271,16 @@ class Dashboard extends Component {
                                             <tr>
                                                 <th className='table-solid'>BCVA</th>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -286,10 +297,10 @@ class Dashboard extends Component {
                                             <tbody>
                                             <tr>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
                                                     <Input type="text" name="note" id="note" placeholder="" />
@@ -300,9 +311,9 @@ class Dashboard extends Component {
                                             </tr>
                                             </tbody>
                                         </Table>
-                                        <div>
+                                        <h3>
                                             Custom OK OS - Mắt phải
-                                        </div>
+                                        </h3>
                                         <Table responsive className='table-solid'>
                                             <thead>
                                             <tr>
@@ -315,10 +326,10 @@ class Dashboard extends Component {
                                             <tbody>
                                             <tr>
                                                 <td className='table-solid'>
-                                                    <Input onChange={(event) => this.state.a = event.target.value} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
-                                                    <Input onChange={() => console.log(this.state.a)} type="text" name="note" id="note" placeholder="" />
+                                                    <Input type="text" name="note" id="note" placeholder="" />
                                                 </td>
                                                 <td className='table-solid'>
                                                     <Input type="text" name="note" id="note" placeholder="" />

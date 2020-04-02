@@ -19,7 +19,7 @@ import {
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
-import {customerService} from "../../services/index";
+import {authService, customerService} from "../../services/index";
 
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
@@ -30,7 +30,8 @@ class DefaultLayout extends Component {
     loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
     signOut(e) {
-        e.preventDefault()
+        e.preventDefault();
+        authService.logout();
         this.props.history.push('/login')
     }
 
