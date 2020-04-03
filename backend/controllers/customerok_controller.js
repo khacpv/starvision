@@ -3,7 +3,6 @@ const router = express.Router();
 const models = require("../models/index");
 const CustomerOk = models.CustomerOk;
 const { check, validationResult } = require("express-validator");
-const FormatResponse = require("./responses/customerOk");
 
 // router.get("/", async (req, res) => {
 //   let customers = await CustomerOk.findAll({});
