@@ -15,7 +15,7 @@ module.exports = function (passport) {
       const user = await User.findByPk(jwt_payload.id);
       if (user) {
         return done(null, user);
-      }
+      }     
       return done(null, false);
     })),
   );
