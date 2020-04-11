@@ -7,17 +7,17 @@ const { check, validationResult } = require("express-validator");
 router.get("/", async (req, res) => {
   let result = await MODEL_SAMPLE.findAll({})
   if (result) {
-    res.send({ code: 200, msg: "success", items: result });
+    return res.send({ code: 200, msg: "success", items: result });
   }
-  res.send({ code: 400, msg: "error"});
+  return res.send({ code: 400, msg: "error"});
 });
 
 router.get("/:id", async (req, res) => {
     let result = await MODEL_SAMPLE.findByPk(req.params.id)
     if (result) {
-      res.send({ code: 200, msg: "success", items: data });
+      return res.send({ code: 200, msg: "success", items: data });
     }
-    res.send({ code: 400, msg: "error"});
+    return res.send({ code: 400, msg: "error"});
 });
 
 router.post("/", async (req, res) => {
@@ -34,9 +34,9 @@ router.post("/", async (req, res) => {
         LOOP_PROPERTY
     });
     if (result){
-      res.send({ code: 200, msg: "success", items: result });
+      return res.send({ code: 200, msg: "success", items: result });
     }
-    res.send({ code: 400, msg: "error" });
+    return res.send({ code: 400, msg: "error" });
 });
 
 router.put("/:id", async (req, res) => {
@@ -58,10 +58,10 @@ router.put("/:id", async (req, res) => {
       } 
     });
     if (result){
-      res.send({ code: 200, msg: "success", items: result });
+      return res.send({ code: 200, msg: "success", items: result });
     }
 
-    res.send({ code: 200, msg: "error"});
+    return res.send({ code: 200, msg: "error"});
 });
 
 router.delete("/:id", async (req, res) => {
@@ -69,9 +69,9 @@ router.delete("/:id", async (req, res) => {
     where: { id: req.params.id }
   });
     if (result) {
-      res.send({ code: 200, msg: "success"});
+      return res.send({ code: 200, msg: "success"});
     }
-    res.send({ code: 400, msg: "error"});
+    return res.send({ code: 400, msg: "error"});
 });
 
 module.exports = router;
