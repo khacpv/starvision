@@ -8,34 +8,34 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      TENDTTC: {
+      name: {
         type: Sequelize.STRING
       },
-      MADTTC: {
+      code: {
         type: Sequelize.STRING
       },
-      DIACHI: {
+      address: {
         type: Sequelize.STRING
       },
-      DIDONG: {
+      mobile: {
         type: Sequelize.STRING
       },
-      EMAIL: {
+      email: {
         type: Sequelize.STRING
       },
-      JD_CHUCVU: {
+      position: {
         type: Sequelize.INTEGER
       },
-      JD_PHONGBAN: {
+      department: {
         type: Sequelize.INTEGER
       },
-      QUYENNGUOIDUNG: {
+      role: {
         type: Sequelize.STRING
       },
-      ENABLE_DTTC: {
+      enable: {
         type: Sequelize.INTEGER
       },
-      ID_CHINHANH: {
+      agency: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -49,6 +49,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('DTTCs');
+    return queryInterface.dropTable('Dttcs');
   }
 };

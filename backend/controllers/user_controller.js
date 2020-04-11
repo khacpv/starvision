@@ -15,28 +15,28 @@ router.get("/", async (req, res) => {
     include: [
       {
         model: Dttc,
-        as: 'Dttc'
+        as: 'dttc'
       }
     ]
   })
 
   if (user){
-    res.send({
+    return res.send({
       status: "success",
       data:[
           {
-            Id_Dttc: user.ID_DTTC,
-            Id_bacsi: user.MABS,
-            Ten_DTTC: user.Dttc.TENDTTC,
-            Tenbacsi: user.TENKHACHHANG,
-            Mabacsi: user.MABS,
-            Diachi: user.DIACHI,
-            Sodienthoai: user.DIDONG
+            Id_Dttc: user.dttc_id,
+            Id_bacsi: user.doctor_id,
+            Ten_DTTC: user.dttc ? user.dttc.name : null,
+            Tenbacsi: user.customer_name,
+            Mabacsi: user.doctor_code,
+            Diachi: user.address,
+            Sodienthoai: user.mobile
           }
       ]
     })
   }
-  res.send({
+  return res.send({
     status: "error",
     data: ''
   })

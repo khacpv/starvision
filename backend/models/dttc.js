@@ -1,16 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Dttc = sequelize.define('Dttc', {
-    TENDTTC: DataTypes.STRING,
-    MADTTC: DataTypes.STRING,
-    DIACHI: DataTypes.STRING,
-    DIDONG: DataTypes.STRING,
-    EMAIL: DataTypes.STRING,
-    JD_CHUCVU: DataTypes.INTEGER,
-    JD_PHONGBAN: DataTypes.INTEGER,
-    QUYENNGUOIDUNG: DataTypes.STRING,
-    ENABLE_DTTC: DataTypes.INTEGER,
-    ID_CHINHANH: DataTypes.INTEGER
+    name: DataTypes.STRING,
+    code: DataTypes.STRING,
+    address: DataTypes.STRING,
+    mobile: DataTypes.STRING,
+    email: DataTypes.STRING,
+    position: DataTypes.INTEGER,
+    department: DataTypes.INTEGER,
+    role: DataTypes.STRING,
+    enable: DataTypes.INTEGER,
+    agency: DataTypes.INTEGER
   }, {});
   Dttc.associate = function(models) {
     // associations can be defined here
