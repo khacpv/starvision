@@ -5,9 +5,9 @@
     "expired": "30m"
   },
   "development": {
-    "username": "oicsoft",
-    "password": "12#dfV92@mNF",
-    "database": "starvision-dev.oicsoft.com",
+    "username": "root",
+    "password": "",
+    "database": "database_development",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "logging": false
@@ -21,9 +21,9 @@
     "operatorsAliases": false
   },
   "production": {
-    "username": "oicsoft",
-    "password": "12#dfV92@mNF",
-    "database": "starvision-dev.oicsoft.com",
+    "username": "root",
+    "password": "",
+    "database": "database_development",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "logging": false
