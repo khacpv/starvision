@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Fitting.associate = function(models) {
     // associations can be defined here
+    Fitting.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customer_id' });
+
   };
   return Fitting;
 };
