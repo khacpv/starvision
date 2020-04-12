@@ -39,6 +39,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   CustomerOk.associate = function(models) {
     // associations can be defined here
+    CustomerOk.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customer_id' });
+
   };
   return CustomerOk;
 };
