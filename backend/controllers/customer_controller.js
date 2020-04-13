@@ -341,7 +341,9 @@ router.get(
 
     const customerIdOk = new Set();
     customerOk.forEach(element => {
-      customerIdOk.add(element.customer.id);
+      if (element.customer){
+        customerIdOk.add(element.customer.id);
+      }
     });
     let customerIdOkArr = Array.from(customerIdOk);
     
@@ -406,7 +408,10 @@ router.get(
 
     const fittingIdOk = new Set();
     fitting.forEach(element => {
-      fittingIdOk.add(element.customer.id);
+      if (element.customer){
+        fittingIdOk.add(element.customer.id);
+
+      }
     });
     let fittingIdOkArr = Array.from(fittingIdOk);
     
@@ -471,7 +476,9 @@ router.get(
 
     const fittingIdOk = new Set();
     fitting.forEach(element => {
-      fittingIdOk.add(element.customer.id);
+      if (element.customer){
+        fittingIdOk.add(element.customer.id);
+      }
     });
     let fittingIdOkArr = Array.from(fittingIdOk);
     

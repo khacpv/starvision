@@ -117,14 +117,14 @@ router.get("/", async (req, res) => {
       }
     };
 
-    res.send({
+    return res.send({
       status: "success",
       message: "",
       data: result
     });
   }
 
-  res.send({
+  return res.send({
     status: "error",
     message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
     data: ""
