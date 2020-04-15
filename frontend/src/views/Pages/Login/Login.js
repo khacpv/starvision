@@ -16,6 +16,10 @@ import {
 } from 'reactstrap';
 import {authService} from "../../../services";
 import qs from 'qs';
+import {saveProfile} from "../../../actions/AccountAction";
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {customerService} from "../../../services/index";
 
 class Login extends Component {
 
@@ -26,12 +30,20 @@ class Login extends Component {
 
     login() {
         const {username, password} = this.state;
-        authService.login(qs.stringify({username, password})).then(result => {
-            authService.setToken(result.data.token, result.data);
-            this.props.history.push('/dashboard')
-        }).catch((error) => {
-            console.log(error)
-        });
+        if (username && password) {
+            authService.login(qs.stringify({username, password})).then(result => {
+                authService.setToken(result.data.token, result.data);
+                // this.props.saveProfile(result.data);
+                this.props.history.push('/dashboard');
+                customerService.getUserData(result.data.user_id).then(data => {
+                    authService.setUser(data.data[0]);
+                }).catch(error => console.log(error))
+            }).catch((error) => {
+                alert('thông tin đăng nhập không chính xác')
+            });
+        } else {
+            alert('Vui lòng nhập đủ thông tin')
+        }
     }
 
     render() {
@@ -83,4 +95,16 @@ class Login extends Component {
     }
 }
 
-export default Login;
+Login.propTypes = {
+    saveProfile: PropTypes.func,
+};
+
+const mapStateToProps = state => ({
+
+});
+
+const actions = dispatch => ({
+    saveProfile: (data) => dispatch(saveProfile(data))
+});
+
+export default connect(mapStateToProps, actions)(Login);

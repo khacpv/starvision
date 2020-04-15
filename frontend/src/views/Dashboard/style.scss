@@ -4,4 +4,18 @@
 
 .table-solid {
   border: 1px solid #CCCCCC;
+  text-align: center;
+}
+
+.table-hover:hover {
+  background-color: gray;
+  cursor: pointer;
+}
+
+.modal-big {
+
+}
+
+.overflow-content {
+  overflow-x: scroll;
 }

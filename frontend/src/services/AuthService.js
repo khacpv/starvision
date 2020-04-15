@@ -18,8 +18,8 @@ class AuthService {
         localStorage.setItem('profile', JSON.stringify(profile));
     }
 
-    setProfile(profile) {
-        localStorage.setItem('profile', JSON.stringify(profile));
+    setUser(profile) {
+        localStorage.setItem('user', JSON.stringify(profile));
     }
 }
 
