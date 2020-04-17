@@ -9,18 +9,18 @@ router.get("/", async (req, res) => {
   let dttcId = req.query.iddttc;
 
   let result = await Fitting.findAll({
-    where:{
+    where: {
       customer_id: customerId,
-      dttc_id: dttcId
-    }
+      dttc_id: dttcId,
+    },
   });
   if (result) {
     let custom_result = [];
-    result.forEach(element => {
+    result.forEach((element) => {
       let tmpSide = element.side;
       custom_result.push({
         fitting_no: element.fitting_no,
-        [tmpSide] :{
+        [tmpSide]: {
           os_kcode: element.kcode,
           os_power: element.power,
           os_size: element.size,
@@ -37,74 +37,126 @@ router.get("/", async (req, res) => {
           os_comment_di_chuyen: element.comment_di_chuyen,
           os_comment_ket_luan: element.comment_ket_luan,
           os_video: element.video,
-          os_thumb: element.thumb
-        }
-      })
+          os_thumb: element.thumb,
+        },
+      });
     });
-    res.send({ 
+    res.send({
       status: "success",
       message: "",
-      data: custom_result 
+      data: custom_result,
     });
   }
   res.send({ code: 400, msg: "error" });
 });
 
+router.post(
+  "/",
+  [
+    check("khid", "Không tìm thấy thông tin khách hàng!"),
+    check("iddttc", "Không tìm thấy thông tin người lập!"),
+    check("idbacsi", "Không tìm thấy thông tin bác sĩ!"),
+  ],
+  async (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.send({
+        status: "error",
+        message: errors.array()[0].msg,
+        data: "",
+      });
+    }
+    let checkFitting = await Fitting.findOne({
+      where: {
+        customer_id: req.body.khid,
+        dttc_id: req.body.iddttc,
+        fitting_no: req.body.fitting_no,
+      },
+    });
 
-router.post("/", 
-[
-  check("khid", "Không tìm thấy thông tin khách hàng!"),
-  check("iddttc", "Không tìm thấy thông tin người lập!"),
-  check("idbacsi", "Không tìm thấy thông tin bác sĩ!")
-],async (req, res) => {
-  let errors = validationResult(req);
-  if (!errors.isEmpty()) {
+    if (checkFitting){
+      let updateFitting = Fitting.update(
+        {
+          doctor_code: req.body.mabacsi,
+          doctor_id: req.body.idbacsi,
+          customer_id: req.body.khid,
+          dttc_id: req.body.iddttc,
+          date_examination: req.body.ngaykham,
+          fitting_no: req.body.fitting_no,
+          referaction_sph: req.body.referaction_sph,
+          referaction_cyl: req.body.referaction_cyl,
+          referaction_ax: req.body.referaction_ax,
+          bcva_va: req.body.bcva_va,
+          bcva_sph: req.body.bcva_sph,
+          bcva_cyl: req.body.bcva_cyl,
+          bcva_ax: req.body.bcva_ax,
+          side: req.body.side,
+          kcode: req.body.kcode,
+          power: req.body.power,
+          comment_size: req.body.comment_size,
+          comment_matbo: req.body.comment_matbo,
+          comment_vung_dieu_tri: req.body.comment_vung_dieu_tri,
+          comment_di_chuyen: req.body.comment_di_chuyen,
+          comment_ket_luan: req.body.comment_ket_luan,
+          video: req.body.video,
+          thumb: req.body.thumb,
+        },
+        {
+          where: {
+            id: checkFitting.id,
+          },
+        }
+      );
+
+      if (updateFitting) {
+        return res.send({
+          status: "success",
+          message: "",
+          data: "",
+        });
+      }
+    }
+
+    let result = await Fitting.create({
+      doctor_code: req.body.mabacsi,
+      doctor_id: req.body.idbacsi,
+      customer_id: req.body.khid,
+      dttc_id: req.body.iddttc,
+      date_examination: req.body.ngaykham,
+      fitting_no: req.body.fitting_no,
+      referaction_sph: req.body.referaction_sph,
+      referaction_cyl: req.body.referaction_cyl,
+      referaction_ax: req.body.referaction_ax,
+      bcva_va: req.body.bcva_va,
+      bcva_sph: req.body.bcva_sph,
+      bcva_cyl: req.body.bcva_cyl,
+      bcva_ax: req.body.bcva_ax,
+      side: req.body.side,
+      size: req.body.size,
+      kcode: req.body.kcode,
+      power: req.body.power,
+      comment_size: req.body.comment_size,
+      comment_matbo: req.body.comment_matbo,
+      comment_vung_dieu_tri: req.body.comment_vung_dieu_tri,
+      comment_di_chuyen: req.body.comment_di_chuyen,
+      comment_ket_luan: req.body.comment_ket_luan,
+      video: req.body.video,
+      thumb: req.body.thumb,
+    });
+    if (result) {
+      return res.send({
+        status: "success",
+        message: "",
+        data: "",
+      });
+    }
     return res.send({
       status: "error",
-      message: errors.array()[0].msg,
-      data: ""
+      message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+      data: "",
     });
   }
-
-  let result = await Fitting.create({
-    doctor_code: req.body.mabacsi,
-    doctor_id: req.body.idbacsi,
-    customer_id: req.body.khid,
-    dttc_id: req.body.iddttc,
-    date_examination: req.body.ngaykham,
-    fitting_no: req.body.fitting_no,
-    referaction_sph: req.body.referaction_sph,
-    referaction_cyl: req.body.referaction_cyl,
-    referaction_ax: req.body.referaction_ax,
-    bcva_va: req.body.bcva_va,
-    bcva_sph: req.body.bcva_sph,
-    bcva_cyl: req.body.bcva_cyl,
-    bcva_ax: req.body.bcva_ax,
-    side: req.body.side,
-    size: req.body.size,
-    kcode: req.body.kcode,
-    power: req.body.power,
-    comment_size: req.body.comment_size,
-    comment_matbo: req.body.comment_matbo,
-    comment_vung_dieu_tri: req.body.comment_vung_dieu_tri,
-    comment_di_chuyen: req.body.comment_di_chuyen,
-    comment_ket_luan: req.body.comment_ket_luan,
-    video: req.body.video,
-    thumb: req.body.thumb
-  });
-  if (result) {
-    res.send({ 
-      status: 'success',
-      message : '',
-      data: "" 
-    });
-  }
-  res.send({ 
-    status : 'error',
-    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
-    data: ""
-  });
-});
+);
 
 router.put("/:id", async (req, res) => {
   let errors = validationResult(req);
@@ -112,7 +164,7 @@ router.put("/:id", async (req, res) => {
     return res.send({
       status: "error",
       message: errors.array()[0].msg,
-      data: ""
+      data: "",
     });
   }
   let result = Fitting.update(
@@ -139,12 +191,12 @@ router.put("/:id", async (req, res) => {
       comment_di_chuyen: req.body.comment_di_chuyen,
       comment_ket_luan: req.body.comment_ket_luan,
       video: req.body.video,
-      thumb: req.body.thumb
+      thumb: req.body.thumb,
     },
     {
       where: {
-        id: req.params.id
-      }
+        id: req.params.id,
+      },
     }
   );
   if (result) {
@@ -156,7 +208,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   let result = await Fitting.destroy({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
   });
   if (result) {
     res.send({ code: 200, msg: "success" });
