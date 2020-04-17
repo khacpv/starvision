@@ -71,10 +71,10 @@ router.get("/", async (req, res) => {
   let data = await CustomerOk.findOne({
     where: {
       customer_id: customerId,
-      dttc_id: dttcId
-    }
+      dttc_id: dttcId,
+    },
   });
-  
+
   if (data) {
     let result = {
       customOk: {
@@ -94,7 +94,7 @@ router.get("/", async (req, res) => {
           od_custom_ok_k_code: data.customok_kcode_r,
           od_custom_ok_power: data.customok_power_r,
           od_custom_ok_size: data.customok_size_r,
-          ngayfitting: data.createAt
+          ngayfitting: data.createAt,
         },
         customOk_L: {
           od_refactometer_sph: data.ref_sph_l,
@@ -112,22 +112,22 @@ router.get("/", async (req, res) => {
           od_custom_ok_k_code: data.customok_kcode_l,
           od_custom_ok_power: data.customok_power_l,
           od_custom_ok_size: data.customok_size_l,
-          ngayfitting: data.createAt
-        }
-      }
+          ngayfitting: data.createAt,
+        },
+      },
     };
 
     return res.send({
       status: "success",
       message: "",
-      data: result
+      data: result,
     });
   }
 
   return res.send({
     status: "error",
     message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
-    data: ""
+    data: "",
   });
 });
 
@@ -151,7 +151,7 @@ router.get("/:id", async (req, res) => {
         od_custom_ok_k_code: data.customok_kcode_r,
         od_custom_ok_power: data.customok_power_r,
         od_custom_ok_size: data.customok_size_r,
-        ngayfitting: data.createAt
+        ngayfitting: data.createAt,
       },
       customOk_L: {
         od_refactometer_sph: data.ref_sph_l,
@@ -170,37 +170,31 @@ router.get("/:id", async (req, res) => {
         od_custom_ok_k_code: data.customok_kcode_l,
         od_custom_ok_power: data.customok_power_l,
         od_custom_ok_size: data.customok_size_l,
-        ngayfitting: data.createAt
-      }
-    }
+        ngayfitting: data.createAt,
+      },
+    },
   };
   if (data) {
     res.send({
       status: "success",
       message: "",
-      data: result
+      data: result,
     });
   }
 
   res.send({
     status: "error",
     message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
-    message: ""
+    message: "",
   });
 });
 
 router.post(
   "/",
   [
-    check("iddttc", "Không tìm thấy thông tin người lập!")
-      .not()
-      .isEmpty(),
-    check("khid", "Không tìm thấy thông tin khách hàng!")
-      .not()
-      .isEmpty(),
-    check("idbacsi", "Không tìm thấy thông tin bác sĩ!")
-      .not()
-      .isEmpty()
+    check("iddttc", "Không tìm thấy thông tin người lập!").not().isEmpty(),
+    check("khid", "Không tìm thấy thông tin khách hàng!").not().isEmpty(),
+    check("idbacsi", "Không tìm thấy thông tin bác sĩ!").not().isEmpty(),
   ],
   async (req, res) => {
     let errors = validationResult(req);
@@ -208,8 +202,68 @@ router.post(
       return res.send({
         status: "error",
         message: errors.array()[0].msg,
-        data: ""
+        data: "",
       });
+    }
+    let checkCustomerOk = await CustomerOk.findOne({
+      where: {
+        customer_id: req.body.khid,
+        dttc_id: req.body.iddttc,
+      },
+    });
+    if (checkCustomerOk) {
+      let updateCustomer = await CustomerOk.update(
+        {
+          doctor_code: req.body.mabacsi,
+          doctor_id: req.body.idbacsi,
+          // customer_id: req.body.khid,
+          // dttc_id: req.body.iddttc,
+          date_examination: req.body.ngaykham,
+          ref_sph_r: req.body.Ref_SPH_R,
+          ref_cyl_r: req.body.Ref_CYL_R,
+          ref_ax_r: req.body.Ref_AX_R,
+          bcva_va_r: req.body.BCVA_VA_R,
+          bcva_sph_r: req.body.BCVA_SPH_R,
+          bcva_cyl_r: req.body.BCVA_CYL_R,
+          bcva_ax_r: req.body.BCVA_AX_R,
+          d_k1_r: req.body.D_K1_R,
+          d_k2_r: req.body.D_K2_R,
+          d_ave_r: req.body.D_AVE_R,
+          d_hvid_r: req.body.D_HVID_R,
+          customok_lense_r: req.body.customOk_Lense_R,
+          customok_kcode_r: req.body.customOk_Kcode_R,
+          customok_power_r: req.body.customOk_Power_R,
+          customok_size_r: req.body.customOk_Size_R,
+          ref_sph_l: req.body.Ref_SPH_L,
+          ref_cyl_l: req.body.Ref_CYL_L,
+          ref_ax_l: req.body.Ref_AX_L,
+          bcva_va_l: req.body.BCVA_VA_L,
+          bcva_sph_l: req.body.BCVA_SPH_L,
+          bcva_cyl_l: req.body.BCVA_CYL_L,
+          bcva_ax_l: req.body.BCVA_AX_L,
+          d_k1_l: req.body.D_K1_L,
+          d_k2_l: req.body.D_K2_L,
+          d_ave_l: req.body.D_AVE_L,
+          d_hvid_l: req.body.D_HVID_L,
+          customok_lense_l: req.body.customOk_Lense_L,
+          customok_kcode_l: req.body.customOk_Kcode_L,
+          customok_power_l: req.body.customOk_Power_L,
+          customok_size_l: req.body.customOk_Size_L,
+        },
+        {
+          where: {
+            id: checkCustomerOk.id
+          },
+        }
+      );
+
+      if (updateCustomer) {
+        return res.send({
+          status: "success",
+          message: "",
+          data: "",
+        });
+      }
     }
 
     let customerOk = await CustomerOk.create({
@@ -247,14 +301,14 @@ router.post(
       customok_lense_l: req.body.customOk_Lense_L,
       customok_kcode_l: req.body.customOk_Kcode_L,
       customok_power_l: req.body.customOk_Power_L,
-      customok_size_l: req.body.customOk_Size_L
+      customok_size_l: req.body.customOk_Size_L,
     });
 
     if (customerOk) {
       return res.send({
-        status : 'success',
-        message : '',
-        data : ""
+        status: "success",
+        message: "",
+        data: "",
       });
     }
     res.send({ code: 400, msg: "error" });
@@ -298,28 +352,28 @@ router.put("/:id", (req, res) => {
       customok_lense_l: req.body.customOk_Lense_L,
       customok_kcode_l: req.body.customOk_Kcode_L,
       customok_power_l: req.body.customOk_Power_L,
-      customok_size_l: req.body.customOk_Size_L
+      customok_size_l: req.body.customOk_Size_L,
     },
     {
       where: {
-        id: req.params.id
-      }
+        id: req.params.id,
+      },
     }
   )
-    .then(data => {
+    .then((data) => {
       res.send({ code: 200, msg: "success", items: data });
     })
-    .catch(err => res.json(err));
+    .catch((err) => res.json(err));
 });
 
 router.delete("/:id", (req, res) => {
   CustomerOk.destroy({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
   })
-    .then(data => {
+    .then((data) => {
       res.send({ code: 200, msg: "success" });
     })
-    .catch(err => res.json(err));
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;
