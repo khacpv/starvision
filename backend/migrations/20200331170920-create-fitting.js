@@ -33,7 +33,7 @@ module.exports = {
         type: Sequelize.DOUBLE
       },
       referaction_ax: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_va: {
         type: Sequelize.STRING
@@ -45,7 +45,7 @@ module.exports = {
         type: Sequelize.DOUBLE
       },
       bcva_ax: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       side: {
         type: Sequelize.STRING
@@ -54,6 +54,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       power: {
+        type: Sequelize.STRING
+      },
+      size: {
         type: Sequelize.STRING
       },
       comment_size: {
