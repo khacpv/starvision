@@ -90,7 +90,7 @@ router.post(
           bcva_sph: req.body.bcva_sph,
           bcva_cyl: req.body.bcva_cyl,
           bcva_ax: req.body.bcva_ax,
-          side: req.body.side,
+          
           kcode: req.body.kcode,
           power: req.body.power,
           comment_size: req.body.comment_size,
@@ -104,6 +104,7 @@ router.post(
         {
           where: {
             id: checkFitting.id,
+            side: req.body.side,
           },
         }
       );
