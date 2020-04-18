@@ -27,6 +27,7 @@ import {
 import {CustomTooltips} from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import CustomerList from "../../containers/CustomerList";
 
 class FollowUp extends Component {
     constructor(props) {
@@ -54,9 +55,12 @@ class FollowUp extends Component {
             slist.push(<option>{s.toFixed(2)}</option>)
         }
         return (
-            <div className="animated fadeIn">
-                <Row>
-                    <Col xs='8' style={{backgroundColor: 'white', padding: '15px 15px 15px 15px'}}>
+            <div className="animated fadeIn overflow-content">
+                <Row style={{width: '1600px'}}>
+                    <Col xs='3'>
+                        <CustomerList/>
+                    </Col>
+                    <Col xs='9' style={{backgroundColor: 'white', padding: '15px 15px 15px 15px'}}>
                         <Form>
                             <h1 style={{ 'text-align': 'center', 'font-weight': 'bold', 'padding-top': 30}}>
                                 FOLLOW UP
@@ -332,31 +336,6 @@ class FollowUp extends Component {
                                 <Button style={{ 'margin-left': 15}} color={'success'}>Fitting 1</Button>
                             </Row>
                         </Form>
-                    </Col>
-                    <Col xs='4'>
-                        <div style={{backgroundColor: 'white', padding: '15px 15px 15px 15px'}}>
-                            <Row>
-                                <div style={{ 'margin-left': 15}}><Input type="text" name="note" id="note" placeholder="tìm kiếm bệnh nhân" /></div>
-                                <div className={'center-item'} style={{ 'margin': '2px 0 0 10px', 'background-color': 'grey', width: '30px', height: '30px', 'border-radius': 5}}>
-                                    <i style={{margin: 'auto', display: 'block'}} className="fa fa-search"/>
-                                </div>
-                            </Row>
-                            <div style={{'margin-top': 20}}>
-                                <Table responsive className='table-solid'>
-                                    <thead>
-                                    <tr style={{ 'background-color': '#F8F8F8'}}>
-                                        <th className='table-solid'>Tên Bệnh Nhân</th>
-                                        <th className='table-solid'>Ngày Sinh</th>
-                                        <th className='table-solid'>Giới Tính</th>
-                                        <th className='table-solid'>Địa Chỉ</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </Table>
-                            </div>
-                        </div>
                     </Col>
                 </Row>
             </div>
