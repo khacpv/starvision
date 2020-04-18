@@ -71,6 +71,7 @@ router.post(
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
         fitting_no: req.body.fitting_no,
+        side: req.body.side,
       },
     });
 
@@ -104,7 +105,6 @@ router.post(
         {
           where: {
             id: checkFitting.id,
-            side: req.body.side,
           },
         }
       );
