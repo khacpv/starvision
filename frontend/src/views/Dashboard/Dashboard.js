@@ -18,6 +18,7 @@ import CustomerList from "../../containers/CustomerList";
 import CustomerOKForm from "./CustomerOKForm";
 import classnames from 'classnames';
 import FittingForm from "./FittingForm";
+import OrderLenseForm from "./OrderLenseForm";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -30,6 +31,7 @@ class Dashboard extends Component {
             currentTab: 0,
             customOK: null,
             fittingData: [],
+            orderLenseData: [],
             isLoading: false
         };
     }
@@ -52,7 +54,11 @@ class Dashboard extends Component {
                 this.setState({customOK: null});
             } else {
                 this.customOk.setData(customOK.data.customOk);
-                this.setState({customOK: customOK.data});
+                this.setState({customOK: customOK.data}, () => {
+                    this.newOrderLense.resetForm();
+                    this.getOrderLenseData(customer);
+                    this.newOrderLense.setDefaultLense(customOK.data.customOk.customOk_L.od_custom_ok_lense, customOK.data.customOk.customOk_R.od_custom_ok_lense)
+                });
             }
         }).catch(error => {
             console.log(error)
@@ -66,11 +72,19 @@ class Dashboard extends Component {
             let fittingData = [];
             fitting.data.map((data, index) => {
                 if (index % 2 === 0) {
-                    fittingData[index] = {};
-                    fittingData[index].fitting_no = data.fitting_no;
-                    fittingData[index].fitting_right = data.R;
+                    fittingData[index/2] = {};
+                    fittingData[index/2].fitting_no = data.fitting_no;
+                    if (data.L) {
+                        fittingData[index/2].fitting_left = data.L;
+                    } else {
+                        fittingData[index/2].fitting_right = data.R;
+                    }
                 } else {
-                    fittingData[index - 1].fitting_left = data.L;
+                    if (data.L) {
+                        fittingData[(index - 1)/2].fitting_left = data.L;
+                    } else {
+                        fittingData[(index - 1)/2].fitting_right = data.R;
+                    }
                 }
             });
             this.setState({fittingData: fittingData});
@@ -80,6 +94,16 @@ class Dashboard extends Component {
         }).catch(error => {
             console.log(error)
         })
+    }
+
+    getOrderLenseData(customer) {
+        const doctorData = JSON.parse(localStorage.getItem('user'));
+        customerService.getOrderLenseById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
+            this.setState({orderLenseData: result.data});
+            result.data.map((data, index) => {
+                this[`order${index}`].setData(data);
+            })
+        }).catch(error => console.log(error))
     }
 
     changeTab(tab) {
@@ -199,15 +223,23 @@ class Dashboard extends Component {
                                     <TabPane tabId={1}>
                                         {
                                             this.state.fittingData.map((fitting, index) => (
-                                                <FittingForm fittingNo={index + 1} index={index} data={fitting} ref={child => {this[`fitting${index}`] = child}} customer={this.state.customer}/>
+                                                <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={index + 1} index={index} data={fitting} ref={child => {this[`fitting${index}`] = child}} customer={this.state.customer}/>
                                             ))
                                         }
-                                        <FittingForm fittingNo={this.state.fittingData.length + 1} ref={child => {this.newFitting = child}} isNew={true} customer={this.state.customer}/>
+                                        <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={this.state.fittingData.length + 1} ref={child => {this.newFitting = child}} isNew={true} customer={this.state.customer}/>
                                     </TabPane>
                                     {
                                         this.state.customOK &&
                                         <TabPane tabId={2}>
-
+                                            {
+                                                this.state.orderLenseData.map((order, index) => (
+                                                    <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)} orderNo={index + 1} index={index} data={order} ref={child => {this[`order${index}`] = child}} customer={this.state.customer}/>
+                                                ))
+                                            }
+                                            <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)}
+                                                            defaultLense={{left: this.state.customOK.customOk.customOk_L.od_custom_ok_lense,
+                                                                right: this.state.customOK.customOk.customOk_R.od_custom_ok_lense}}
+                                                            orderNo={this.state.orderLenseData.length + 1} ref={child => {this.newOrderLense = child}} isNew={true} customer={this.state.customer}/>
                                         </TabPane>
                                     }
                                 </TabContent>

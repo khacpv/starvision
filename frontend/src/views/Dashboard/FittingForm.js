@@ -63,7 +63,6 @@ class FittingForm extends Component {
     }
 
     setData(data) {
-        console.log(data);
         this.setState({
             referaction_sph_L: data.fitting_left.os_referaction_sph,
             referaction_cyl_L: data.fitting_left.os_referaction_cyl,
@@ -80,7 +79,7 @@ class FittingForm extends Component {
             comment_di_chuyen_L: data.fitting_left.os_comment_di_chuyen,
             comment_ket_luan_L: data.fitting_left.os_comment_ket_luan,
             video_L: data.fitting_left.os_video,
-            size_L: data.fitting_left.os_thumb,
+            size_L: data.fitting_left.os_size,
             referaction_sph_R: data.fitting_right.os_referaction_sph,
             referaction_cyl_R: data.fitting_right.os_referaction_cyl,
             referaction_ax_R: data.fitting_right.os_referaction_ax,
@@ -96,7 +95,7 @@ class FittingForm extends Component {
             comment_di_chuyen_R: data.fitting_right.os_comment_di_chuyen,
             comment_ket_luan_R: data.fitting_right.os_comment_ket_luan,
             video_R: data.fitting_right.os_video,
-            size_R: data.fitting_right.os_thumb,
+            size_R: data.fitting_right.os_size,
         })
     }
 
@@ -115,49 +114,57 @@ class FittingForm extends Component {
             bcva_va_L, bcva_va_R, bcva_sph_L, bcva_sph_R, bcva_cyl_L, bcva_cyl_R, bcva_ax_L, bcva_ax_R, kcode_L, kcode_R,
             power_L, power_R, comment_size_L, comment_size_R, comment_matbo_L, comment_matbo_R, comment_vung_dieu_tri_L, comment_vung_dieu_tri_R,
             comment_di_chuyen_L, comment_di_chuyen_R, comment_ket_luan_L, comment_ket_luan_R, video_L, video_R, size_L, size_R} = this.state;
-        customerService.createFitting({
-            ...data,
-            "fitting_no": this.props.fittingNo,
-            "referaction_sph": referaction_sph_L,
-            "referaction_cyl": referaction_cyl_L,
-            "referaction_ax": referaction_ax_L,
-            "bcva_va": bcva_va_L,
-            "bcva_sph": bcva_sph_L,
-            "bcva_cyl": bcva_cyl_L,
-            "bcva_ax": bcva_ax_L,
-            "side": "L",
-            "kcode": kcode_L,
-            "power": power_L,
-            "comment_size": comment_size_L,
-            "comment_matbo": comment_matbo_L,
-            "comment_vung_dieu_tri": comment_vung_dieu_tri_L,
-            "comment_di_chuyen": comment_di_chuyen_L,
-            "comment_ket_luan": comment_ket_luan_L,
-            "video": video_L,
-            "thumb": size_L
-        }, {
-            ...data,
-            "fitting_no": this.props.fittingNo,
-            "referaction_sph": referaction_sph_R,
-            "referaction_cyl": referaction_cyl_R,
-            "referaction_ax": referaction_ax_R,
-            "bcva_va": bcva_va_R,
-            "bcva_sph": bcva_sph_R,
-            "bcva_cyl": bcva_cyl_R,
-            "bcva_ax": bcva_ax_R,
-            "side": "R",
-            "kcode": kcode_R,
-            "power": power_R,
-            "comment_size": comment_size_R,
-            "comment_matbo": comment_matbo_R,
-            "comment_vung_dieu_tri": comment_vung_dieu_tri_R,
-            "comment_di_chuyen": comment_di_chuyen_R,
-            "comment_ket_luan": comment_ket_luan_R,
-            "video": video_R,
-            "thumb": size_R
-        }).then(result => {
-            console.log(result)
-        }).catch(error => console.log(error))
+        if (bcva_va_L && bcva_sph_L && bcva_cyl_L && bcva_ax_L && bcva_va_R && bcva_sph_R && bcva_cyl_R && bcva_ax_R) {
+            customerService.createFitting({
+                ...data,
+                "fitting_no": this.props.fittingNo,
+                "referaction_sph": referaction_sph_L,
+                "referaction_cyl": referaction_cyl_L,
+                "referaction_ax": referaction_ax_L,
+                "bcva_va": bcva_va_L,
+                "bcva_sph": bcva_sph_L,
+                "bcva_cyl": bcva_cyl_L,
+                "bcva_ax": bcva_ax_L,
+                "side": "L",
+                "kcode": kcode_L,
+                "power": power_L,
+                "comment_size": comment_size_L,
+                "comment_matbo": comment_matbo_L,
+                "comment_vung_dieu_tri": comment_vung_dieu_tri_L,
+                "comment_di_chuyen": comment_di_chuyen_L,
+                "comment_ket_luan": comment_ket_luan_L,
+                "video": video_L,
+                "size": size_L
+            }, {
+                ...data,
+                "fitting_no": this.props.fittingNo,
+                "referaction_sph": referaction_sph_R,
+                "referaction_cyl": referaction_cyl_R,
+                "referaction_ax": referaction_ax_R,
+                "bcva_va": bcva_va_R,
+                "bcva_sph": bcva_sph_R,
+                "bcva_cyl": bcva_cyl_R,
+                "bcva_ax": bcva_ax_R,
+                "side": "R",
+                "kcode": kcode_R,
+                "power": power_R,
+                "comment_size": comment_size_R,
+                "comment_matbo": comment_matbo_R,
+                "comment_vung_dieu_tri": comment_vung_dieu_tri_R,
+                "comment_di_chuyen": comment_di_chuyen_R,
+                "comment_ket_luan": comment_ket_luan_R,
+                "video": video_R,
+                "size": size_R
+            }).then(result => {
+                if (result[0].status === 'success' && result[1].status === 'success') {
+                    this.props.getUserData(this.props.customer);
+                    alert('Cập nhật thành công');
+                }
+            }).catch(error => alert(error.message))
+        } else {
+            alert('Vui lòng điền đủ thông tin BVCA');
+        }
+
     }
 
     resetForm() {
@@ -170,16 +177,17 @@ class FittingForm extends Component {
 
     render() {
         let data = this.state;
-        let klist = [];
+        let klist = [<option/>];
         for (let k = 40; k <= 47.25 ; k+= 0.25) {
             klist.push(<option>{k.toFixed(2)}</option>)
         }
         let plist = [
+            <option/>,
             <option>{-3}</option>,
             <option>{-7}</option>,
             <option>{3}</option>
         ];
-        let slist = [];
+        let slist = [<option/>];
         for (let s = 10.4; s <= 11.6 ; s+= 0.20) {
             slist.push(<option>{s.toFixed(2)}</option>)
         }
@@ -224,11 +232,11 @@ class FittingForm extends Component {
                                             <th className='table-solid'>BCVA</th>
                                             <td className='table-solid'>
                                                 SPH
-                                                <Input value={data.bcva_sph_L} onChange={(event) => this.changeValue(event, 'bcva_sph_L')} type="text" name="bcva_sph_L" id="bcva_sph_L" placeholder="" />
+                                                <Input value={data.bcva_sph_L} onChange={(event) => this.changeValue(event, 'bcva_sph_L')} type="number" name="bcva_sph_L" id="bcva_sph_L" placeholder="" />
                                             </td>
                                             <td className='table-solid'>
                                                 CYL
-                                                <Input value={data.bcva_cyl_L} onChange={(event) => this.changeValue(event, 'bcva_cyl_L')} type="text" name="bcva_cyl_L" id="bcva_cyl_L" placeholder="" />
+                                                <Input value={data.bcva_cyl_L} onChange={(event) => this.changeValue(event, 'bcva_cyl_L')} type="number" name="bcva_cyl_L" id="bcva_cyl_L" placeholder="" />
                                             </td>
                                             <td className='table-solid'>
                                                 AX
@@ -242,10 +250,10 @@ class FittingForm extends Component {
                                         <tr>
                                             <th className='table-solid'>Over Refraction:</th>
                                             <td className='table-solid'>
-                                                <Input value={data.referaction_sph_L} onChange={(event) => this.changeValue(event, 'referaction_sph_L')} type="text" name="referaction_sph_L" id="referaction_sph_L" placeholder="" />
+                                                <Input value={data.referaction_sph_L} onChange={(event) => this.changeValue(event, 'referaction_sph_L')} type="number" name="referaction_sph_L" id="referaction_sph_L" placeholder="" />
                                             </td>
                                             <td className='table-solid'>
-                                                <Input value={data.referaction_cyl_L} onChange={(event) => this.changeValue(event, 'referaction_cyl_L')} type="text" name="referaction_cyl_L" id="referaction_cyl_L" placeholder="" />
+                                                <Input value={data.referaction_cyl_L} onChange={(event) => this.changeValue(event, 'referaction_cyl_L')} type="number" name="referaction_cyl_L" id="referaction_cyl_L" placeholder="" />
                                             </td>
                                             <td className='table-solid'>
                                                 <Input value={data.referaction_ax_L} onChange={(event) => this.changeValue(event, 'referaction_ax_L')} type="text" name="referaction_ax_L" id="referaction_ax_L" placeholder="" />
@@ -310,11 +318,11 @@ class FittingForm extends Component {
                                             <th className='table-solid'>BCVA</th>
                                             <td className='table-solid'>
                                                 SPH
-                                                <Input value={data.bcva_sph_R} onChange={(event) => this.changeValue(event, 'bcva_sph_R')} type="text" name="bcva_sph_R" id="bcva_sph_R" placeholder="" />
+                                                <Input value={data.bcva_sph_R} onChange={(event) => this.changeValue(event, 'bcva_sph_R')} type="number" name="bcva_sph_R" id="bcva_sph_R" placeholder="" />
                                             </td>
                                             <td className='table-solid'>
                                                 CYL
-                                                <Input value={data.bcva_cyl_R} onChange={(event) => this.changeValue(event, 'bcva_cyl_R')} type="text" name="bcva_cyl_R" id="bcva_cyl_R" placeholder="" />
+                                                <Input value={data.bcva_cyl_R} onChange={(event) => this.changeValue(event, 'bcva_cyl_R')} type="number" name="bcva_cyl_R" id="bcva_cyl_R" placeholder="" />
                                             </td>
                                             <td className='table-solid'>
                                                 AX
@@ -328,10 +336,10 @@ class FittingForm extends Component {
                                         <tr>
                                             <th className='table-solid'>Over Refraction:</th>
                                             <td className='table-solid'>
-                                                <Input value={data.referaction_sph_R} onChange={(event) => this.changeValue(event, 'referaction_sph_R')} type="text" name="referaction_sph_R" id="referaction_sph_R" placeholder="" />
+                                                <Input value={data.referaction_sph_R} onChange={(event) => this.changeValue(event, 'referaction_sph_R')} type="number" name="referaction_sph_R" id="referaction_sph_R" placeholder="" />
                                             </td>
                                             <td className='table-solid'>
-                                                <Input value={data.referaction_cyl_R} onChange={(event) => this.changeValue(event, 'referaction_cyl_R')} type="text" name="referaction_cyl_R" id="referaction_cyl_R" placeholder="" />
+                                                <Input value={data.referaction_cyl_R} onChange={(event) => this.changeValue(event, 'referaction_cyl_R')} type="number" name="referaction_cyl_R" id="referaction_cyl_R" placeholder="" />
                                             </td>
                                             <td className='table-solid'>
                                                 <Input value={data.referaction_ax_R} onChange={(event) => this.changeValue(event, 'referaction_ax_R')} type="text" name="referaction_ax_R" id="referaction_ax_R" placeholder="" />
@@ -367,8 +375,8 @@ class FittingForm extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Button onClick={() => this.resetForm()} style={{ 'margin-left': 15}}>Clear</Button>
-                            <Button onClick={() => this.createFitting()} style={{ 'margin-left': 15}} color={'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
+                            <Button onClick={() => this.resetForm()} style={{ 'margin-left': 15}}>Làm mới</Button>
+                            <Button onClick={() => this.createFitting()} style={{ 'margin-left': 15}} color={this.props.isNew ? 'success' : 'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
                         </Row>
                     </Form>
                 </Collapse>
