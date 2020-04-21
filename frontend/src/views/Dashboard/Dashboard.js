@@ -120,14 +120,14 @@ class Dashboard extends Component {
                     </Col>
                     <Col xs='9' style={{backgroundColor: 'white', padding: '15px 15px 15px 15px'}}>
                         <Form>
-                            <h1 style={{ 'text-align': 'center', 'font-weight': 'bold', 'padding-top': 30}}>
+                            <h1 style={{ textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
                                 ORTHOR-K FITTING
                             </h1>
                             <Row style={{ padding: 15}}>
                                 <Col xs={4}>
                                     <FormGroup row>
                                         <div>Ngày sinh:</div>
-                                        <div style={{ 'margin-left': 25}}>
+                                        <div style={{ marginLeft: 25}}>
                                             <DatePicker
                                                 disabled
                                                 className="radius-border-input"
@@ -139,7 +139,7 @@ class Dashboard extends Component {
                                 </Col>
                                 <Col xs={8}>
                                     <FormGroup disabled row>
-                                        <div style={{ 'padding-left': 15}}>Giới tính:</div>
+                                        <div style={{ paddingLeft: 15}}>Giới tính:</div>
                                         <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
                                             <Label check>
                                                 <Input checked={this.state.customer.GIOITINH === 'male'} type="radio" name="radio1" disabled/>{' '}
@@ -166,7 +166,7 @@ class Dashboard extends Component {
                                 </Col>
                                 <Col xs={4}>
                                     <FormGroup row>
-                                        <Label for="phone" xs={4} style={{'padding-right': 0}}>Điện thoại:</Label>
+                                        <Label for="phone" xs={4} style={{paddingRight: 0}}>Điện thoại:</Label>
                                         <Col xs={8}>
                                             <Input value={this.state.customer.DIDONG} type="text" placeholder="" disabled/>
                                         </Col>
@@ -223,7 +223,7 @@ class Dashboard extends Component {
                                     <TabPane tabId={1}>
                                         {
                                             this.state.fittingData.map((fitting, index) => (
-                                                <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={index + 1} index={index} data={fitting} ref={child => {this[`fitting${index}`] = child}} customer={this.state.customer}/>
+                                                <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={index + 1} key={index} data={fitting} ref={child => {this[`fitting${index}`] = child}} customer={this.state.customer}/>
                                             ))
                                         }
                                         <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={this.state.fittingData.length + 1} ref={child => {this.newFitting = child}} isNew={true} customer={this.state.customer}/>
@@ -233,7 +233,7 @@ class Dashboard extends Component {
                                         <TabPane tabId={2}>
                                             {
                                                 this.state.orderLenseData.map((order, index) => (
-                                                    <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)} orderNo={index + 1} index={index} data={order} ref={child => {this[`order${index}`] = child}} customer={this.state.customer}/>
+                                                    <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)} orderNo={index + 1} key={index} data={order} ref={child => {this[`order${index}`] = child}} customer={this.state.customer}/>
                                                 ))
                                             }
                                             <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)}
@@ -243,8 +243,8 @@ class Dashboard extends Component {
                                         </TabPane>
                                     }
                                 </TabContent>
-                            </div> : <div style={{height: '100px', 'text-align': 'center'}}>
-                                <p style={{ 'margin-top': '100px'}}>Chưa có thông tin khách hàng</p>
+                            </div> : <div style={{height: '100px', textAlign: 'center'}}>
+                                <p style={{ marginTop: '100px'}}>Chưa có thông tin khách hàng</p>
                             </div>
                         }
                     </Col>

@@ -57,23 +57,23 @@ class CustomerList extends Component {
 
     render() {
         return (
-            <div style={{backgroundColor: 'white', padding: '15px 15px 15px 15px', 'max-height': '1000px', 'overflow-y': 'scroll'}}>
+            <div style={{backgroundColor: 'white', padding: '15px 15px 15px 15px', maxHeight: '1000px', overflowY: 'scroll'}}>
                 <ModalAddCustomer isOpen={this.state.isAddCustomer} closeModal={() => this.setState({isAddCustomer: false})}/>
                 <Row>
-                    <div style={{ 'margin-left': 15}}>
+                    <div style={{ marginLeft: 15}}>
                         <Input type="text" name="note" id="note" placeholder="tìm kiếm bệnh nhân" onChange={(event) => this.state.customerSearchName = event.target.value} />
                     </div>
-                    <Button onClick={() => this.searchCustomer()} className={'center-item'} style={{ 'margin': '2px 0 0 5px', 'background-color': 'grey', width: '30px', height: '30px', 'border-radius': 5}}>
+                    <Button onClick={() => this.searchCustomer()} className={'center-item'} style={{ 'margin': '2px 0 0 5px', backgroundColor: 'grey', width: '30px', height: '30px', borderRadius: 5}}>
                         <i style={{margin: 'auto', display: 'block'}} className="fa fa-search"/>
                     </Button>
                 </Row>
                 <div>
-                    <Button style={{ 'margin-top': 15}} onClick={() => this.setState({isAddCustomer: true})}>Thêm bệnh nhân</Button>
+                    <Button style={{ marginTop: 15}} onClick={() => this.setState({isAddCustomer: true})}>Thêm bệnh nhân</Button>
                 </div>
-                <div style={{'margin-top': 20}}>
+                <div style={{marginTop: 20}}>
                     <Table responsive className='table-solid'>
                         <thead>
-                        <tr style={{ 'background-color': '#F8F8F8'}}>
+                        <tr style={{ backgroundColor: '#F8F8F8'}}>
                             <th className='table-solid'>Tên Bệnh Nhân</th>
                             <th className='table-solid'>Ngày Sinh</th>
                             <th className='table-solid'>Giới Tính</th>
@@ -82,8 +82,8 @@ class CustomerList extends Component {
                         </thead>
                         <tbody>
                         {
-                            this.state.customerList.map(item => (
-                                <tr onClick={() => this.props.getUserData(item)} className={'table-hover'}>
+                            this.state.customerList.map((item, index) => (
+                                <tr onClick={() => this.props.getUserData(item)} className={'table-hover'} key={index}>
                                     <td className='table-solid'>
                                         {item.TENKHACHHANG}
                                     </td>
