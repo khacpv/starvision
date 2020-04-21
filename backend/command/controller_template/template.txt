@@ -1,0 +1,77 @@
+const express = require("express");
+const router = express.Router();
+const models = require("../models/index");
+const MODEL_SAMPLE = models.MODEL_SAMPLE;
+const { check, validationResult } = require("express-validator");
+
+router.get("/", async (req, res) => {
+  let result = await MODEL_SAMPLE.findAll({})
+  if (result) {
+    return res.send({ code: 200, msg: "success", items: result });
+  }
+  return res.send({ code: 400, msg: "error"});
+});
+
+router.get("/:id", async (req, res) => {
+    let result = await MODEL_SAMPLE.findByPk(req.params.id)
+    if (result) {
+      return res.send({ code: 200, msg: "success", items: data });
+    }
+    return res.send({ code: 400, msg: "error"});
+});
+
+router.post("/", async (req, res) => {
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send({
+      status: "error",
+      message: errors.array()[0].msg,
+      data: ""
+    });
+  }
+
+    let result = await MODEL_SAMPLE.create({
+        LOOP_PROPERTY
+    });
+    if (result){
+      return res.send({ code: 200, msg: "success", items: result });
+    }
+    return res.send({ code: 400, msg: "error" });
+});
+
+router.put("/:id", async (req, res) => {
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send({
+      status: "error",
+      message: errors.array()[0].msg,
+      data: ""
+    });
+  }
+  let result = await MODEL_SAMPLE.update(
+    { 
+      LOOP_PROPERTY
+    }, 
+    { 
+      where: { 
+        id: req.params.id
+      } 
+    });
+    if (result){
+      return res.send({ code: 200, msg: "success", items: result });
+    }
+
+    return res.send({ code: 200, msg: "error"});
+});
+
+router.delete("/:id", async (req, res) => {
+  let result = await MODEL_SAMPLE.destroy({
+    where: { id: req.params.id }
+  });
+    if (result) {
+      return res.send({ code: 200, msg: "success"});
+    }
+    return res.send({ code: 400, msg: "error"});
+});
+
+module.exports = router;
