@@ -46,6 +46,7 @@ class CustomerService {
         const requestOne = this.axios.post('/fitting', dataLeft);
         const requestTwo = this.axios.post('/fitting', dataRight);
         return axios.all([requestOne, requestTwo])
+        // return this.axios.post('/fitting', dataLeft);
     }
 
     createFollowUp(data) {

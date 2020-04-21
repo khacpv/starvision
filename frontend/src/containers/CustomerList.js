@@ -57,7 +57,7 @@ class CustomerList extends Component {
 
     render() {
         return (
-            <div style={{backgroundColor: 'white', padding: '15px 15px 15px 15px'}}>
+            <div style={{backgroundColor: 'white', padding: '15px 15px 15px 15px', 'max-height': '1000px', 'overflow-y': 'scroll'}}>
                 <ModalAddCustomer isOpen={this.state.isAddCustomer} closeModal={() => this.setState({isAddCustomer: false})}/>
                 <Row>
                     <div style={{ 'margin-left': 15}}>
