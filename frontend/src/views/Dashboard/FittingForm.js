@@ -10,11 +10,11 @@ import {
     Label, Collapse, CardBody, Card,
     Container,Table
 } from 'reactstrap';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {customerService} from "../../services/index";
-import moment from 'moment';
-import CustomerList from "../../containers/CustomerList";
+import {customerService, uploadService} from "../../services/index";
+import axios from 'axios';
+import aws from 'aws-sdk';
+import S3 from 'react-aws-s3';
 
 class FittingForm extends Component {
 
@@ -175,6 +175,28 @@ class FittingForm extends Component {
         this.setState({[param]: event.target.value})
     }
 
+    changeFile(file, type) {
+        let fileParts = file.name.split('.');
+        let fileName = fileParts[0];
+        let fileType = fileParts[1];
+        const S3_BUCKET = 'starvisionapp';
+        const s3Params = {
+            bucketName: S3_BUCKET,
+            dirName: 'media',
+            type: fileType,
+            region: 'ap-southeast-1', // Put your aws region here
+            accessKeyId: 'AKIAJD2KS6K627R5G55Q',
+            secretAccessKey: '5Vqjp/btidPFcWhdvpvdhbbM5R0JbpamYpTotNCK',
+            s3Url: 'https://starvisionapp.s3.ap-southeast-1.amazonaws.com/'
+        };
+        const ReactS3Client = new S3(s3Params);
+
+        ReactS3Client
+            .uploadFile(file, fileName)
+            .then(data => console.log(data))
+            .catch(err => console.log(err))
+    }
+
     render() {
         let data = this.state;
         let klist = [<option/>];
@@ -280,7 +302,7 @@ class FittingForm extends Component {
                                         <tr>
                                             <th className='table-solid'>Video</th>
                                             <td className='table-solid'colspan="4">
-                                                <Input type="file" name="file" id="exampleFile" />
+                                                <Input onChange={(event) => this.changeFile(event.target.files[0], 'left')} type="file" name="file" id="exampleFile" />
                                             </td>
                                         </tr>
                                         </tbody>
@@ -366,7 +388,7 @@ class FittingForm extends Component {
                                         <tr>
                                             <th className='table-solid'>Video</th>
                                             <td className='table-solid'colspan="4">
-                                                <Input type="file" name="file" id="exampleFile" />
+                                                <Input onChange={(event) => this.changeFile(event.target.files[0], 'right')} type="file" name="file" id="exampleFile" />
                                             </td>
                                         </tr>
                                         </tbody>

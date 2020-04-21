@@ -29,7 +29,8 @@ class OrderLenseForm extends Component {
         side_L: '',
         note_order_lens: '',
         orderNumber: '',
-        id_order: null,
+        id_orderlense_R: null,
+        id_orderlense_L: null,
     };
 
     constructor(props) {
@@ -52,7 +53,8 @@ class OrderLenseForm extends Component {
             power_L: data.L.os_power,
             side_L: data.L.os_size,
             note_order_lens: data.R.note_order_lens,
-            id_order: data.R.id_order,
+            id_orderlense_R: data.R.id_order,
+            id_orderlense_L: data.L.id_order,
             orderNumber: data.So_Don_Hang
         })
     }
@@ -61,6 +63,7 @@ class OrderLenseForm extends Component {
 
     createOrderLense() {
         const doctorData = JSON.parse(localStorage.getItem('user'));
+        const {lense_R, kcode_R, power_R, side_R, lense_L, kcode_L, power_L, side_L} = this.state;
         const data = {
             mabacsi : doctorData.Tenbacsi,
             idbacsi : doctorData.Id_bacsi,
@@ -69,18 +72,35 @@ class OrderLenseForm extends Component {
             khid: this.props.customer.ID_KHACHHANG,
             ...this.state
         };
-        customerService.createOrderLense(data).then(result => {
-            if (result.status === 'success') {
-                this.resetForm();
-                console.log(this.props.defaultLense)
-                this.setDefaultLense(this.props.defaultLense.left, this.props.defaultLense.right);
-                this.props.getUserData(this.props.customer);
-                alert('Cập nhật thành công');
-            } else {
-                alert(result.message)
-            }
+        if (lense_R && kcode_R && power_R && side_R && lense_L && kcode_L && power_L && side_L) {
+            if (this.props.isNew) {
+                customerService.createOrderLense(data).then(result => {
+                    if (result.status === 'success') {
+                        this.resetForm();
+                        this.setDefaultLense(this.props.defaultLense.left, this.props.defaultLense.right);
+                        this.props.getUserData(this.props.customer);
+                        alert('Cập nhật thành công');
+                    } else {
+                        alert(result.message)
+                    }
 
-        }).catch(error => console.log(error))
+                }).catch(error => console.log(error))
+            } else {
+                customerService.updateOrderLense(data).then(result => {
+                    if (result.status === 'success') {
+                        this.resetForm();
+                        this.props.getUserData(this.props.customer);
+                        alert('Cập nhật thành công');
+                    } else {
+                        alert(result.message)
+                    }
+
+                }).catch(error => console.log(error))
+            }
+        } else {
+            alert('Vui lòng nhập đủ thông tin lense')
+        }
+
     }
 
     resetForm() {
@@ -189,7 +209,7 @@ class OrderLenseForm extends Component {
                     <Row>
                         <Col xs={12}>
                             <FormGroup>
-                                <Input type="textarea" name="text" id="exampleText" placeholder="Ghi chú đặt kính" />
+                                <Input value={data.note_order_lens} onChange={(event) => this.changeValue(event, 'note_order_lens')} type="textarea" name="text" id="exampleText" placeholder="Ghi chú đặt kính" />
                             </FormGroup>
                         </Col>
                         <Button onClick={() => this.createOrderLense()} style={{ 'margin-left': 15}} color={this.props.isNew ? 'success' : 'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
