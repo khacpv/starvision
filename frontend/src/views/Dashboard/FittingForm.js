@@ -233,7 +233,7 @@ class FittingForm extends Component {
     let fileParts = file.name.split('.');
     let fileMime = file.type;
     let fileSize = file.size;
-    if (fileMime.indexOf('video/') < 0 && fileMime.indexOf('image/')) {
+    if (fileMime.indexOf('video/') < 0 && fileMime.indexOf('image/') < 0) {
       alert('Selected file is not a Video or Image');
       event.target.value = null;
       return;
