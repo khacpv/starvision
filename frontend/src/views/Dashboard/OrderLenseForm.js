@@ -7,8 +7,7 @@ import {
     Form,
     Input,
     FormGroup,
-    Label, Collapse, CardBody, Card,
-    Container,Table
+    Modal,Table, ModalHeader, ModalBody, ModalFooter
 } from 'reactstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,6 +30,7 @@ class OrderLenseForm extends Component {
         orderNumber: '',
         id_orderlense_R: null,
         id_orderlense_L: null,
+        isShowModal: false
     };
 
     constructor(props) {
@@ -100,7 +100,16 @@ class OrderLenseForm extends Component {
         } else {
             alert('Vui lòng nhập đủ thông tin lense')
         }
+    }
 
+    removeOrderLense() {
+        this.setState({isShowModal: false});
+        customerService.deleteOrderLense({
+            so_don_hang: this.state.orderNumber
+        }).then(() => {
+            this.props.getUserData(this.props.customer);
+            alert('Xoá thành công')
+        }).catch(() => alert('Có lỗi xảy ra vui lòng thử lại'))
     }
 
     resetForm() {
@@ -134,6 +143,16 @@ class OrderLenseForm extends Component {
         }
         return (
             <div style={{ 'margin-top': '20px'}}>
+                <Modal isOpen={this.state.isShowModal} toggle={() => {}}>
+                    <ModalHeader toggle={() => this.setState({isShowModal: false})}>Xác nhận</ModalHeader>
+                    <ModalBody>
+                        Bạn chắc chắn muốn xoá?
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={() => this.setState({isShowModal: false})}>Bỏ qua</Button>{' '}
+                        <Button color="danger" onClick={() => this.removeOrderLense()}>Xoá</Button>
+                    </ModalFooter>
+                </Modal>
                 <Form>
                     <Row>
                         <Col xs={12}>
@@ -213,6 +232,9 @@ class OrderLenseForm extends Component {
                             </FormGroup>
                         </Col>
                         <Button onClick={() => this.createOrderLense()} style={{ 'margin-left': 15}} color={this.props.isNew ? 'success' : 'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
+                        {
+                            !this.props.isNew && <Button onClick={() => this.setState({isShowModal: true})} style={{ 'margin-left': 15}} color={'danger'}>Huỷ đơn</Button>
+                        }
                     </Row>
                 </Form>
             </div>

@@ -32,13 +32,15 @@
     "react-chartjs-2": "^2.9.0",
     "react-datepicker": "^2.14.0",
     "react-dom": "^16.13.0",
+    "react-loading": "^2.0.3",
     "react-redux": "^7.2.0",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2",
     "react-test-renderer": "^16.13.0",
     "reactstrap": "^8.4.1",
     "redux": "^4.0.5",
-    "simple-line-icons": "^2.4.1"
+    "simple-line-icons": "^2.4.1",
+    "video-react": "^0.14.1"
   },
   "devDependencies": {
     "react-scripts": "^3.4.0"
