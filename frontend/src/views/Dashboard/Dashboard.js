@@ -214,7 +214,14 @@ class Dashboard extends Component {
                                             </NavLink>
                                         </NavItem>
                                     }
-
+                                    <NavItem>
+                                        <NavLink
+                                            className={classnames({ active: currentTab === 3 })}
+                                            onClick={() => { this.changeTab(3); }}
+                                        >
+                                            Follow Up
+                                        </NavLink>
+                                    </NavItem>
                                 </Nav>
                                 <TabContent activeTab={currentTab}>
                                     <TabPane tabId={0}>
