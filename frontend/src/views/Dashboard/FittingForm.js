@@ -238,23 +238,13 @@ class FittingForm extends Component {
     }
 
     changeFile(file, eyeSide, event) {
-        const doctorData = JSON.parse(localStorage.getItem('user'));
-        let fileParts = file.name.split('.');
-        let fileType = fileParts[fileParts.length - 1];
         let fileMime = file.type;
-        let fileSize = file.size;
         if (fileMime.indexOf('video/') < 0) {
             alert('Selected file is not a Video');
             event.target.value = null;
             return;
         }
-        // solution: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html
-        AWS.config.update({
-            region: 'ap-southeast-1',
-            credentials: new AWS.CognitoIdentityCredentials({
-                IdentityPoolId: 'ap-southeast-1:65b3d253-6e4a-4f99-a542-310ee4cbac28',
-            }),
-        });
+
         // TODO: show loading icon
         if (eyeSide === 'left') {
             this.setState({isLoadingLeft: true})
@@ -263,17 +253,7 @@ class FittingForm extends Component {
             this.setState({isLoadingRight: true})
         }
         // Multiparts upload
-        new AWS.S3.ManagedUpload({
-            params: {
-                Bucket: 'starvisionapp',
-                Key: getFileS3Name(fileType, 'fitting', this.props.customer.ID_KHACHHANG, doctorData),
-                // Key: fileParts[0],
-                Body: file,
-                ContentType: fileType,
-                ACL: 'public-read', // required!
-            },
-        })
-        .promise()
+        uploadService.uploadFile(file, this.props.customer)
         .then(data => {
                 // TODO: hide loading icon
                 console.log(`uploaded to:`, data.Location, data);
@@ -561,6 +541,9 @@ class FittingForm extends Component {
                                                     <div style={{marginTop: 10}}>
                                                         <Player
                                                             playsInline
+                                                            fluid={false}
+                                                            width={368}
+                                                            height={656}
                                                             poster="/assets/poster.png"
                                                             src={this.state.video_L}
                                                         />
@@ -806,6 +789,9 @@ class FittingForm extends Component {
                                                     <div style={{marginTop: 10}}>
                                                         <Player
                                                             playsInline
+                                                            fluid={false}
+                                                            width={368}
+                                                            height={656}
                                                             poster="/assets/poster.png"
                                                             src={this.state.video_R}
                                                         />
