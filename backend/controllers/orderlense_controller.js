@@ -50,14 +50,14 @@ router.get("/", async (req, res) => {
           Status: element.right.status,
         },
         L: {
-          id_order: element.right.id,
-          os_lense: element.right.lense,
-          os_kcode: element.right.kcode,
-          os_power: element.right.power,
-          os_size: element.right.side,
-          note_order_lens: element.right.note,
-          price: element.right.price,
-          Status: element.right.status,
+          id_order: element.left.id,
+          os_lense: element.left.lense,
+          os_kcode: element.left.kcode,
+          os_power: element.left.power,
+          os_size: element.left.size,
+          note_order_lens: element.left.note,
+          price: element.left.price,
+          Status: element.left.status,
         },
       });
     });
@@ -118,7 +118,7 @@ router.post(
         lense: lense_L,
         kcode: kcode_L,
         power: power_L,
-        side: side_L,
+        size: side_L,
         note: req.body.note_order_lens,
         type: "L",
       });
@@ -127,7 +127,7 @@ router.post(
         lense: lense_R,
         kcode: kcode_R,
         power: power_R,
-        side: side_R,
+        size: side_R,
         note: req.body.note_order_lens,
         type: "R",
       });
