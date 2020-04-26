@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     kcode: DataTypes.STRING,
     power: DataTypes.STRING,
     side: DataTypes.STRING,
+    size: DataTypes.STRING,
     note: DataTypes.TEXT,
     price: DataTypes.DOUBLE,
     status: DataTypes.INTEGER,

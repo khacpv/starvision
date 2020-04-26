@@ -7,17 +7,33 @@ import {
     Form,
     Input,
     FormGroup,
-    Label, Collapse, CardBody, Card,
-    Container,Table
+    Label,
+    Collapse,
+    CardBody,
+    Card,
+    Container,
+    Table,
 } from 'reactstrap';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import {customerService} from "../../services/index";
+import 'react-datepicker/dist/react-datepicker.css';
+import {customerService, uploadService} from '../../services/index';
+import AWS from 'aws-sdk';
 import moment from 'moment';
-import CustomerList from "../../containers/CustomerList";
+import { Player } from 'video-react';
+import ReactLoading from 'react-loading';
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+export function getFileS3Name(typeContent, type, khid, doctorData) {
+    let strDate = moment(new Date()).format('YYYY-MM-DD');
+    let idBacsi = doctorData.Id_bacsi;
+    let id_Dttc = doctorData.Id_Dttc;
+    let randomNumber = getRandomInt(100) * 100;
+    return strDate + "-" + idBacsi + "-" + id_Dttc.toString() + "_" + khid.toString() + "_" + type + randomNumber.toString() + "." + typeContent;
+}
 
 class FittingForm extends Component {
-
     initialState = {
         referaction_sph_L: '',
         referaction_cyl_L: '',
@@ -57,13 +73,13 @@ class FittingForm extends Component {
         super(props);
         this.state = {
             ...this.initialState,
-            isLoading: false,
-            isOpen: !props.isNew
+            isLoadingLeft: false,
+            isLoadingRight: false,
+            isOpen: !props.isNew,
         };
     }
 
     setData(data) {
-        console.log(data);
         this.setState({
             referaction_sph_L: data.fitting_left.os_referaction_sph,
             referaction_cyl_L: data.fitting_left.os_referaction_cyl,
@@ -80,7 +96,7 @@ class FittingForm extends Component {
             comment_di_chuyen_L: data.fitting_left.os_comment_di_chuyen,
             comment_ket_luan_L: data.fitting_left.os_comment_ket_luan,
             video_L: data.fitting_left.os_video,
-            size_L: data.fitting_left.os_thumb,
+            size_L: data.fitting_left.os_size,
             referaction_sph_R: data.fitting_right.os_referaction_sph,
             referaction_cyl_R: data.fitting_right.os_referaction_cyl,
             referaction_ax_R: data.fitting_right.os_referaction_ax,
@@ -96,68 +112,121 @@ class FittingForm extends Component {
             comment_di_chuyen_R: data.fitting_right.os_comment_di_chuyen,
             comment_ket_luan_R: data.fitting_right.os_comment_ket_luan,
             video_R: data.fitting_right.os_video,
-            size_R: data.fitting_right.os_thumb,
-        })
+            size_R: data.fitting_right.os_size,
+        });
     }
-
-    loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
     createFitting() {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         const data = {
-            mabacsi : doctorData.Tenbacsi,
-            idbacsi : doctorData.Id_bacsi,
-            iddttc : doctorData.Id_Dttc,
-            ngaykham : new Date(),
+            mabacsi: doctorData.Tenbacsi,
+            idbacsi: doctorData.Id_bacsi,
+            iddttc: doctorData.Id_Dttc,
+            ngaykham: new Date(),
             khid: this.props.customer.ID_KHACHHANG,
         };
-        const {referaction_sph_L, referaction_sph_R, referaction_cyl_L, referaction_cyl_R, referaction_ax_L, referaction_ax_R,
-            bcva_va_L, bcva_va_R, bcva_sph_L, bcva_sph_R, bcva_cyl_L, bcva_cyl_R, bcva_ax_L, bcva_ax_R, kcode_L, kcode_R,
-            power_L, power_R, comment_size_L, comment_size_R, comment_matbo_L, comment_matbo_R, comment_vung_dieu_tri_L, comment_vung_dieu_tri_R,
-            comment_di_chuyen_L, comment_di_chuyen_R, comment_ket_luan_L, comment_ket_luan_R, video_L, video_R, size_L, size_R} = this.state;
-        customerService.createFitting({
-            ...data,
-            "fitting_no": this.props.fittingNo,
-            "referaction_sph": referaction_sph_L,
-            "referaction_cyl": referaction_cyl_L,
-            "referaction_ax": referaction_ax_L,
-            "bcva_va": bcva_va_L,
-            "bcva_sph": bcva_sph_L,
-            "bcva_cyl": bcva_cyl_L,
-            "bcva_ax": bcva_ax_L,
-            "side": "L",
-            "kcode": kcode_L,
-            "power": power_L,
-            "comment_size": comment_size_L,
-            "comment_matbo": comment_matbo_L,
-            "comment_vung_dieu_tri": comment_vung_dieu_tri_L,
-            "comment_di_chuyen": comment_di_chuyen_L,
-            "comment_ket_luan": comment_ket_luan_L,
-            "video": video_L,
-            "thumb": size_L
-        }, {
-            ...data,
-            "fitting_no": this.props.fittingNo,
-            "referaction_sph": referaction_sph_R,
-            "referaction_cyl": referaction_cyl_R,
-            "referaction_ax": referaction_ax_R,
-            "bcva_va": bcva_va_R,
-            "bcva_sph": bcva_sph_R,
-            "bcva_cyl": bcva_cyl_R,
-            "bcva_ax": bcva_ax_R,
-            "side": "R",
-            "kcode": kcode_R,
-            "power": power_R,
-            "comment_size": comment_size_R,
-            "comment_matbo": comment_matbo_R,
-            "comment_vung_dieu_tri": comment_vung_dieu_tri_R,
-            "comment_di_chuyen": comment_di_chuyen_R,
-            "comment_ket_luan": comment_ket_luan_R,
-            "video": video_R,
-            "thumb": size_R
-        }).then(result => {
-            console.log(result)
-        }).catch(error => console.log(error))
+        const {
+            referaction_sph_L,
+            referaction_sph_R,
+            referaction_cyl_L,
+            referaction_cyl_R,
+            referaction_ax_L,
+            referaction_ax_R,
+            bcva_va_L,
+            bcva_va_R,
+            bcva_sph_L,
+            bcva_sph_R,
+            bcva_cyl_L,
+            bcva_cyl_R,
+            bcva_ax_L,
+            bcva_ax_R,
+            kcode_L,
+            kcode_R,
+            power_L,
+            power_R,
+            comment_size_L,
+            comment_size_R,
+            comment_matbo_L,
+            comment_matbo_R,
+            comment_vung_dieu_tri_L,
+            comment_vung_dieu_tri_R,
+            comment_di_chuyen_L,
+            comment_di_chuyen_R,
+            comment_ket_luan_L,
+            comment_ket_luan_R,
+            video_L,
+            video_R,
+            size_L,
+            size_R,
+        } = this.state;
+        if (
+            bcva_va_L &&
+            bcva_sph_L &&
+            bcva_cyl_L &&
+            bcva_ax_L &&
+            bcva_va_R &&
+            bcva_sph_R &&
+            bcva_cyl_R &&
+            bcva_ax_R
+        ) {
+            customerService
+                .createFitting(
+                    {
+                        ...data,
+                        fitting_no: this.props.fittingNo,
+                        referaction_sph: referaction_sph_L,
+                        referaction_cyl: referaction_cyl_L,
+                        referaction_ax: referaction_ax_L,
+                        bcva_va: bcva_va_L,
+                        bcva_sph: bcva_sph_L,
+                        bcva_cyl: bcva_cyl_L,
+                        bcva_ax: bcva_ax_L,
+                        side: 'L',
+                        kcode: kcode_L,
+                        power: power_L,
+                        comment_size: comment_size_L,
+                        comment_matbo: comment_matbo_L,
+                        comment_vung_dieu_tri: comment_vung_dieu_tri_L,
+                        comment_di_chuyen: comment_di_chuyen_L,
+                        comment_ket_luan: comment_ket_luan_L,
+                        video: video_L,
+                        size: size_L,
+                    },
+                    {
+                        ...data,
+                        fitting_no: this.props.fittingNo,
+                        referaction_sph: referaction_sph_R,
+                        referaction_cyl: referaction_cyl_R,
+                        referaction_ax: referaction_ax_R,
+                        bcva_va: bcva_va_R,
+                        bcva_sph: bcva_sph_R,
+                        bcva_cyl: bcva_cyl_R,
+                        bcva_ax: bcva_ax_R,
+                        side: 'R',
+                        kcode: kcode_R,
+                        power: power_R,
+                        comment_size: comment_size_R,
+                        comment_matbo: comment_matbo_R,
+                        comment_vung_dieu_tri: comment_vung_dieu_tri_R,
+                        comment_di_chuyen: comment_di_chuyen_R,
+                        comment_ket_luan: comment_ket_luan_R,
+                        video: video_R,
+                        size: size_R,
+                    }
+                )
+                .then((result) => {
+                    if (
+                        result[0].status === 'success' &&
+                        result[1].status === 'success'
+                    ) {
+                        this.props.getUserData(this.props.customer);
+                        alert('Cập nhật thành công');
+                    }
+                })
+                .catch((error) => alert(error.message));
+        } else {
+            alert('Vui lòng điền đủ thông tin BVCA');
+        }
     }
 
     resetForm() {
@@ -165,114 +234,321 @@ class FittingForm extends Component {
     }
 
     changeValue(event, param) {
-        this.setState({[param]: event.target.value})
+        this.setState({[param]: event.target.value});
+    }
+
+    changeFile(file, eyeSide, event) {
+        let fileMime = file.type;
+        if (fileMime.indexOf('video/') < 0) {
+            alert('Selected file is not a Video');
+            event.target.value = null;
+            return;
+        }
+
+        // TODO: show loading icon
+        if (eyeSide === 'left') {
+            this.setState({isLoadingLeft: true})
+        }
+        if (eyeSide === 'right') {
+            this.setState({isLoadingRight: true})
+        }
+        // Multiparts upload
+        uploadService.uploadFile(file, this.props.customer)
+        .then(data => {
+                // TODO: hide loading icon
+                console.log(`uploaded to:`, data.Location, data);
+                if (eyeSide === 'left') {
+                    this.setState({video_L: data.Location, isLoadingLeft: false})
+                }
+                if (eyeSide === 'right') {
+                    this.setState({video_R: data.Location, isLoadingRight: false})
+                }
+                // TODO: display uploaded file
+            },
+        ).catch(err => {
+            if (eyeSide === 'left') {
+                this.setState({isLoadingLeft: false})
+            }
+            if (eyeSide === 'right') {
+                this.setState({isLoadingRight: false})
+            }
+            alert('There was an error uploading your photo: ' + err.message)
+        })
     }
 
     render() {
         let data = this.state;
-        let klist = [];
-        for (let k = 40; k <= 47.25 ; k+= 0.25) {
-            klist.push(<option>{k.toFixed(2)}</option>)
+        let klist = [<option/>];
+        for (let k = 40; k <= 47.25; k += 0.25) {
+            klist.push(<option>{k.toFixed(2)}</option>);
         }
         let plist = [
+            <option/>,
             <option>{-3}</option>,
             <option>{-7}</option>,
-            <option>{3}</option>
+            <option>{3}</option>,
         ];
-        let slist = [];
-        for (let s = 10.4; s <= 11.6 ; s+= 0.20) {
-            slist.push(<option>{s.toFixed(2)}</option>)
+        let slist = [<option/>];
+        for (let s = 10.4; s <= 11.6; s += 0.2) {
+            slist.push(<option>{s.toFixed(2)}</option>);
         }
         return (
-            <div style={{ 'margin-top': '20px'}}>
+            <div style={{'margin-top': '20px'}}>
                 <div>
-                    <Button onClick={() => this.setState({ isOpen: !this.state.isOpen})} style={{ 'margin-bottom': 15}} color={'info'}>Fitting lần {this.props.fittingNo}( Click để {this.state.isOpen ? 'đóng' : 'mở'})</Button>
+                    <Button
+                        onClick={() => this.setState({isOpen: !this.state.isOpen})}
+                        style={{'margin-bottom': 15}}
+                        color={'info'}
+                    >
+                        Fitting lần {this.props.fittingNo}( Click để{' '}
+                        {this.state.isOpen ? 'đóng' : 'mở'})
+                    </Button>
                 </div>
                 <Collapse isOpen={this.state.isOpen}>
                     <Form>
                         <Row>
                             <Col xs={6}>
-                                <h3>
-                                    OS - Mắt trái
-                                </h3>
+                                <h3>OS - Mắt trái</h3>
                                 <div>
-                                    <Table responsive className='table-solid'>
+                                    <Table responsive className="table-solid">
                                         <tbody>
                                         <tr>
-                                            <th className='table-solid'>Fitting</th>
-                                            <td className='table-solid'>
+                                            <th className="table-solid">Fitting</th>
+                                            <td className="table-solid">
                                                 K-code
-                                                <Input value={data.kcode_L} onChange={(event) => this.changeValue(event, 'kcode_L')} type="select" name="kcode_L" id="kcode_L">
+                                                <Input
+                                                    value={data.kcode_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'kcode_L')
+                                                    }
+                                                    type="select"
+                                                    name="kcode_L"
+                                                    id="kcode_L"
+                                                >
                                                     {klist}
                                                 </Input>
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 Power
-                                                <Input value={data.power_L} onChange={(event) => this.changeValue(event, 'power_L')} type="select" name="power_L" id="power_L">
+                                                <Input
+                                                    value={data.power_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'power_L')
+                                                    }
+                                                    type="select"
+                                                    name="power_L"
+                                                    id="power_L"
+                                                >
                                                     {plist}
                                                 </Input>
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 Size
-                                                <Input value={data.size_L} onChange={(event) => this.changeValue(event, 'size_L')} type="select" name="select" id="size_L">
+                                                <Input
+                                                    value={data.size_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'size_L')
+                                                    }
+                                                    type="select"
+                                                    name="select"
+                                                    id="size_L"
+                                                >
                                                     {slist}
                                                 </Input>
                                             </td>
-                                            <td className='table-solid'/>
+                                            <td className="table-solid"/>
                                         </tr>
                                         <tr>
-                                            <th className='table-solid'>BCVA</th>
-                                            <td className='table-solid'>
+                                            <th className="table-solid">BCVA</th>
+                                            <td className="table-solid">
                                                 SPH
-                                                <Input value={data.bcva_sph_L} onChange={(event) => this.changeValue(event, 'bcva_sph_L')} type="text" name="bcva_sph_L" id="bcva_sph_L" placeholder="" />
+                                                <Input
+                                                    value={data.bcva_sph_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'bcva_sph_L')
+                                                    }
+                                                    type="number"
+                                                    name="bcva_sph_L"
+                                                    id="bcva_sph_L"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 CYL
-                                                <Input value={data.bcva_cyl_L} onChange={(event) => this.changeValue(event, 'bcva_cyl_L')} type="text" name="bcva_cyl_L" id="bcva_cyl_L" placeholder="" />
+                                                <Input
+                                                    value={data.bcva_cyl_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'bcva_cyl_L')
+                                                    }
+                                                    type="number"
+                                                    name="bcva_cyl_L"
+                                                    id="bcva_cyl_L"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 AX
-                                                <Input value={data.bcva_ax_L} onChange={(event) => this.changeValue(event, 'bcva_ax_L')} type="text" name="bcva_ax_L" id="bcva_ax_L" placeholder="" />
+                                                <Input
+                                                    value={data.bcva_ax_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'bcva_ax_L')
+                                                    }
+                                                    type="text"
+                                                    name="bcva_ax_L"
+                                                    id="bcva_ax_L"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 VA
-                                                <Input value={data.bcva_va_L} onChange={(event) => this.changeValue(event, 'bcva_va_L')} type="text" name="bcva_va_L" id="bcva_va_L" placeholder="" />
+                                                <Input
+                                                    value={data.bcva_va_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'bcva_va_L')
+                                                    }
+                                                    type="text"
+                                                    name="bcva_va_L"
+                                                    id="bcva_va_L"
+                                                    placeholder=""
+                                                />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th className='table-solid'>Over Refraction:</th>
-                                            <td className='table-solid'>
-                                                <Input value={data.referaction_sph_L} onChange={(event) => this.changeValue(event, 'referaction_sph_L')} type="text" name="referaction_sph_L" id="referaction_sph_L" placeholder="" />
+                                            <th className="table-solid">Over Refraction:</th>
+                                            <td className="table-solid">
+                                                <Input
+                                                    value={data.referaction_sph_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'referaction_sph_L')
+                                                    }
+                                                    type="number"
+                                                    name="referaction_sph_L"
+                                                    id="referaction_sph_L"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
-                                                <Input value={data.referaction_cyl_L} onChange={(event) => this.changeValue(event, 'referaction_cyl_L')} type="text" name="referaction_cyl_L" id="referaction_cyl_L" placeholder="" />
+                                            <td className="table-solid">
+                                                <Input
+                                                    value={data.referaction_cyl_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'referaction_cyl_L')
+                                                    }
+                                                    type="number"
+                                                    name="referaction_cyl_L"
+                                                    id="referaction_cyl_L"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
-                                                <Input value={data.referaction_ax_L} onChange={(event) => this.changeValue(event, 'referaction_ax_L')} type="text" name="referaction_ax_L" id="referaction_ax_L" placeholder="" />
+                                            <td className="table-solid">
+                                                <Input
+                                                    value={data.referaction_ax_L}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'referaction_ax_L')
+                                                    }
+                                                    type="text"
+                                                    name="referaction_ax_L"
+                                                    id="referaction_ax_L"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'/>
+                                            <td className="table-solid"/>
                                         </tr>
                                         <tr>
-                                            <th className='table-solid'>Comments</th>
-                                            <td className='table-solid' colspan="4">
+                                            <th className="table-solid">Comments</th>
+                                            <td className="table-solid" colspan="4">
                                                 <div>
                                                     <h5>Vùng điều trị:</h5>
-                                                    <Input value={data.comment_vung_dieu_tri_L} onChange={(event) => this.changeValue(event, 'comment_vung_dieu_tri_L')} type="text" name="comment_vung_dieu_tri_L" id="comment_vung_dieu_tri_L" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_vung_dieu_tri_L}
+                                                        onChange={(event) =>
+                                                            this.changeValue(
+                                                                event,
+                                                                'comment_vung_dieu_tri_L'
+                                                            )
+                                                        }
+                                                        type="text"
+                                                        name="comment_vung_dieu_tri_L"
+                                                        id="comment_vung_dieu_tri_L"
+                                                        placeholder=""
+                                                    />
                                                     <h5 style={{'margin-top': 5}}>Mắt bò:</h5>
-                                                    <Input value={data.comment_matbo_L} onChange={(event) => this.changeValue(event, 'comment_matbo_L')} type="text" name="comment_matbo_L" id="comment_matbo_L" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_matbo_L}
+                                                        onChange={(event) =>
+                                                            this.changeValue(event, 'comment_matbo_L')
+                                                        }
+                                                        type="text"
+                                                        name="comment_matbo_L"
+                                                        id="comment_matbo_L"
+                                                        placeholder=""
+                                                    />
                                                     <h5 style={{'margin-top': 5}}>Size:</h5>
-                                                    <Input value={data.comment_size_L} onChange={(event) => this.changeValue(event, 'comment_size_L')} type="text" name="comment_size_L" id="comment_size_L" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_size_L}
+                                                        onChange={(event) =>
+                                                            this.changeValue(event, 'comment_size_L')
+                                                        }
+                                                        type="text"
+                                                        name="comment_size_L"
+                                                        id="comment_size_L"
+                                                        placeholder=""
+                                                    />
                                                     <h5 style={{'margin-top': 5}}>Di chuyển:</h5>
-                                                    <Input value={data.comment_di_chuyen_L} onChange={(event) => this.changeValue(event, 'comment_di_chuyen_L')} type="text" name="comment_di_chuyen_L" id="comment_di_chuyen_L" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_di_chuyen_L}
+                                                        onChange={(event) =>
+                                                            this.changeValue(event, 'comment_di_chuyen_L')
+                                                        }
+                                                        type="text"
+                                                        name="comment_di_chuyen_L"
+                                                        id="comment_di_chuyen_L"
+                                                        placeholder=""
+                                                    />
                                                     <h5 style={{'margin-top': 5}}>Kết luận:</h5>
-                                                    <Input value={data.comment_ket_luan_L} onChange={(event) => this.changeValue(event, 'comment_ket_luan_L')} type="text" name="comment_ket_luan_L" id="comment_ket_luan_L" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_ket_luan_L}
+                                                        onChange={(event) =>
+                                                            this.changeValue(event, 'comment_ket_luan_L')
+                                                        }
+                                                        type="text"
+                                                        name="comment_ket_luan_L"
+                                                        id="comment_ket_luan_L"
+                                                        placeholder=""
+                                                    />
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th className='table-solid'>Video</th>
-                                            <td className='table-solid'colspan="4">
-                                                <Input type="file" name="file" id="exampleFile" />
+                                            <th className="table-solid">Video</th>
+                                            <td className="table-solid" colspan="4">
+                                                {
+                                                    this.state.isLoadingLeft ? <ReactLoading type={'spin'} color={'grey'} height={20} width={20} />
+                                                        : <Input
+                                                            onChange={(event) =>
+                                                                this.changeFile(
+                                                                    event.target.files[0],
+                                                                    'left',
+                                                                    event
+                                                                )
+                                                            }
+                                                            type="file"
+                                                            name="file"
+                                                            id="exampleFile"
+                                                        />
+                                                }
+                                                {
+                                                    this.state.video_L &&
+                                                    <div style={{marginTop: 10}}>
+                                                        <Player
+                                                            playsInline
+                                                            fluid={false}
+                                                            width={368}
+                                                            height={656}
+                                                            poster="/assets/poster.png"
+                                                            src={this.state.video_L}
+                                                        />
+                                                    </div>
+                                                }
                                             </td>
                                         </tr>
                                         </tbody>
@@ -282,83 +558,245 @@ class FittingForm extends Component {
                             <Col xs={6}>
                                 <h3>OD - Mắt phải</h3>
                                 <div>
-                                    <Table responsive className='table-solid'>
+                                    <Table responsive className="table-solid">
                                         <tbody>
                                         <tr>
-                                            <th className='table-solid'>Fitting</th>
-                                            <td className='table-solid'>
+                                            <th className="table-solid">Fitting</th>
+                                            <td className="table-solid">
                                                 K-code
-                                                <Input value={data.kcode_R} onChange={(event) => this.changeValue(event, 'kcode_R')} type="select" name="kcode_R" id="kcode_R">
+                                                <Input
+                                                    value={data.kcode_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'kcode_R')
+                                                    }
+                                                    type="select"
+                                                    name="kcode_R"
+                                                    id="kcode_R"
+                                                >
                                                     {klist}
                                                 </Input>
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 Power
-                                                <Input value={data.power_R} onChange={(event) => this.changeValue(event, 'power_R')} type="select" name="power_R" id="power_R">
+                                                <Input
+                                                    value={data.power_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'power_R')
+                                                    }
+                                                    type="select"
+                                                    name="power_R"
+                                                    id="power_R"
+                                                >
                                                     {plist}
                                                 </Input>
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 Size
-                                                <Input value={data.size_R} onChange={(event) => this.changeValue(event, 'size_R')} type="select" name="size_R" id="size_R">
+                                                <Input
+                                                    value={data.size_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'size_R')
+                                                    }
+                                                    type="select"
+                                                    name="size_R"
+                                                    id="size_R"
+                                                >
                                                     {slist}
                                                 </Input>
                                             </td>
-                                            <td className='table-solid'/>
+                                            <td className="table-solid"/>
                                         </tr>
                                         <tr>
-                                            <th className='table-solid'>BCVA</th>
-                                            <td className='table-solid'>
+                                            <th className="table-solid">BCVA</th>
+                                            <td className="table-solid">
                                                 SPH
-                                                <Input value={data.bcva_sph_R} onChange={(event) => this.changeValue(event, 'bcva_sph_R')} type="text" name="bcva_sph_R" id="bcva_sph_R" placeholder="" />
+                                                <Input
+                                                    value={data.bcva_sph_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'bcva_sph_R')
+                                                    }
+                                                    type="number"
+                                                    name="bcva_sph_R"
+                                                    id="bcva_sph_R"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 CYL
-                                                <Input value={data.bcva_cyl_R} onChange={(event) => this.changeValue(event, 'bcva_cyl_R')} type="text" name="bcva_cyl_R" id="bcva_cyl_R" placeholder="" />
+                                                <Input
+                                                    value={data.bcva_cyl_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'bcva_cyl_R')
+                                                    }
+                                                    type="number"
+                                                    name="bcva_cyl_R"
+                                                    id="bcva_cyl_R"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 AX
-                                                <Input value={data.bcva_ax_R} onChange={(event) => this.changeValue(event, 'bcva_ax_R')} type="text" name="bcva_ax_R" id="bcva_ax_R" placeholder="" />
+                                                <Input
+                                                    value={data.bcva_ax_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'bcva_ax_R')
+                                                    }
+                                                    type="text"
+                                                    name="bcva_ax_R"
+                                                    id="bcva_ax_R"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
+                                            <td className="table-solid">
                                                 VA
-                                                <Input value={data.bcva_va_R} onChange={(event) => this.changeValue(event, 'bcva_va_R')} type="text" name="bcva_va_R" id="bcva_va_R" placeholder="" />
+                                                <Input
+                                                    value={data.bcva_va_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'bcva_va_R')
+                                                    }
+                                                    type="text"
+                                                    name="bcva_va_R"
+                                                    id="bcva_va_R"
+                                                    placeholder=""
+                                                />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th className='table-solid'>Over Refraction:</th>
-                                            <td className='table-solid'>
-                                                <Input value={data.referaction_sph_R} onChange={(event) => this.changeValue(event, 'referaction_sph_R')} type="text" name="referaction_sph_R" id="referaction_sph_R" placeholder="" />
+                                            <th className="table-solid">Over Refraction:</th>
+                                            <td className="table-solid">
+                                                <Input
+                                                    value={data.referaction_sph_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'referaction_sph_R')
+                                                    }
+                                                    type="number"
+                                                    name="referaction_sph_R"
+                                                    id="referaction_sph_R"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
-                                                <Input value={data.referaction_cyl_R} onChange={(event) => this.changeValue(event, 'referaction_cyl_R')} type="text" name="referaction_cyl_R" id="referaction_cyl_R" placeholder="" />
+                                            <td className="table-solid">
+                                                <Input
+                                                    value={data.referaction_cyl_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'referaction_cyl_R')
+                                                    }
+                                                    type="number"
+                                                    name="referaction_cyl_R"
+                                                    id="referaction_cyl_R"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'>
-                                                <Input value={data.referaction_ax_R} onChange={(event) => this.changeValue(event, 'referaction_ax_R')} type="text" name="referaction_ax_R" id="referaction_ax_R" placeholder="" />
+                                            <td className="table-solid">
+                                                <Input
+                                                    value={data.referaction_ax_R}
+                                                    onChange={(event) =>
+                                                        this.changeValue(event, 'referaction_ax_R')
+                                                    }
+                                                    type="text"
+                                                    name="referaction_ax_R"
+                                                    id="referaction_ax_R"
+                                                    placeholder=""
+                                                />
                                             </td>
-                                            <td className='table-solid'/>
+                                            <td className="table-solid"/>
                                         </tr>
                                         <tr>
-                                            <th className='table-solid'>Comments</th>
-                                            <td className='table-solid' colspan="4">
+                                            <th className="table-solid">Comments</th>
+                                            <td className="table-solid" colspan="4">
                                                 <div>
                                                     <h5>Vùng điều trị:</h5>
-                                                    <Input value={data.comment_vung_dieu_tri_R} onChange={(event) => this.changeValue(event, 'comment_vung_dieu_tri_R')} type="text" name="comment_vung_dieu_tri_R" id="comment_vung_dieu_tri_R" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_vung_dieu_tri_R}
+                                                        onChange={(event) =>
+                                                            this.changeValue(
+                                                                event,
+                                                                'comment_vung_dieu_tri_R'
+                                                            )
+                                                        }
+                                                        type="text"
+                                                        name="comment_vung_dieu_tri_R"
+                                                        id="comment_vung_dieu_tri_R"
+                                                        placeholder=""
+                                                    />
                                                     <h5 style={{'margin-top': 5}}>Mắt bò:</h5>
-                                                    <Input value={data.comment_matbo_R} onChange={(event) => this.changeValue(event, 'comment_matbo_R')} type="text" name="comment_matbo_R" id="comment_matbo_R" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_matbo_R}
+                                                        onChange={(event) =>
+                                                            this.changeValue(event, 'comment_matbo_R')
+                                                        }
+                                                        type="text"
+                                                        name="comment_matbo_R"
+                                                        id="comment_matbo_R"
+                                                        placeholder=""
+                                                    />
                                                     <h5 style={{'margin-top': 5}}>Size:</h5>
-                                                    <Input value={data.comment_size_R} onChange={(event) => this.changeValue(event, 'comment_size_R')} type="text" name="comment_size_R" id="comment_size_R" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_size_R}
+                                                        onChange={(event) =>
+                                                            this.changeValue(event, 'comment_size_R')
+                                                        }
+                                                        type="text"
+                                                        name="comment_size_R"
+                                                        id="comment_size_R"
+                                                        placeholder=""
+                                                    />
                                                     <h5 style={{'margin-top': 5}}>Di chuyển:</h5>
-                                                    <Input value={data.comment_di_chuyen_R} onChange={(event) => this.changeValue(event, 'comment_di_chuyen_R')} type="text" name="comment_di_chuyen_R" id="comment_di_chuyen_R" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_di_chuyen_R}
+                                                        onChange={(event) =>
+                                                            this.changeValue(event, 'comment_di_chuyen_R')
+                                                        }
+                                                        type="text"
+                                                        name="comment_di_chuyen_R"
+                                                        id="comment_di_chuyen_R"
+                                                        placeholder=""
+                                                    />
                                                     <h5 style={{'margin-top': 5}}>Kết luận:</h5>
-                                                    <Input value={data.comment_ket_luan_R} onChange={(event) => this.changeValue(event, 'comment_ket_luan_R')} type="text" name="comment_ket_luan_R" id="comment_ket_luan_R" placeholder="" />
+                                                    <Input
+                                                        value={data.comment_ket_luan_R}
+                                                        onChange={(event) =>
+                                                            this.changeValue(event, 'comment_ket_luan_R')
+                                                        }
+                                                        type="text"
+                                                        name="comment_ket_luan_R"
+                                                        id="comment_ket_luan_R"
+                                                        placeholder=""
+                                                    />
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th className='table-solid'>Video</th>
-                                            <td className='table-solid'colspan="4">
-                                                <Input type="file" name="file" id="exampleFile" />
+                                            <th className="table-solid">Video</th>
+                                            <td className="table-solid" colspan="4">
+                                                {
+                                                    this.state.isLoadingRight ? <ReactLoading type={'spin'} color={'grey'} height={20} width={20} />
+                                                        : <Input
+                                                            onChange={(event) =>
+                                                                this.changeFile(
+                                                                    event.target.files[0],
+                                                                    'right',
+                                                                    event
+                                                                )
+                                                            }
+                                                            type="file"
+                                                            name="file"
+                                                            id="exampleFile"
+                                                        />
+                                                }
+                                                {
+                                                    this.state.video_R &&
+                                                    <div style={{marginTop: 10}}>
+                                                        <Player
+                                                            playsInline
+                                                            fluid={false}
+                                                            width={368}
+                                                            height={656}
+                                                            poster="/assets/poster.png"
+                                                            src={this.state.video_R}
+                                                        />
+                                                    </div>
+                                                }
                                             </td>
                                         </tr>
                                         </tbody>
@@ -367,8 +805,19 @@ class FittingForm extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Button onClick={() => this.resetForm()} style={{ 'margin-left': 15}}>Clear</Button>
-                            <Button onClick={() => this.createFitting()} style={{ 'margin-left': 15}} color={'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
+                            <Button
+                                onClick={() => this.resetForm()}
+                                style={{'margin-left': 15}}
+                            >
+                                Làm mới
+                            </Button>
+                            <Button
+                                onClick={() => this.createFitting()}
+                                style={{'margin-left': 15}}
+                                color={this.props.isNew ? 'success' : 'primary'}
+                            >
+                                {this.props.isNew ? 'Tạo mới' : 'Cập nhật'}
+                            </Button>
                         </Row>
                     </Form>
                 </Collapse>

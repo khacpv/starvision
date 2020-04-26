@@ -20,6 +20,9 @@ module.exports = {
       side: {
         type: Sequelize.STRING
       },
+      size: {
+        type: Sequelize.STRING
+      },
       note: {
         type: Sequelize.TEXT
       },
