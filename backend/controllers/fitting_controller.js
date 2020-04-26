@@ -41,13 +41,13 @@ router.get("/", async (req, res) => {
         },
       });
     });
-    res.send({
+    return res.send({
       status: "success",
       message: "",
       data: custom_result,
     });
   }
-  res.send({ code: 400, msg: "error" });
+  return res.send({ code: 400, msg: "error" });
 });
 
 router.post(
@@ -201,10 +201,10 @@ router.put("/:id", async (req, res) => {
     }
   );
   if (result) {
-    res.send({ code: 200, msg: "success", items: result });
+    return res.send({ code: 200, msg: "success", items: result });
   }
 
-  res.send({ code: 200, msg: "error" });
+  return res.send({ code: 200, msg: "error" });
 });
 
 router.delete("/:id", async (req, res) => {
@@ -212,9 +212,9 @@ router.delete("/:id", async (req, res) => {
     where: { id: req.params.id },
   });
   if (result) {
-    res.send({ code: 200, msg: "success" });
+    return res.send({ code: 200, msg: "success" });
   }
-  res.send({ code: 400, msg: "error" });
+  return res.send({ code: 400, msg: "error" });
 });
 
 module.exports = router;

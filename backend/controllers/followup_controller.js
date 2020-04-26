@@ -111,6 +111,83 @@ router.post(
     let transaction;
     let left = null;
     let right = null;
+
+    // update
+    let checkFollowup = await FollowUp.count({
+      where:{
+        customer_id: req.body.khid,
+        dttc_id: req.body.iddttc,
+      }
+    });
+
+
+    if (checkFollowup > 0){
+      try {
+        // get transaction
+        transaction = await sequelize.transaction();
+  
+        right = await FollowUp.update({
+          doctor_code: req.body.mabacsi,
+          doctor_id: req.body.idbacsi,
+   
+          date_examination: req.body.ngaykham,
+  
+          comment: req.body.note,
+          bcva_va: bcva_va_R,
+          image: image_R,
+          video: video_R,
+          thumb: thumb_R,
+        },{
+          where:{
+            customer_id: req.body.khid,
+            dttc_id: req.body.iddttc,
+            type: "R",
+          }
+        });
+        left = await FollowUp.update({
+          doctor_code: req.body.mabacsi,
+          doctor_id: req.body.idbacsi,
+
+          date_examination: req.body.ngaykham,
+  
+          comment: req.body.note,
+
+          bcva_va: bcva_va_L,
+          image: image_L,
+          video: video_L,
+          thumb: thumb_L,
+        },{
+          where:{
+            customer_id: req.body.khid,
+            dttc_id: req.body.iddttc,
+            type: "L",
+          }
+        });
+  
+        // commit
+        await transaction.commit();
+      } catch (err) {
+        // Rollback transaction only if the transaction object is defined
+        if (transaction) await transaction.rollback();
+  
+        return res.send({
+          status: "error",
+          message:
+            "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+          data: "",
+        });
+      }
+
+      if (left && right) {
+        return res.send({
+          status: "success",
+          message: "",
+          data: "",
+        });
+      }
+    }
+    
+    // Create
     try {
       // get transaction
       transaction = await sequelize.transaction();
