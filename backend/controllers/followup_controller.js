@@ -280,7 +280,7 @@ router.put(
           dttc_id: req.body.iddttc,
           date_examination: req.body.ngaykham,
           followup_no: req.body.followup_no,
-          comment: req.body.comment,
+          note: req.body.note,
           side: req.body.side,
           bcva_va: req.body.bcva_va,
           image: req.body.image,
