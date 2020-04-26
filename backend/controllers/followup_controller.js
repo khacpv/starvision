@@ -132,7 +132,7 @@ router.post(
    
           date_examination: req.body.ngaykham,
   
-          comment: req.body.note,
+          note: req.body.note,
           bcva_va: bcva_va_R,
           image: image_R,
           video: video_R,
@@ -150,7 +150,7 @@ router.post(
 
           date_examination: req.body.ngaykham,
   
-          comment: req.body.note,
+          note: req.body.note,
 
           bcva_va: bcva_va_L,
           image: image_L,
@@ -199,7 +199,7 @@ router.post(
         dttc_id: req.body.iddttc,
         date_examination: req.body.ngaykham,
 
-        comment: req.body.note,
+        note: req.body.note,
         type: "R",
         bcva_va: bcva_va_R,
         image: image_R,
@@ -213,7 +213,7 @@ router.post(
         dttc_id: req.body.iddttc,
         date_examination: req.body.ngaykham,
 
-        comment: req.body.note,
+        note: req.body.note,
         type: "L",
         bcva_va: bcva_va_L,
         image: image_L,
