@@ -6,15 +6,7 @@ const { check, validationResult } = require("express-validator");
 
 router.get("/", async (req, res) => {
   let result = await Notifications.findAll({
-    attributes: ['id', 'title', 'content', "send_at", "is_read"],
-  });
-  let total = await Notifications.count({
-    
-  });
-  let count = await Notifications.count({
-    where:{
-      is_read: 0
-    }
+    attributes: ["id", "title", "content", "send_at", "is_read"],
   });
   if (result) {
     return res.send({
@@ -32,12 +24,49 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/:id", async (req, res) => {
-  let result = await Notifications.findByPk(req.params.id);
+router.get("/count_unread", async (req, res) => {
+  let result = await Notifications.count({
+    where: {
+      is_read: 0,
+    },
+  });
   if (result) {
-    return res.send({ code: 200, msg: "success", items: data });
+    return res.send({
+      status: "success",
+      message: "",
+      data: result,
+    });
   }
-  return res.send({ code: 400, msg: "error" });
+  return res.send({
+    status: "error",
+    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+    data: "",
+  });
+});
+
+router.post("/read", async (req, res) => {
+  let result = await Notifications.update(
+    {
+      is_read: 1,
+    },
+    {
+      where: {
+        id: req.body.id,
+      },
+    }
+  );
+  if (result) {
+    return res.send({
+      status: "success",
+      message: "",
+      data: "",
+    });
+  }
+  return res.send({
+    status: "error",
+    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+    data: "",
+  });
 });
 
 router.post("/", async (req, res) => {

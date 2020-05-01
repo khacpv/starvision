@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
       if (element.size == 'L'){
         key = 'os';
       }
-      let tmpSide = element.type;
+      let tmpSide = element.side;
       returnData.push({
         followup_no: element.followup_no,
         comment: element.note,
@@ -112,15 +112,19 @@ router.post(
     let transaction;
     let left = null;
     let right = null;
-
+    let checkFollowup = 0;
     // update
-    let checkFollowup = await FollowUp.count({
-      where:{
-        customer_id: req.body.khid,
-        dttc_id: req.body.iddttc,
-        id: req.body.id
-      }
-    });
+    if (req.body.id){
+      
+      checkFollowup = await FollowUp.count({
+        where:{
+          customer_id: req.body.khid,
+          dttc_id: req.body.iddttc,
+          id: req.body.id
+        }
+      });
+    }
+    
 
 
     if (checkFollowup > 0){
@@ -133,6 +137,7 @@ router.post(
           doctor_id: req.body.idbacsi,
    
           date_examination: req.body.ngaykham,
+          re_examination_date: req.body.ngaytaikham,
   
           note: req.body.note,
           bcva_va: bcva_va_R,
@@ -141,8 +146,10 @@ router.post(
           thumb: thumb_R,
         },{
           where:{
-            id: checkFollowup.id,
-            type: "R",
+            customer_id: req.body.khid,
+            dttc_id: req.body.iddttc,
+            id: req.body.id,
+            side: "R",
           }
         });
         left = await FollowUp.update({
@@ -150,6 +157,7 @@ router.post(
           doctor_id: req.body.idbacsi,
 
           date_examination: req.body.ngaykham,
+          re_examination_date: req.body.ngaytaikham,
   
           note: req.body.note,
 
@@ -159,8 +167,10 @@ router.post(
           thumb: thumb_L,
         },{
           where:{
-            id: checkFollowup.id,
-            type: "L",
+            customer_id: req.body.khid,
+            dttc_id: req.body.iddttc,
+            id: req.body.id,
+            side: "L",
           }
         });
   
@@ -198,9 +208,10 @@ router.post(
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
         date_examination: req.body.ngaykham,
+        re_examination_date: req.body.ngaytaikham,
         followup_no: 1,
         note: req.body.note,
-        type: "R",
+        side: "R",
         bcva_va: bcva_va_R,
         image: image_R,
         video: video_R,
@@ -212,10 +223,12 @@ router.post(
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
         date_examination: req.body.ngaykham,
+        re_examination_date: req.body.ngaytaikham,
+
         followup_no: 2,
 
         note: req.body.note,
-        type: "L",
+        side: "L",
         bcva_va: bcva_va_L,
         image: image_L,
         video: video_L,

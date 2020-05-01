@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
 const User = models.User;
-const Token = models.AccessToken;
+const Token = models.Tokens;
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const { check, validationResult } = require("express-validator");
@@ -15,18 +15,42 @@ router.post("/", async (req, res) => {
 
   let user = await User.findOne({
     where: {
-      username: username
-    }
+      username: username,
+    },
   });
   if (!user) {
     res.status(401).send({
       code: 401,
-      msg: "Authentication failed. User not found."
+      msg: "Authentication failed. User not found.",
     });
   } else {
     if (bcrypt.compareSync(password, user.password)) {
-      var token = jwt.sign(user.dataValues, config.app.secret            );
-
+      var token = jwt.sign(user.dataValues, config.app.secret);
+      if (token) {
+        let checkToken = await Token.findOne({
+          where: {
+            user_id: user.id,
+          },
+        });
+        if (!checkToken) {
+          Token.create({
+            access_token: token,
+            user_id: user.id,
+          });
+        } else {
+          Token.update(
+            {
+              access_token: token,
+              user_id: user.id,
+            },
+            {
+              where: {
+                user_id: user.id,
+              },
+            }
+          );
+        }
+      }
       res.status(200).send({
         status: "success",
         message: "",
@@ -35,8 +59,8 @@ router.post("/", async (req, res) => {
           user_email: user.email,
           user_nicename: user.fullname,
           user_id: user.id,
-          user_display_name: user.username
-        }
+          user_display_name: user.username,
+        },
       });
     } else {
       res.status(401).json({ msg: "Password is incorrect" });
@@ -50,9 +74,7 @@ router.post(
     check("username", "Username too short").isLength({ min: 5 }),
     check("email", "Email wrong format").isEmail(),
     check("password", "Username too short").isLength({ min: 5 }),
-    check("username", "Username is required")
-      .not()
-      .isEmpty()
+    check("username", "Username is required").not().isEmpty(),
   ],
   async (req, res) => {
     let data = req.body;
@@ -62,18 +84,18 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).send({
         code: 400,
-        msg: "Invalid data"
+        msg: "Invalid data",
       });
     } else {
       let checkUser = await User.findOne({
         where: {
-          username: data.username
-        }
+          username: data.username,
+        },
       });
       if (checkUser) {
         return res.status(200).send({
           code: 400,
-          msg: "Account existed"
+          msg: "Account existed",
         });
       }
 
@@ -87,19 +109,19 @@ router.post(
         address: data.address,
         birthday: data.birthday,
         gender: data.gender,
-        note: data.note
+        note: data.note,
       });
 
       if (user) {
         return res.send({
           code: 200,
           msg: "Register successfull",
-          data: user
+          data: user,
         });
       } else {
         return res.status(400).send({
           code: 400,
-          msg: "Register Error"
+          msg: "Register Error",
         });
       }
     }
