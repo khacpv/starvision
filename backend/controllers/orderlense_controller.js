@@ -28,6 +28,9 @@ router.get("/", async (req, res) => {
         as: "right",
       },
     ],
+    order: [
+      ['date_examination', 'DESC'],
+  ],
   });
 
   if (result) {

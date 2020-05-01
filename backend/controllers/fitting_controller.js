@@ -66,14 +66,17 @@ router.post(
         data: "",
       });
     }
-    let checkFitting = await Fitting.findOne({
-      where: {
-        customer_id: req.body.khid,
-        dttc_id: req.body.iddttc,
-        id: req.body.id,
-        side: req.body.side,
-      },
-    });
+    let checkFitting = null;
+    if (req.body.id){
+      checkFitting = await Fitting.findOne({
+        where: {
+          customer_id: req.body.khid,
+          dttc_id: req.body.iddttc,
+          id: req.body.id,
+          side: req.body.side,
+        },
+      });
+    }
 
     if (checkFitting){
       let updateFitting = Fitting.update(
