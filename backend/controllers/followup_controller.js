@@ -26,9 +26,10 @@ router.get("/", async (req, res) => {
       }
       let tmpSide = element.type;
       returnData.push({
-        followup_no: index++,
+        followup_no: element.followup_no,
         comment: element.note,
         ngaykham: element.date_examination,
+        ngaytaikham: element.re_examination_date,
         [tmpSide]: {
           [key + '_bcva_va']: element.bcva_va,
           [key + '_image']: element.image,
@@ -198,7 +199,7 @@ router.post(
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
         date_examination: req.body.ngaykham,
-
+        followup_no: 1,
         note: req.body.note,
         type: "R",
         bcva_va: bcva_va_R,
@@ -212,6 +213,7 @@ router.post(
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
         date_examination: req.body.ngaykham,
+        followup_no: 2,
 
         note: req.body.note,
         type: "L",
