@@ -33,7 +33,6 @@ router.get("/", async (req, res) => {
   if (result) {
     let returnData = [];
     result.forEach((element) => {
-      let tmpSize = element.type;
       let date = new Date(element.date_examination);
 
       returnData.push({
@@ -120,7 +119,7 @@ router.post(
         power: power_L,
         size: side_L,
         note: req.body.note_order_lens,
-        type: "L",
+        side: "L",
       });
 
       let right = await Lense.create({
@@ -129,7 +128,7 @@ router.post(
         power: power_R,
         size: side_R,
         note: req.body.note_order_lens,
-        type: "R",
+        side: "R",
       });
       let todayStart = new Date().setHours(0, 0, 0, 0);
       let now = new Date();
@@ -263,7 +262,7 @@ router.post(
           lense: lense_L,
           kcode: kcode_L,
           power: power_L,
-          side: side_L,
+          size: side_L,
           note: req.body.note_order_lens,
         },
         {
@@ -278,7 +277,7 @@ router.post(
           lense: lense_R,
           kcode: kcode_R,
           power: power_R,
-          side: side_R,
+          size: side_R,
           note: req.body.note_order_lens,
         },
         {

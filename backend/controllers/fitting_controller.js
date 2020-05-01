@@ -70,7 +70,7 @@ router.post(
       where: {
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
-        fitting_no: req.body.fitting_no,
+        id: req.body.id,
         side: req.body.side,
       },
     });

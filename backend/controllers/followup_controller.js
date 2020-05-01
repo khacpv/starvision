@@ -118,6 +118,7 @@ router.post(
       where:{
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
+        id: req.body.id
       }
     });
 
@@ -140,8 +141,7 @@ router.post(
           thumb: thumb_R,
         },{
           where:{
-            customer_id: req.body.khid,
-            dttc_id: req.body.iddttc,
+            id: checkFollowup.id,
             type: "R",
           }
         });
@@ -159,8 +159,7 @@ router.post(
           thumb: thumb_L,
         },{
           where:{
-            customer_id: req.body.khid,
-            dttc_id: req.body.iddttc,
+            id: checkFollowup.id,
             type: "L",
           }
         });
