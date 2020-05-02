@@ -4,6 +4,8 @@ const models = require("../models/index");
 const FollowUp = models.FollowUp;
 const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
+const Sequelize = require("sequelize");
+const { Op } = Sequelize;
 
 router.get("/", async (req, res) => {
   let userId = req.query.userid;
@@ -13,16 +15,16 @@ router.get("/", async (req, res) => {
     where: {
       customer_id: userId,
       dttc_id: dttcId,
-    }
+    },
   });
 
   if (result) {
     let returnData = [];
     let index = 1;
-    result.forEach(element => {
-      let key = 'od';
-      if (element.size == 'L'){
-        key = 'os';
+    result.forEach((element) => {
+      let key = "od";
+      if (element.size == "L") {
+        key = "os";
       }
       let tmpSide = element.side;
       returnData.push({
@@ -31,30 +33,21 @@ router.get("/", async (req, res) => {
         ngaykham: element.date_examination,
         ngaytaikham: element.re_examination_date,
         [tmpSide]: {
-          [key + '_bcva_va']: element.bcva_va,
-          [key + '_image']: element.image,
-          [key + '_video']: element.video,
-          [key + '_thumb']: element.thumb,
-          A_TH_DUBAO: element.id
-        }
-        
+          [key + "_bcva_va"]: element.bcva_va,
+          [key + "_image"]: element.image,
+          [key + "_video"]: element.video,
+          [key + "_thumb"]: element.thumb,
+          A_TH_DUBAO: element.id,
+        },
       });
     });
-    return res.send({ 
-      status: "success", 
-      message: '',
-      data: returnData 
+    return res.send({
+      status: "success",
+      message: "",
+      data: returnData,
     });
   }
   return res.send({ code: 400, msg: "error" });
-});
-
-router.get("/:id", async (req, res) => {
-  let result = await FollowUp.findByPk(req.params.id);
-  if (result) {
-    res.send({ code: 200, msg: "success", items: data });
-  }
-  res.send({ code: 400, msg: "error" });
 });
 
 router.post(
@@ -114,72 +107,72 @@ router.post(
     let right = null;
     let checkFollowup = 0;
     // update
-    if (req.body.id){
-      
+    if (req.body.id_left && req.body.id_right) {
       checkFollowup = await FollowUp.count({
-        where:{
+        where: {
           customer_id: req.body.khid,
           dttc_id: req.body.iddttc,
-          id: req.body.id
-        }
+          id: {
+            [Op.or]: [req.body.id_left, req.body.id_right],
+          },
+        },
       });
     }
-    
 
-
-    if (checkFollowup > 0){
+    if (checkFollowup > 0) {
       try {
         // get transaction
         transaction = await sequelize.transaction();
-  
-        right = await FollowUp.update({
-          doctor_code: req.body.mabacsi,
-          doctor_id: req.body.idbacsi,
-   
-          date_examination: req.body.ngaykham,
-          re_examination_date: req.body.ngaytaikham,
-  
-          note: req.body.note,
-          bcva_va: bcva_va_R,
-          image: image_R,
-          video: video_R,
-          thumb: thumb_R,
-        },{
-          where:{
-            customer_id: req.body.khid,
-            dttc_id: req.body.iddttc,
-            id: req.body.id,
-            side: "R",
-          }
-        });
-        left = await FollowUp.update({
-          doctor_code: req.body.mabacsi,
-          doctor_id: req.body.idbacsi,
 
-          date_examination: req.body.ngaykham,
-          re_examination_date: req.body.ngaytaikham,
-  
-          note: req.body.note,
-
-          bcva_va: bcva_va_L,
-          image: image_L,
-          video: video_L,
-          thumb: thumb_L,
-        },{
-          where:{
-            customer_id: req.body.khid,
-            dttc_id: req.body.iddttc,
-            id: req.body.id,
-            side: "L",
+        right = await FollowUp.update(
+          {
+            doctor_code: req.body.mabacsi,
+            doctor_id: req.body.idbacsi,
+            date_examination: req.body.ngaykham,
+            re_examination_date: req.body.ngaytaikham,
+            note: req.body.note,
+            bcva_va: bcva_va_R,
+            image: image_R,
+            video: video_R,
+            thumb: thumb_R,
+          },
+          {
+            where: {
+              customer_id: req.body.khid,
+              dttc_id: req.body.iddttc,
+              id: req.body.id_right,
+              side: "R",
+            },
           }
-        });
-  
+        );
+        left = await FollowUp.update(
+          {
+            doctor_code: req.body.mabacsi,
+            doctor_id: req.body.idbacsi,
+            date_examination: req.body.ngaykham,
+            re_examination_date: req.body.ngaytaikham,
+            note: req.body.note,
+            bcva_va: bcva_va_L,
+            image: image_L,
+            video: video_L,
+            thumb: thumb_L,
+          },
+          {
+            where: {
+              customer_id: req.body.khid,
+              dttc_id: req.body.iddttc,
+              id: req.body.id_left,
+              side: "L",
+            },
+          }
+        );
+
         // commit
         await transaction.commit();
       } catch (err) {
         // Rollback transaction only if the transaction object is defined
         if (transaction) await transaction.rollback();
-  
+
         return res.send({
           status: "error",
           message:
@@ -191,12 +184,12 @@ router.post(
       if (left && right) {
         return res.send({
           status: "success",
-          message: "",
+          message: "update",
           data: "",
         });
       }
     }
-    
+
     // Create
     try {
       // get transaction
