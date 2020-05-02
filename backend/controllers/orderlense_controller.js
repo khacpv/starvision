@@ -213,7 +213,7 @@ router.post(
     }
     let customerCount = await Customer.count({
       where: {
-        customer_id: req.body.khid,
+        id: req.body.khid,
         dttc_id: req.body.iddttc,
       },
     });
