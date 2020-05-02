@@ -21,6 +21,7 @@ router.get("/", async (req, res) => {
       custom_result.push({
         fitting_no: element.fitting_no,
         [tmpSide]: {
+          id: element.id,
           os_kcode: element.kcode,
           os_power: element.power,
           os_size: element.size,
