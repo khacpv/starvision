@@ -136,22 +136,17 @@ class CustomerOKForm extends Component {
     calOk1_Ok2_Ok3_Ok4(type) {
         const { BCVA_SPH_L, D_K1_L, D_K2_L, D_HVID_L, BCVA_SPH_R, D_K1_R, D_K2_R, D_HVID_R} = this.state;
         let b5 = type === 'left' ? parseFloat(BCVA_SPH_L) : parseFloat(BCVA_SPH_R);
-        let d3 = 0;
-        let d4 = 0;
         let d24 = 0;
         let d31 = 0;
         let d32 = 0;
         let d34 = 0;
         let d35 = 0;
         let b8 = type === 'left' ? parseFloat(D_HVID_L) : parseFloat(D_HVID_R);
-        let b7 = 0;
-        let b10 = 0;
         let b14 = 0;
         let b15 = 0;
         let b16 = 0;
         let b31 = 0;
         let b32 = 0;
-        let b34 = 0;
         let b35 = 0;
         let b37 = 0;
         let b39 = 0;
@@ -239,16 +234,8 @@ class CustomerOKForm extends Component {
         else
             Ok2 = Math.round((d31+d32)*2+0.04)/4;
 
-        // calculate Ok1 = =IF(B22>=0,IF(OR(B7<>0,B22=0),"HP","H"),IF(B7<>0,"MP",IF(B22<=-5.13,"XM","XMJ")))
-
         if (Ok3 > 0)
-            if (b7 != 0 || Ok3 == 0)
-                Ok1 = "HP";
-            else
-                Ok1 = "H";
-        else
-        if (b7 != 0)
-            Ok1 = "MP";
+            Ok1 = "H";
         else
         if (Ok3 <= -5.13)
             Ok1 = "XM";

@@ -67,6 +67,8 @@ class FittingForm extends Component {
         comment_ket_luan_R: '',
         video_R: '',
         size_R: '',
+        id_left: null,
+        id_right: null,
     };
 
     constructor(props) {
@@ -113,6 +115,8 @@ class FittingForm extends Component {
             comment_ket_luan_R: data.fitting_right.os_comment_ket_luan,
             video_R: data.fitting_right.os_video,
             size_R: data.fitting_right.os_size,
+            id_left: data.fitting_left.id,
+            id_right: data.fitting_right.id,
         });
     }
 
@@ -158,6 +162,8 @@ class FittingForm extends Component {
             video_R,
             size_L,
             size_R,
+            id_right,
+            id_left
         } = this.state;
         if (
             bcva_va_L &&
@@ -191,6 +197,7 @@ class FittingForm extends Component {
                         comment_ket_luan: comment_ket_luan_L,
                         video: video_L,
                         size: size_L,
+                        id: id_left
                     },
                     {
                         ...data,
@@ -212,6 +219,7 @@ class FittingForm extends Component {
                         comment_ket_luan: comment_ket_luan_R,
                         video: video_R,
                         size: size_R,
+                        id: id_right
                     }
                 )
                 .then((result) => {
@@ -542,8 +550,8 @@ class FittingForm extends Component {
                                                         <Player
                                                             playsInline
                                                             fluid={false}
-                                                            width={368}
-                                                            height={656}
+                                                            width={250}
+                                                            height={400}
                                                             poster="/assets/poster.png"
                                                             src={this.state.video_L}
                                                         />
@@ -790,8 +798,8 @@ class FittingForm extends Component {
                                                         <Player
                                                             playsInline
                                                             fluid={false}
-                                                            width={368}
-                                                            height={656}
+                                                            width={250}
+                                                            height={400}
                                                             poster="/assets/poster.png"
                                                             src={this.state.video_R}
                                                         />

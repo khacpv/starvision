@@ -30,7 +30,11 @@ class OrderLenseForm extends Component {
         orderNumber: '',
         id_orderlense_R: null,
         id_orderlense_L: null,
-        isShowModal: false
+        isShowModal: false,
+        price_L: null,
+        price_R: null,
+        status_L: null,
+        status_R: null,
     };
 
     constructor(props) {
@@ -55,7 +59,11 @@ class OrderLenseForm extends Component {
             note_order_lens: data.R.note_order_lens,
             id_orderlense_R: data.R.id_order,
             id_orderlense_L: data.L.id_order,
-            orderNumber: data.So_Don_Hang
+            orderNumber: data.So_Don_Hang,
+            price_L: data.L.price,
+            price_R: data.R.price,
+            status_L: data.L.trangthai,
+            status_R: data.R.trangthai,
         })
     }
 
@@ -77,7 +85,7 @@ class OrderLenseForm extends Component {
                 customerService.createOrderLense(data).then(result => {
                     if (result.status === 'success') {
                         this.resetForm();
-                        this.setDefaultLense(this.props.defaultLense.left, this.props.defaultLense.right);
+                        this.setDefaultLense(this.props.defaultLense);
                         this.props.getUserData(this.props.customer);
                         alert('Cập nhật thành công');
                     } else {
@@ -116,11 +124,21 @@ class OrderLenseForm extends Component {
         this.setState(this.initialState);
     }
 
-    setDefaultLense(leftLense, RightLense) {
-        this.setState({
-            lense_L: leftLense,
-            lense_R: RightLense
-        })
+    setDefaultLense(data) {
+        const leftData = data.customOk_L;
+        const rightData = data.customOk_R;
+        if (leftData && rightData) {
+            this.setState({
+                lense_R: rightData.od_custom_ok_lense,
+                kcode_R: parseFloat(rightData.od_custom_ok_k_code).toFixed(2),
+                power_R: parseFloat(rightData.od_custom_ok_power).toFixed(2),
+                side_R: parseFloat(rightData.od_custom_ok_size).toFixed(2),
+                lense_L: leftData.od_custom_ok_lense,
+                kcode_L: parseFloat(leftData.od_custom_ok_k_code).toFixed(2),
+                power_L: parseFloat(leftData.od_custom_ok_power).toFixed(2),
+                side_L: parseFloat(leftData.od_custom_ok_size).toFixed(2),
+            })
+        }
     }
 
     changeValue(event, param) {
@@ -129,6 +147,13 @@ class OrderLenseForm extends Component {
 
     render() {
         let data = this.state;
+        let lenselist = [
+            <option/>,
+            <option>HP</option>,
+            <option>H</option>,
+            <option>XMJ</option>,
+            <option>XM</option>,
+        ];
         let klist = [(<option/>)];
         for (let k = 38; k <= 50 ; k+= 0.25) {
             klist.push(<option>{k.toFixed(2)}</option>)
@@ -138,7 +163,7 @@ class OrderLenseForm extends Component {
             plist.push(<option>{p.toFixed(2)}</option>)
         }
         let slist = [(<option/>)];
-        for (let s = 9.6; s <= 12.4 ; s+= 0.20) {
+        for (let s = 9.6; s <= 12.4 ; s+= 0.2) {
             slist.push(<option>{s.toFixed(2)}</option>)
         }
         return (
@@ -163,10 +188,12 @@ class OrderLenseForm extends Component {
                                 <Table responsive className='table-solid'>
                                     <tbody>
                                     <tr>
-                                        <th className='table-solid'>OS</th>
+                                        <th className='table-solid' rowSpan={this.props.isNew ? 1 : 2}>OS</th>
                                         <td className='table-solid'>
                                             Lense
-                                            <Input value={data.lense_L} onChange={(event) => this.changeValue(event, 'lense_L')} type={'text'} name="lense_L" id="lense_L" placeholder=""/>
+                                            <Input value={data.lense_L} onChange={(event) => this.changeValue(event, 'lense_L')} type='select' name="lense_L" id="lense_L" placeholder="">
+                                                {lenselist}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
                                             K-code
@@ -187,6 +214,18 @@ class OrderLenseForm extends Component {
                                             </Input>
                                         </td>
                                     </tr>
+                                    {
+                                        !this.props.isNew && <tr>
+                                            <td className='table-solid' colSpan={2}>
+                                                <h4>Giá tiền</h4>
+                                                <p>{data.price_L}</p>
+                                            </td>
+                                            <td className='table-solid' colSpan={2}>
+                                                <h4>Trạng thái</h4>
+                                                <p>{data.price_L}</p>
+                                            </td>
+                                        </tr>
+                                    }
                                     </tbody>
                                 </Table>
                             </div>
@@ -196,10 +235,12 @@ class OrderLenseForm extends Component {
                                 <Table responsive className='table-solid'>
                                     <tbody>
                                     <tr>
-                                        <th className='table-solid'>OD</th>
+                                        <th className='table-solid' rowSpan={this.props.isNew ? 1 : 2}>OD</th>
                                         <td className='table-solid'>
                                             Lense
-                                            <Input value={data.lense_R} onChange={(event) => this.changeValue(event, 'lense_R')} type={'text'} name="lense_R" id="lense_R" placeholder="" />
+                                            <Input value={data.lense_R} onChange={(event) => this.changeValue(event, 'lense_R')} type='select' name="lense_R" id="lense_R" placeholder="" >
+                                                {lenselist}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
                                             K-code
@@ -220,6 +261,18 @@ class OrderLenseForm extends Component {
                                             </Input>
                                         </td>
                                     </tr>
+                                    {
+                                        !this.props.isNew && <tr>
+                                            <td className='table-solid' colSpan={2}>
+                                                <h4>Giá tiền</h4>
+                                                <p>{data.price_R}</p>
+                                            </td>
+                                            <td className='table-solid' colSpan={2}>
+                                                <h4>Trạng thái</h4>
+                                                <p>{data.price_R}</p>
+                                            </td>
+                                        </tr>
+                                    }
                                     </tbody>
                                 </Table>
                             </div>
