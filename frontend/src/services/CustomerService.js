@@ -34,10 +34,6 @@ class CustomerService {
         return this.axios.get(`/orderlense?khid=${customerId}&iddttc=${dttc}`);
     }
 
-    getFollowUpById(userId, dttc) {
-        return this.axios.get(`/followup?userid=${userId}&iddttc=${dttc}`);
-    }
-
     createCustomOk(data) {
         return this.axios.post(`/customok`, data);
     }
@@ -46,11 +42,14 @@ class CustomerService {
         const requestOne = this.axios.post('/fitting', dataLeft);
         const requestTwo = this.axios.post('/fitting', dataRight);
         return axios.all([requestOne, requestTwo])
-        // return this.axios.post('/fitting', dataLeft);
     }
 
     createFollowUp(data) {
         return this.axios.post(`/followup`, data);
+    }
+
+    getFollowUpById(userId, dttc) {
+        return this.axios.get(`/followup?userid=${userId}&iddttc=${dttc}`);
     }
 
     createOrderLense(data) {
@@ -63,6 +62,10 @@ class CustomerService {
 
     deleteOrderLense(data) {
         return this.axios.post(`/orderlense/cancel`, data);
+    }
+
+    getSummary() {
+        return this.axios.get(`/congno`);
     }
 }
 

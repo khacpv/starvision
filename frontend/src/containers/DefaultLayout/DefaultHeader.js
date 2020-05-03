@@ -32,10 +32,10 @@ class DefaultHeader extends Component {
                         <NavLink to="/dashboard" className="nav-link">FITTING</NavLink>
                     </NavItem>
                     <NavItem className="px-3">
-                        <NavLink to="#" className="nav-link">ORDER</NavLink>
+                        <NavLink to="/notifications" className="nav-link">Thông báo</NavLink>
                     </NavItem>
                     <NavItem className="px-3">
-                        <NavLink to="#" className="nav-link">REPORT</NavLink>
+                        <NavLink to="/summary" className="nav-link">Công nợ</NavLink>
                     </NavItem>
                 </Nav>
                 <Nav className="ml-auto" navbar>

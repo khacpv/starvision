@@ -8,6 +8,11 @@
   vertical-align: middle !important;
 }
 
+.table-solid-start {
+    border: 1px solid #CCCCCC;
+    text-align: center;
+}
+
 .table-hover:hover {
   background-color: gray;
   cursor: pointer;

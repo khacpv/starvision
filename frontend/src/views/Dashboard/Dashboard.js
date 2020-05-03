@@ -19,6 +19,8 @@ import CustomerOKForm from "./CustomerOKForm";
 import classnames from 'classnames';
 import FittingForm from "./FittingForm";
 import OrderLenseForm from "./OrderLenseForm";
+import FollowUpForm from "./FollowUpForm";
+import SoftOkForm from "./SoftOkForm";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -32,6 +34,7 @@ class Dashboard extends Component {
             customOK: null,
             fittingData: [],
             orderLenseData: [],
+            followUpData: [],
             isLoading: false
         };
     }
@@ -44,6 +47,7 @@ class Dashboard extends Component {
         });
         this.getCustomOkData(customer);
         this.getFittingData(customer);
+        this.getFollowUpData(customer);
     }
 
     getCustomOkData(customer) {
@@ -57,7 +61,7 @@ class Dashboard extends Component {
                 this.setState({customOK: customOK.data}, () => {
                     this.newOrderLense.resetForm();
                     this.getOrderLenseData(customer);
-                    this.newOrderLense.setDefaultLense(customOK.data.customOk.customOk_L.od_custom_ok_lense, customOK.data.customOk.customOk_R.od_custom_ok_lense)
+                    this.newOrderLense.setDefaultLense(customOK.data.customOk)
                 });
             }
         }).catch(error => {
@@ -102,6 +106,37 @@ class Dashboard extends Component {
             this.setState({orderLenseData: result.data});
             result.data.map((data, index) => {
                 this[`order${index}`].setData(data);
+            })
+        }).catch(error => console.log(error))
+    }
+
+    getFollowUpData(customer) {
+        const doctorData = JSON.parse(localStorage.getItem('user'));
+        customerService.getFollowUpById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
+            this.newFollowUp.resetForm();
+            let followData = [];
+            result.data.map((data, index) => {
+                if (index % 2 === 0) {
+                    followData[index/2] = {};
+                    followData[index/2].ngaykham = data.ngaykham;
+                    followData[index/2].ngaytaikham = data.ngaytaikham;
+                    followData[index/2].note = data.comment;
+                    if (data.L) {
+                        followData[index/2].follow_left = data.L;
+                    } else {
+                        followData[index/2].follow_right = data.R;
+                    }
+                } else {
+                    if (data.L) {
+                        followData[(index - 1)/2].follow_left = data.L;
+                    } else {
+                        followData[(index - 1)/2].follow_right = data.R;
+                    }
+                }
+            });
+            this.setState({followUpData: followData});
+            followData.map((data, index) => {
+                this[`follow${index}`].setData(data);
             })
         }).catch(error => console.log(error))
     }
@@ -193,7 +228,15 @@ class Dashboard extends Component {
                                             className={classnames({ active: currentTab === 0 })}
                                             onClick={() => { this.changeTab(0); }}
                                         >
-                                            CustomOk
+                                            GOV-OK
+                                        </NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink
+                                            className={classnames({ active: currentTab === 4 })}
+                                            onClick={() => { this.changeTab(4); }}
+                                        >
+                                            ARTMOST SOFT-OK
                                         </NavLink>
                                     </NavItem>
                                     <NavItem>
@@ -227,6 +270,9 @@ class Dashboard extends Component {
                                     <TabPane tabId={0}>
                                         <CustomerOKForm getUserData={(customer) => this.getCustomOkData(customer)} ref={child => {this.customOk = child}} customer={this.state.customer}/>
                                     </TabPane>
+                                    <TabPane tabId={4}>
+                                        <SoftOkForm getUserData={(customer) => this.getCustomOkData(customer)} ref={child => {this.customOk = child}} customer={this.state.customer}/>
+                                    </TabPane>
                                     <TabPane tabId={1}>
                                         {
                                             this.state.fittingData.map((fitting, index) => (
@@ -244,11 +290,19 @@ class Dashboard extends Component {
                                                 ))
                                             }
                                             <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)}
-                                                            defaultLense={{left: this.state.customOK.customOk.customOk_L.od_custom_ok_lense,
-                                                                right: this.state.customOK.customOk.customOk_R.od_custom_ok_lense}}
+                                                            defaultLense={this.state.customOK.customOk}
                                                             orderNo={this.state.orderLenseData.length + 1} ref={child => {this.newOrderLense = child}} isNew={true} customer={this.state.customer}/>
                                         </TabPane>
                                     }
+                                    <TabPane tabId={3}>
+                                        {
+                                            this.state.followUpData.map((order, index) => (
+                                                <FollowUpForm getUserData={(customer) => this.getFollowUpData(customer)} orderNo={index + 1} key={index} data={order} ref={child => {this[`follow${index}`] = child}} customer={this.state.customer}/>
+                                            ))
+                                        }
+                                        <FollowUpForm getUserData={(customer) => this.getFollowUpData(customer)}
+                                                        followNo={this.state.followUpData.length + 1} ref={child => {this.newFollowUp = child}} isNew={true} customer={this.state.customer}/>
+                                    </TabPane>
                                 </TabContent>
                             </div> : <div style={{height: '100px', textAlign: 'center'}}>
                                 <p style={{ marginTop: '100px'}}>Chưa có thông tin khách hàng</p>
