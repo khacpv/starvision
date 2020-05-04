@@ -78,11 +78,7 @@ router.post(
     let thumb_L = req.body.thumb_L;
     let image_L = req.body.image_L;
 
-    if (
-      (bcva_va_R != "" && (video_R == "" || image_R == "")) ||
-      (bcva_va_R == "" && video_R == "" && image_R != "") ||
-      ((bcva_va_R == "" || image_R == "") && video_R != "")
-    ) {
+    if (bcva_va_R != "") {
       res.send({
         status: "error",
         message: "Mắt phải cần nhập đủ dữ liệu!",
@@ -90,11 +86,7 @@ router.post(
       });
     }
 
-    if (
-      (bcva_va_L != "" && (video_L == "" || image_L == "")) ||
-      (bcva_va_L == "" && video_L == "" && image_L != "") ||
-      ((bcva_va_L == "" || image_L == "") && video_L != "")
-    ) {
+    if (bcva_va_L != "") {
       res.send({
         status: "error",
         message: "Mắt trái cần nhập đủ dữ liệu",

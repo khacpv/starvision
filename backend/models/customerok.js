@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
     customok_lense_l: DataTypes.STRING,
     customok_kcode_l: DataTypes.STRING,
     customok_power_l: DataTypes.STRING,
-    customok_size_l: DataTypes.STRING
+    customok_size_l: DataTypes.STRING,
+    type: DataTypes.STRING
   }, {});
   CustomerOk.associate = function(models) {
     // associations can be defined here

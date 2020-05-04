@@ -12,8 +12,6 @@ router.get("/", async (req, res) => {
     return res.send({
       status: "success",
       message: "",
-      total: total,
-      unread: count,
       data: result,
     });
   }
