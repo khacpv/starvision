@@ -13,7 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     dttc_name: DataTypes.STRING,
     dttc_id: DataTypes.STRING,
     customer_type: DataTypes.INTEGER,
-    data_group: DataTypes.INTEGER
+    data_group: DataTypes.INTEGER,
+    debt_last_month: DataTypes.DOUBLE,
+    costs_incurred_this_month: DataTypes.DOUBLE,
+    paid: DataTypes.DOUBLE,
+    glass_money: DataTypes.DOUBLE,
+    vtth_money: DataTypes.DOUBLE,
+
   }, {
     paranoid: true
   });

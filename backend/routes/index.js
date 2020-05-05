@@ -9,6 +9,7 @@ const CongnoController = require("../controllers/congno_controller");
 const NotificationsController = require("../controllers/notifications_controller");
 const OrderlenseController = require("../controllers/orderlense_controller");
 const FollowupController = require("../controllers/followup_controller");
+const DeptController = require("../controllers/debt_controller");
 
 module.exports = (app) => {
   app.use(
@@ -32,7 +33,7 @@ module.exports = (app) => {
     FittingController
   );
   app.use("/token", AuthController);
-  app.use("/congno", CongnoController);
+  app.use("/congno", DeptController);
 
   //__GENERATE_ROUTE__
   app.use(
