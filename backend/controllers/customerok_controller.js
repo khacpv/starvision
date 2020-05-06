@@ -8,11 +8,13 @@ const CONSTANT = require("../config/constants.json");
 router.get("/", async (req, res) => {
   let customerId = req.query.khid;
   let dttcId = req.query.iddttc;
+  let customerOdType = req.query.type;
 
   let data = await CustomerOk.findOne({
     where: {
       customer_id: customerId,
       dttc_id: dttcId,
+      type: customerOdType
     },
   });
 
@@ -179,6 +181,7 @@ router.post(
       where: {
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
+        type: req.body.type
       },
     });
     if (checkCustomerOk) {
