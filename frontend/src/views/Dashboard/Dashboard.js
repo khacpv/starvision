@@ -32,10 +32,12 @@ class Dashboard extends Component {
             customerList: [],
             currentTab: 0,
             customOK: null,
+            customOKSoft: null,
             fittingData: [],
             orderLenseData: [],
             followUpData: [],
-            isLoading: false
+            isLoading: false,
+            type: 'GOV'
         };
     }
 
@@ -45,14 +47,15 @@ class Dashboard extends Component {
         this.setState({
             customer
         });
-        this.getCustomOkData(customer);
+        this.getCustomOkGOVData(customer);
+        this.getCustomOkSoftData(customer);
         this.getFittingData(customer);
         this.getFollowUpData(customer);
     }
 
-    getCustomOkData(customer) {
+    getCustomOkGOVData(customer) {
         const doctorData = JSON.parse(localStorage.getItem('user'));
-        customerService.getCustomOkById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(customOK => {
+        customerService.getCustomOkGOVById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(customOK => {
             if (customOK.data === '') {
                 this.customOk.resetForm();
                 this.setState({customOK: null});
@@ -63,6 +66,25 @@ class Dashboard extends Component {
                     this.getOrderLenseData(customer);
                     this.newOrderLense.setDefaultLense(customOK.data.customOk)
                 });
+            }
+        }).catch(error => {
+            console.log(error)
+        });
+    }
+
+    getCustomOkSoftData(customer) {
+        const doctorData = JSON.parse(localStorage.getItem('user'));
+        customerService.getCustomOkSoftById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(customOK => {
+            if (customOK.data === '') {
+                this.customOkSoft.resetForm();
+                this.setState({customOKSoft: null});
+            } else {
+                this.customOkSoft.setData(customOK.data.customOk);
+                // this.setState({customOKSoft: customOK.data}, () => {
+                //     this.newOrderLense.resetForm();
+                //     this.getOrderLenseData(customer);
+                //     this.newOrderLense.setDefaultLense(customOK.data.customOk)
+                // });
             }
         }).catch(error => {
             console.log(error)
@@ -268,10 +290,10 @@ class Dashboard extends Component {
                                 </Nav>
                                 <TabContent activeTab={currentTab}>
                                     <TabPane tabId={0}>
-                                        <CustomerOKForm getUserData={(customer) => this.getCustomOkData(customer)} ref={child => {this.customOk = child}} customer={this.state.customer}/>
+                                        <CustomerOKForm getUserData={(customer) => this.getCustomOkGOVData(customer)} ref={child => {this.customOk = child}} customer={this.state.customer}/>
                                     </TabPane>
                                     <TabPane tabId={4}>
-                                        <SoftOkForm getUserData={(customer) => this.getCustomOkData(customer)} ref={child => {this.customOk = child}} customer={this.state.customer}/>
+                                        <SoftOkForm getUserData={(customer) => this.getCustomOkSoftData(customer)} ref={child => {this.customOkSoft = child}} customer={this.state.customer}/>
                                     </TabPane>
                                     <TabPane tabId={1}>
                                         {
@@ -284,6 +306,21 @@ class Dashboard extends Component {
                                     {
                                         this.state.customOK &&
                                         <TabPane tabId={2}>
+                                            <FormGroup row>
+                                                <div style={{ 'padding-left': 15}}>Loại kính:</div>
+                                                <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
+                                                    <Label check>
+                                                        <Input type="radio" name="type" onChange={() => this.setState({type: 'GOV'})} checked={this.state.type === 'GOV'}/>{' '}
+                                                        GOV
+                                                    </Label>
+                                                </FormGroup>
+                                                <FormGroup check>
+                                                    <Label check>
+                                                        <Input type="radio" name="type" onChange={() => this.setState({type: 'SOFT'})} checked={this.state.type === 'SOFT'}/>{' '}
+                                                        SOFT
+                                                    </Label>
+                                                </FormGroup>
+                                            </FormGroup>
                                             {
                                                 this.state.orderLenseData.map((order, index) => (
                                                     <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)} orderNo={index + 1} key={index} data={order} ref={child => {this[`order${index}`] = child}} customer={this.state.customer}/>

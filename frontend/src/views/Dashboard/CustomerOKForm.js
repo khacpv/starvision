@@ -71,6 +71,7 @@ class CustomerOKForm extends Component {
                 iddttc : doctorData.Id_Dttc,
                 ngaykham : new Date(),
                 khid: this.props.customer.ID_KHACHHANG,
+                type: 'GOV',
                 ...this.state
             };
             customerService.createCustomOk(data).then(() => {

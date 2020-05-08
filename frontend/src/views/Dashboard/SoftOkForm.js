@@ -27,8 +27,8 @@ class SoftOkForm extends Component {
         CYL_L: '',
         HK_L: '',
         VK_L: '',
-        Kcode_L: null,
-        Kcode_R: null
+        Power_L: null,
+        Power_R: null
     };
 
     constructor(props) {
@@ -51,6 +51,7 @@ class SoftOkForm extends Component {
                 iddttc : doctorData.Id_Dttc,
                 ngaykham : new Date(),
                 khid: this.props.customer.ID_KHACHHANG,
+                type: 'SOFT',
                 ...this.state
             };
             customerService.createCustomOk(data).then(() => {
@@ -64,15 +65,18 @@ class SoftOkForm extends Component {
     }
 
     setData(data) {
+        console.log(data);
         this.setState({
-            SPH_R: '',
-            CYL_R: '',
-            HK_R: '',
-            VK_R: '',
-            SPH_L: '',
-            CYL_L: '',
-            HK_L: '',
-            VK_L: '',
+            SPH_R: data.customOk_R.sph,
+            CYL_R: data.customOk_R.cyl,
+            HK_R: data.customOk_R.hk,
+            VK_R: data.customOk_R.vk,
+            SPH_L: data.customOk_L.sph,
+            CYL_L: data.customOk_L.cyl,
+            HK_L: data.customOk_L.hk,
+            VK_L: data.customOk_L.vk,
+            Power_L: data.customOk_L.power,
+            Power_R: data.customOk_R.power
         })
     }
 
@@ -126,9 +130,9 @@ class SoftOkForm extends Component {
 
 
         if (type === 'left') {
-            this.setState({Kcode_L: b9.toFixed(2)})
+            this.setState({Power_L: b9.toFixed(2)})
         } else {
-            this.setState({Kcode_R: b9.toFixed(2)})
+            this.setState({Power_R: b9.toFixed(2)})
         }
     }
 
@@ -167,7 +171,7 @@ class SoftOkForm extends Component {
                                             <Input value={data.VK_L} onChange={(event) => this.changeValue(event, 'VK_L')} type="number"  name="VK_L" id="Ref_AX_L" placeholder="" />
                                         </td>
                                         <td className='table-solid'>
-                                            <Input value={data.Kcode_L} type="number"  name="Kcode_L" id="Kcode_L" placeholder="" disabled />
+                                            <Input value={data.Power_L} type="number"  name="Power_L" id="Power_L" placeholder="" disabled />
                                         </td>
                                     </tr>
                                     </tbody>
@@ -202,7 +206,7 @@ class SoftOkForm extends Component {
                                             <Input value={data.VK_R} onChange={(event) => this.changeValue(event, 'VK_R')} type="number"  name="VK_R" id="VK_R" placeholder="" />
                                         </td>
                                         <td className='table-solid'>
-                                            <Input value={data.Kcode_R} type="number"  name="Kcode_R" id="Kcode_R" placeholder="" disabled />
+                                            <Input value={data.Power_R} type="number"  name="Power_R" id="Power_R" placeholder="" disabled />
                                         </td>
                                     </tr>
                                     </tbody>

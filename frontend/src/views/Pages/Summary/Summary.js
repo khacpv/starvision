@@ -27,7 +27,8 @@ class Summary extends Component {
     loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
     componentDidMount() {
-        customerService.getSummary().then(result => {
+        const doctorData = JSON.parse(localStorage.getItem('user'));
+        customerService.getSummary(doctorData.Id_bacsi).then(result => {
             console.log(result)
         }).catch(error => console.log(error))
     }
