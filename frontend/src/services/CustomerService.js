@@ -22,8 +22,12 @@ class CustomerService {
         return this.axios.post(`/customer`, data);
     }
 
-    getCustomOkById(customerId, dttc) {
-        return this.axios.get(`/customok?khid=${customerId}&iddttc=${dttc}`);
+    getCustomOkGOVById(customerId, dttc) {
+        return this.axios.get(`/customok?khid=${customerId}&iddttc=${dttc}&type=GOV`);
+    }
+
+    getCustomOkSoftById(customerId, dttc) {
+        return this.axios.get(`/customok?khid=${customerId}&iddttc=${dttc}&type=SOFT`);
     }
 
     getFittingById(customerId, dttc) {
@@ -64,8 +68,16 @@ class CustomerService {
         return this.axios.post(`/orderlense/cancel`, data);
     }
 
-    getSummary() {
-        return this.axios.get(`/congno`);
+    getSummary(id_bacsi) {
+        return this.axios.get(`/congno?id_bacsi=${id_bacsi}`);
+    }
+
+    getAllNotify() {
+        return this.axios.get(`/notifications`);
+    }
+
+    getUnreadNotify() {
+        return this.axios.get(`/notifications/count_unread`);
     }
 }
 
