@@ -1,23 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
-const Customer = models.Customer;
-const Dttc = models.Dttc;
+const User = models.Users;
 
 
 router.get("/", async (req, res) => {
   let userId = req.query.id;
 
-  let user = await Customer.findOne({
+  let user = await User.findOne({
     where: { 
-      id: userId
-    },
-    include: [
-      {
-        model: Dttc,
-        as: 'dttc'
-      }
-    ]
+      user_id: userId
+    }
   })
 
   if (user){
@@ -27,11 +20,11 @@ router.get("/", async (req, res) => {
           {
             Id_Dttc: user.dttc_id,
             Id_bacsi: user.doctor_id,
-            Ten_DTTC: user.dttc ? user.dttc.name : null,
-            Tenbacsi: user.customer_name,
-            Mabacsi: user.doctor_code,
+            Ten_DTTC: user.dttc_name,
+            Tenbacsi: user.name,
+            Mabacsi: user.code,
             Diachi: user.address,
-            Sodienthoai: user.mobile
+            Sodienthoai: user.phone
           }
       ]
     })

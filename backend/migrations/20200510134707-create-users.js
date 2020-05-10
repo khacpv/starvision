@@ -8,19 +8,40 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      group_user_id: {
+      name: {
+        type: Sequelize.STRING
+      },
+      age: {
         type: Sequelize.INTEGER
       },
-      department_id: {
-        type: Sequelize.INTEGER
+      gender: {
+        type: Sequelize.STRING
+      },
+      birthday: {
+        type: Sequelize.STRING
+      },
+      code: {
+        type: Sequelize.STRING
+      },
+      user_id: {
+        type: Sequelize.STRING
+      },
+      doctor_name: {
+        type: Sequelize.STRING
+      },
+      address: {
+        type: Sequelize.STRING
       },
       dttc_id: {
         type: Sequelize.INTEGER
       },
-      email: {
+      doctor_id: {
+        type: Sequelize.INTEGER
+      },
+      dttc_name: {
         type: Sequelize.STRING
       },
-      fullname: {
+      phone: {
         type: Sequelize.STRING
       },
       username: {
@@ -29,44 +50,17 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      action: {
-        type: Sequelize.INTEGER
-      },
-      export: {
-        type: Sequelize.INTEGER
-      },
-      wallpaper: {
+      contract_name: {
         type: Sequelize.STRING
       },
-      fontname: {
-        type: Sequelize.STRING
-      },
-      fontsize: {
-        type: Sequelize.INTEGER
-      },
-      forecolor: {
-        type: Sequelize.INTEGER
-      },
-      backcolor: {
+      role: {
         type: Sequelize.INTEGER
       },
       note: {
         type: Sequelize.TEXT
       },
-      role: {
-        type: Sequelize.INTEGER
-      },
-      role_data: {
+      email: {
         type: Sequelize.STRING
-      },
-      html_signature: {
-        type: Sequelize.STRING
-      },
-      signature: {
-        type: Sequelize.STRING
-      },
-      id_storage: {
-        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -78,7 +72,7 @@ module.exports = {
       },
       deletedAt: {
         type: Sequelize.DATE
-      },      
+    }
     });
   },
   down: (queryInterface, Sequelize) => {
