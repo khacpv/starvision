@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
-const User = models.User;
+const User = models.Users;
 const Token = models.Tokens;
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
@@ -56,10 +56,10 @@ router.post("/", async (req, res) => {
         message: "",
         data: {
           token: token,
-          user_email: user.email,
-          user_nicename: user.fullname,
+          user_email: user.user_email,
+          user_nicename: user.user_nicename,
           user_id: user.id,
-          user_display_name: user.username,
+          user_display_name: user.display_name,
         },
       });
     } else {
@@ -72,14 +72,14 @@ router.post(
   "/register",
   [
     check("username", "Username too short").isLength({ min: 5 }),
-    check("email", "Email wrong format").isEmail(),
+    // check("email", "Email wrong format").isEmail(),
     check("password", "Username too short").isLength({ min: 5 }),
     check("username", "Username is required").not().isEmpty(),
   ],
   async (req, res) => {
     let data = req.body;
     let hash = bcrypt.hashSync(req.body.password, salt);
-
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).send({
@@ -87,12 +87,13 @@ router.post(
         msg: "Invalid data",
       });
     } else {
-      let checkUser = await User.findOne({
+      let checkUser = await User.count({
         where: {
           username: data.username,
         },
       });
-      if (checkUser) {
+      
+      if (checkUser > 0) {
         return res.status(200).send({
           code: 400,
           msg: "Account existed",
@@ -105,11 +106,12 @@ router.post(
         password: hash,
         name: data.name,
         age: data.age,
-        mobile: data.mobile,
+        phone: data.phone,
         address: data.address,
         birthday: data.birthday,
         gender: data.gender,
         note: data.note,
+        user_id:Number(checkUser)+1
       });
 
       if (user) {
