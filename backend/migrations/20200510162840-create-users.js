@@ -8,58 +8,31 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING
-      },
-      age: {
-        type: Sequelize.INTEGER
-      },
-      gender: {
-        type: Sequelize.STRING
-      },
-      birthday: {
-        type: Sequelize.STRING
-      },
-      code: {
-        type: Sequelize.STRING
-      },
-      user_id: {
-        type: Sequelize.STRING
-      },
-      doctor_name: {
-        type: Sequelize.STRING
-      },
-      address: {
-        type: Sequelize.STRING
-      },
-      dttc_id: {
-        type: Sequelize.INTEGER
-      },
-      doctor_id: {
-        type: Sequelize.INTEGER
-      },
-      dttc_name: {
-        type: Sequelize.STRING
-      },
-      phone: {
-        type: Sequelize.STRING
-      },
       username: {
         type: Sequelize.STRING
       },
       password: {
         type: Sequelize.STRING
       },
-      contract_name: {
+      user_nicename: {
         type: Sequelize.STRING
       },
-      role: {
+      user_email: {
+        type: Sequelize.STRING
+      },
+      user_url: {
+        type: Sequelize.STRING
+      },
+      user_registered: {
+        type: Sequelize.DATE
+      },
+      user_activation_key: {
+        type: Sequelize.STRING
+      },
+      user_status: {
         type: Sequelize.INTEGER
       },
-      note: {
-        type: Sequelize.TEXT
-      },
-      email: {
+      display_name: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -69,10 +42,7 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      deletedAt: {
-        type: Sequelize.DATE
-    }
+      }
     });
   },
   down: (queryInterface, Sequelize) => {

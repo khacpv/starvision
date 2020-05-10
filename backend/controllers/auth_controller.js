@@ -56,10 +56,10 @@ router.post("/", async (req, res) => {
         message: "",
         data: {
           token: token,
-          user_email: user.email,
-          user_nicename: user.fullname,
+          user_email: user.user_email,
+          user_nicename: user.user_nicename,
           user_id: user.id,
-          user_display_name: user.username,
+          user_display_name: user.display_name,
         },
       });
     } else {
