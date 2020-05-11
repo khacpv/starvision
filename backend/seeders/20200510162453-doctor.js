@@ -20,6 +20,7 @@ module.exports = {
       console.log(element.customer_MaKH);
 
       listUser.push({
+        id: element.Id,
         name: element.customer_name,
         code: element.customer_MaKH,
         user_id: element.userWebId !=null ? element.userWebId : "",
