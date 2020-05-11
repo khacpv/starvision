@@ -15,7 +15,7 @@ router.get(
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
   async (req, res) => {
     let doctorName = req.query.tenbacsi;
-
+    
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -293,7 +293,7 @@ router.get(
   "/forgotpass",
   [
     check("username", "Chưa điền thông tin người dùng.").not().isEmpty(),
-    check("contact", "Chưa điền thông tin liên hệ").not().isEmpty(),
+    check("lienhe", "Chưa điền thông tin liên hệ").not().isEmpty(),
   ],
   async (req, res) => {
     let username = req.query.username;

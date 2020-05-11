@@ -18,8 +18,8 @@ router.get("/", async (req, res) => {
       status: "success",
       data:[
           {
-            Id_Dttc: user.dttc_id,
-            Id_bacsi: user.doctor_id,
+            Id_Dttc: String(user.dttc_id),
+            Id_bacsi: String(user.doctor_id),
             Ten_DTTC: user.dttc_name,
             Tenbacsi: user.name,
             Mabacsi: user.code,
