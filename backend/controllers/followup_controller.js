@@ -78,7 +78,7 @@ router.post(
     let thumb_L = req.body.thumb_L;
     let image_L = req.body.image_L;
 
-    if (bcva_va_R != "") {
+    if (bcva_va_R == null || bcva_va_R == "") {
       res.send({
         status: "error",
         message: "Mắt phải cần nhập đủ dữ liệu!",
@@ -86,7 +86,7 @@ router.post(
       });
     }
 
-    if (bcva_va_L != "") {
+    if (bcva_va_L == null || bcva_va_L == "") {
       res.send({
         status: "error",
         message: "Mắt trái cần nhập đủ dữ liệu",
