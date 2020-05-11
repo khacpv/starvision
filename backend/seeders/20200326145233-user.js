@@ -16,11 +16,12 @@ module.exports = {
         if (Number(item.userWebId) == element.ID){
           i++;
           doctor = item;
-          console.log(i);
+          // console.log(i);
         }
       });
 
       listUser.push({
+        id: element.ID,
         username: element.user_login,
         password: doctor != null ? bcrypt.hashSync(doctor.Pwd, salt): element.user_pass,
         user_nicename: element.user_nicename,
