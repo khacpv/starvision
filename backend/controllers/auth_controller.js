@@ -56,6 +56,7 @@ router.post("/", async (req, res) => {
         message: "",
         data: {
           token: token,
+          role: user.role,
           user_email: user.user_email,
           user_nicename: user.user_nicename,
           user_id: user.id,
@@ -103,6 +104,7 @@ router.post(
       let user = await User.create({
         email: data.email,
         username: data.username,
+        role: data.role,
         password: hash,
         name: data.name,
         age: data.age,
