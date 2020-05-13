@@ -102,18 +102,12 @@ router.post(
       }
 
       let user = await User.create({
-        email: data.email,
+        user_email: data.email,
         username: data.username,
         role: data.role,
         password: hash,
-        name: data.name,
-        age: data.age,
-        phone: data.phone,
-        address: data.address,
-        birthday: data.birthday,
-        gender: data.gender,
-        note: data.note,
-        user_id:Number(checkUser)+1
+        display_name: data.user_display_name,
+        user_nicename: data.user_nicename,
       });
 
       if (user) {
