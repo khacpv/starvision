@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     let result = await MODEL_SAMPLE.findByPk(req.params.id)
     if (result) {
-      return res.send({ code: 200, msg: "success", items: data });
+      return res.send({ code: 200, msg: "success", items: result });
     }
     return res.send({ code: 400, msg: "error"});
 });

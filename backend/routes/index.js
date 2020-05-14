@@ -4,7 +4,8 @@ const CustomerController = require("../controllers/customer_controller");
 const UserController = require("../controllers/user_controller");
 const CustomerOkController = require("../controllers/customerok_controller");
 const FittingController = require("../controllers/fitting_controller");
-//__INIT_CONTROLLER__
+//__INIT_CONTROLLER__ 
+const DoctorsController = require('../controllers/doctors_controller')
 const NotificationsController = require("../controllers/notifications_controller");
 const OrderlenseController = require("../controllers/orderlense_controller");
 const FollowupController = require("../controllers/followup_controller");
@@ -34,11 +35,12 @@ module.exports = (app) => {
   app.use("/token", AuthController);
   app.use("/congno", DeptController);
 
-  //__GENERATE_ROUTE__
+  //__GENERATE_ROUTE__ 
+app.use('/doctor', passport.authenticate('jwt', { session: false }), DoctorsController);
   app.use(
     "/notifications",
     passport.authenticate("jwt", { session: false }),
-    NotificationsController
+    DoctorsController
   );
   app.use(
     "/notifications",
