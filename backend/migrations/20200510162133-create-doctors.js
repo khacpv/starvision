@@ -26,7 +26,7 @@ module.exports = {
       user_id: {
         type: Sequelize.STRING
       },
-      doctor_name: {
+      department_name: {
         type: Sequelize.STRING
       },
       address: {
