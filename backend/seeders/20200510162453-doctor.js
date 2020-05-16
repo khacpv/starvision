@@ -24,7 +24,7 @@ module.exports = {
         name: element.customer_name,
         code: element.customer_MaKH,
         user_id: element.userWebId !=null ? element.userWebId : "",
-        doctor_name: element.TenVietTat,
+        department_name: element.TenVietTat,
         address: element.Diachi != null ? element.Diachi : "",
         dttc_id: element.Id_Dttc,
         doctor_id: element.Id_bacsi,
