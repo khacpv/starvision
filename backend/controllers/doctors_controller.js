@@ -7,6 +7,33 @@ const { check, validationResult } = require("express-validator");
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const sequelize = require("../config/db").sequelize;
+const Sequelize = require("sequelize");
+const { Op } = Sequelize;
+
+router.get("/search", async (req, res) => {
+  let doctorName = req.query.doctor_name;
+  console.log(doctorName);
+  
+  let result = await Doctors.findAll({
+    where:{
+      [Op.or]: [
+        {
+          name: {
+            [Op.like]: `%${doctorName}%`,
+          },
+        },{
+          department_name: {
+            [Op.like]: `%${doctorName}%`,
+          },
+        }
+      ]
+    }
+  });
+  if (result) {
+    return res.send({ code: 200, msg: "success", items: result });
+  }
+  return res.send({ code: 400, msg: "error" });
+});
 
 router.get("/", async (req, res) => {
   let result = await Doctors.findAll({
