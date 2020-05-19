@@ -14,6 +14,12 @@ module.exports = {
       customer_name: {
         type: Sequelize.STRING
       },
+      phone1:{
+        type: Sequelize.STRING
+      },
+      phone2:{
+        type: Sequelize.STRING
+      },
       mobile: {
         type: Sequelize.STRING
       },
