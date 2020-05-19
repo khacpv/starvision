@@ -15,7 +15,7 @@ router.get(
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
   async (req, res) => {
     let doctorName = req.query.tenbacsi;
-    
+
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -40,10 +40,19 @@ router.get(
 
     if (customer) {
       let returnCustomer = [];
+      let current_date = element.birthday;
+      let timestamp = current_date.getTime();
+      let formatted_date =
+        current_date.getDate() +
+        "/" +
+        current_date.getMonth() +
+        1 +
+        "/" +
+        current_date.getFullYear();
       customer.forEach((element) => {
         returnCustomer.push({
           ID_KHACHHANG: element.id,
-          NAMSINH: element.birthday,
+          NAMSINH: formatted_date,
           TENKHACHHANG: element.customer_name,
           DIDONG: element.mobile,
           GIOITINH: element.gender,
@@ -328,31 +337,29 @@ router.get(
       });
     }
 
-    let customerOk = await CustomerOk.findAll(
-      {
-        include: [
-          {
-            model: Customer,
-            as: "customer",
-          },
-        ],
-      }
-    );
+    let customerOk = await CustomerOk.findAll({
+      include: [
+        {
+          model: Customer,
+          as: "customer",
+        },
+      ],
+    });
 
     const customerIdOk = new Set();
-    customerOk.forEach(element => {
-      if (element.customer){
+    customerOk.forEach((element) => {
+      if (element.customer) {
         customerIdOk.add(element.customer.id);
       }
     });
     let customerIdOkArr = Array.from(customerIdOk);
-    
+
     let customer = await Customer.findAll({
       where: {
         doctor_name: req.query.tenbacsi,
         id: {
-          [Op.notIn]: customerIdOkArr
-        }
+          [Op.notIn]: customerIdOkArr,
+        },
       },
     });
     if (customer || customerOk) {
@@ -395,32 +402,29 @@ router.get(
       });
     }
 
-    let fitting = await Fitting.findAll(
-      {
-        include: [
-          {
-            model: Customer,
-            as: "customer",
-          },
-        ],
-      }
-    );
+    let fitting = await Fitting.findAll({
+      include: [
+        {
+          model: Customer,
+          as: "customer",
+        },
+      ],
+    });
 
     const fittingIdOk = new Set();
-    fitting.forEach(element => {
-      if (element.customer){
+    fitting.forEach((element) => {
+      if (element.customer) {
         fittingIdOk.add(element.customer.id);
-
       }
     });
     let fittingIdOkArr = Array.from(fittingIdOk);
-    
+
     let customer = await Customer.findAll({
       where: {
         doctor_name: req.query.tenbacsi,
         id: {
-          [Op.notIn]: fittingIdOkArr
-        }
+          [Op.notIn]: fittingIdOkArr,
+        },
       },
     });
     if (customer) {
@@ -463,32 +467,30 @@ router.get(
       });
     }
 
-    let fitting = await Fitting.findAll(
-      {
-        include: [
-          {
-            model: Customer,
-            as: "customer",
-          },
-        ],
-      }
-    );
+    let fitting = await Fitting.findAll({
+      include: [
+        {
+          model: Customer,
+          as: "customer",
+        },
+      ],
+    });
 
     const fittingIdOk = new Set();
-    fitting.forEach(element => {
-      if (element.customer){
+    fitting.forEach((element) => {
+      if (element.customer) {
         fittingIdOk.add(element.customer.id);
       }
     });
     let fittingIdOkArr = Array.from(fittingIdOk);
-    
+
     let customer = await Customer.findAll({
       where: {
         doctor_name: req.query.tenbacsi,
         customer_name: {
           [Op.like]: `%${req.query.tenkhachhang}%`,
         },
-        id: fittingIdOkArr
+        id: fittingIdOkArr,
       },
     });
     if (customer) {
