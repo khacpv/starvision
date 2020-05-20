@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 
   if (data) {
     let result = null;
-    if (data.type == CONSTANT.CustomerOk.type_1) {
+    if (data.type == CONSTANT.CustomerOk.GOV) {
       result = {
         customOk: {
           type: data.type,
@@ -186,7 +186,7 @@ router.post(
     });
     if (checkCustomerOk) {
       let updateCustomer = null;
-      if (type == CONSTANT.CustomerOk.type_1) {
+      if (type == CONSTANT.CustomerOk.GOV) {
         updateCustomer = await CustomerOk.update(
           {
             doctor_code: req.body.mabacsi,
@@ -230,7 +230,7 @@ router.post(
           }
         );
       }
-      if (type == CONSTANT.CustomerOk.type_2) {
+      if (type == CONSTANT.CustomerOk.SOFT) {
         updateCustomer = await CustomerOk.update(
           {
             doctor_code: req.body.mabacsi,
@@ -270,7 +270,7 @@ router.post(
       }
     }
     let customerOk = null;
-    if (type == CONSTANT.CustomerOk.type_1) {
+    if (type == CONSTANT.CustomerOk.GOV) {
       customerOk = await CustomerOk.create({
         doctor_code: req.body.mabacsi,
         doctor_id: req.body.idbacsi,
@@ -310,7 +310,7 @@ router.post(
         type: req.body.type,
       });
     }
-    if (type == CONSTANT.CustomerOk.type_2) {
+    if (type == CONSTANT.CustomerOk.SOFT) {
       customerOk = await CustomerOk.create({
         doctor_code: req.body.mabacsi,
         doctor_id: req.body.idbacsi,

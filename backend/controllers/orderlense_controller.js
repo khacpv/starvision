@@ -7,6 +7,7 @@ const Customer = models.Customer;
 const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
 const Op = require("../config/db").Sequelize.Op;
+const CONSTANT = require("../config/constants.json");
 
 router.get("/", async (req, res) => {
   let customerId = req.query.khid;
@@ -16,7 +17,7 @@ router.get("/", async (req, res) => {
     where: {
       customer_id: customerId,
       dttc_id: dttcId,
-      is_active: 1
+      is_active: 1,
     },
     include: [
       {
@@ -28,9 +29,7 @@ router.get("/", async (req, res) => {
         as: "right",
       },
     ],
-    order: [
-      ['date_examination', 'DESC'],
-  ],
+    order: [["date_examination", "DESC"]],
   });
 
   if (result) {
@@ -41,6 +40,7 @@ router.get("/", async (req, res) => {
       returnData.push({
         Ngay: date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
         So_Don_Hang: element.order_number,
+        type: element.type,
         R: {
           id_order: element.right.id,
           od_lense: element.right.lense,
@@ -100,7 +100,17 @@ router.post(
         data: "",
       });
     }
-
+    let orderLenseType = req.body.type;
+    if (
+      orderLenseType != CONSTANT.OrderLense.SOFT &&
+      orderLenseType != CONSTANT.OrderLense.CUSTOM
+    ) {
+      return res.send({
+        status: "error",
+        message: "Sai thông tin loại order lense",
+        data: "",
+      });
+    }
     let lense_L = req.body.lense_L;
     let kcode_L = req.body.kcode_L;
     let power_L = req.body.power_L;
@@ -163,7 +173,7 @@ router.post(
           customer_id: req.body.khid,
           dttc_id: req.body.iddttc,
           date_examination: new Date().toString(),
-
+          type: req.body.type,
           id_lense_left: left.id,
           id_lense_right: right.id,
           is_active: 1,
@@ -225,7 +235,18 @@ router.post(
         data: "",
       });
     }
-
+    let orderLenseType = req.body.type;
+    if (
+      orderLenseType &&
+      orderLenseType != CONSTANT.OrderLense.SOFT &&
+      orderLenseType != CONSTANT.OrderLense.CUSTOM
+    ) {
+      return res.send({
+        status: "error",
+        message: "Sai thông tin loại order lense",
+        data: "",
+      });
+    }
     let lense_L = req.body.lense_L;
     let kcode_L = req.body.kcode_L;
     let power_L = req.body.power_L;
@@ -240,7 +261,7 @@ router.post(
 
     let result = null;
 
-    let orderLense = await OrderLense.findAll({
+    let orderLense = await OrderLense.findOne({
       where: {
         id_lense_left: id_orderlense_L,
         id_lense_right: id_orderlense_R,
@@ -259,6 +280,16 @@ router.post(
     try {
       // get transaction
       transaction = await sequelize.transaction();
+      await OrderLense.update(
+        {
+          type: orderLenseType
+        },
+        {
+          where: {
+            id: orderLense.id,
+          },
+        }
+      );
 
       let left = await Lense.update(
         {
@@ -333,7 +364,7 @@ router.post("/cancel", async (req, res) => {
 
   let result = await OrderLense.update(
     {
-      is_active: 0
+      is_active: 0,
     },
     {
       where: {
