@@ -1,6 +1,10 @@
 {
     "CustomerOk":{
-        "type_1": "GOV",
-        "type_2": "SOFT"
+        "GOV": "GOV",
+        "SOFT": "SOFT"
+    },
+    "OrderLense":{
+        "SOFT": "SOFT_OK",
+        "CUSTOM": "CUSTOM_OK"
     }
 }
