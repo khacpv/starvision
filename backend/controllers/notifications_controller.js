@@ -3,6 +3,7 @@ const router = express.Router();
 const models = require("../models/index");
 const Notifications = models.Notifications;
 const { check, validationResult } = require("express-validator");
+const sequelize = require("../config/db").sequelize;
 
 router.get("/", async (req, res) => {
   let result = await Notifications.findAll({
@@ -76,21 +77,39 @@ router.post("/", async (req, res) => {
       data: "",
     });
   }
+  let customerList = req.body.receiver_id.split(",");
 
-  let result = await Notifications.create({
-    title: req.body.title,
-    content: req.body.content,
-    sender_id: req.user.id,
-    receiver_id: req.body.receiver_id,
-    send_at: new Date(),
-  });
-  if (result) {
+  try {
+    // get transaction
+    transaction = await sequelize.transaction();
+    customerList.forEach(async (customerId) => {
+      let result = await Notifications.create({
+        title: req.body.title,
+        content: req.body.content,
+        sender_id: req.user.id,
+        receiver_id: customerId,
+        send_at: new Date(),
+      });
+    });
+    await transaction.commit();
     return res.send({
       status: "success",
       message: "",
       data: "",
     });
+
+    // commit
+  } catch (err) {
+    // Rollback transaction only if the transaction object is defined
+    if (transaction) await transaction.rollback();
+
+    return res.send({
+      status: "error",
+      message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+      data: "",
+    });
   }
+
   return res.send({
     status: "error",
     message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",

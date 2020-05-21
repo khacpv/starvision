@@ -4,7 +4,7 @@
         "SOFT": "SOFT"
     },
     "OrderLense":{
-        "SOFT": "SOFT_OK",
-        "CUSTOM": "CUSTOM_OK"
+        "SOFT": "SOFT",
+        "CUSTOM": "GOV"
     }
 }

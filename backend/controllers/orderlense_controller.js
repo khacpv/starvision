@@ -50,7 +50,7 @@ router.get("/", async (req, res) => {
           note_order_lens: element.right.note,
           price: element.right.price,
           status: element.right.status,
-          prefix: element.prefix
+          prefix: element.prefix,
         },
         L: {
           id_order: element.left.id,
@@ -61,7 +61,7 @@ router.get("/", async (req, res) => {
           note_order_lens: element.left.note,
           price: element.left.price,
           status: element.left.status,
-          prefix: element.prefix
+          prefix: element.prefix,
         },
       });
     });
@@ -105,7 +105,7 @@ router.post(
     let orderLenseType = req.body.type;
     if (
       orderLenseType != CONSTANT.OrderLense.SOFT &&
-      orderLenseType != CONSTANT.OrderLense.CUSTOM
+      orderLenseType != CONSTANT.OrderLense.GOV
     ) {
       return res.send({
         status: "error",
@@ -135,7 +135,7 @@ router.post(
         size: side_L,
         note: req.body.note_order_lens,
         side: "L",
-        prefix: req.body.prefix
+        prefix: req.body.prefixLeft,
       });
 
       let right = await Lense.create({
@@ -145,8 +145,7 @@ router.post(
         size: side_R,
         note: req.body.note_order_lens,
         side: "R",
-        prefix: req.body.prefix
-
+        prefix: req.body.prefixRight,
       });
       let todayStart = new Date().setHours(0, 0, 0, 0);
       let now = new Date();
@@ -244,7 +243,7 @@ router.post(
     if (
       orderLenseType &&
       orderLenseType != CONSTANT.OrderLense.SOFT &&
-      orderLenseType != CONSTANT.OrderLense.CUSTOM
+      orderLenseType != CONSTANT.OrderLense.GOV
     ) {
       return res.send({
         status: "error",
@@ -287,7 +286,7 @@ router.post(
       transaction = await sequelize.transaction();
       await OrderLense.update(
         {
-          type: orderLenseType
+          type: orderLenseType,
         },
         {
           where: {
@@ -303,8 +302,7 @@ router.post(
           power: power_L,
           size: side_L,
           note: req.body.note_order_lens,
-        prefix: req.body.prefix
-
+          prefix: req.body.prefixLeft,
         },
         {
           where: {
@@ -320,8 +318,7 @@ router.post(
           power: power_R,
           size: side_R,
           note: req.body.note_order_lens,
-        prefix: req.body.prefix
-
+          prefix: req.body.prefixRight,
         },
         {
           where: {
