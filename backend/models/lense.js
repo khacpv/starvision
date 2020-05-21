@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     note: DataTypes.TEXT,
     price: DataTypes.DOUBLE,
     status: DataTypes.INTEGER,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    prefix: DataTypes.STRING
   }, {});
   Lense.associate = function(models) {
     // associations can be defined here
