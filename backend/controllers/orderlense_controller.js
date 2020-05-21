@@ -49,7 +49,8 @@ router.get("/", async (req, res) => {
           od_size: element.right.size,
           note_order_lens: element.right.note,
           price: element.right.price,
-          Status: element.right.status,
+          status: element.right.status,
+          prefix: element.prefix
         },
         L: {
           id_order: element.left.id,
@@ -59,7 +60,8 @@ router.get("/", async (req, res) => {
           os_size: element.left.size,
           note_order_lens: element.left.note,
           price: element.left.price,
-          Status: element.left.status,
+          status: element.left.status,
+          prefix: element.prefix
         },
       });
     });
@@ -133,6 +135,7 @@ router.post(
         size: side_L,
         note: req.body.note_order_lens,
         side: "L",
+        prefix: req.body.prefix
       });
 
       let right = await Lense.create({
@@ -142,6 +145,8 @@ router.post(
         size: side_R,
         note: req.body.note_order_lens,
         side: "R",
+        prefix: req.body.prefix
+
       });
       let todayStart = new Date().setHours(0, 0, 0, 0);
       let now = new Date();
@@ -298,6 +303,8 @@ router.post(
           power: power_L,
           size: side_L,
           note: req.body.note_order_lens,
+        prefix: req.body.prefix
+
         },
         {
           where: {
@@ -313,6 +320,8 @@ router.post(
           power: power_R,
           size: side_R,
           note: req.body.note_order_lens,
+        prefix: req.body.prefix
+
         },
         {
           where: {
