@@ -5,6 +5,6 @@
     },
     "OrderLense":{
         "SOFT": "SOFT",
-        "CUSTOM": "GOV"
+        "GOV": "GOV"
     }
 }
