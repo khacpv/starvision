@@ -14,7 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {customerService} from "../../services/index";
 import moment from 'moment';
-import CustomerList from "../../containers/CustomerList";
+import CustomerList from "./CustomerList";
 import CustomerOKForm from "./CustomerOKForm";
 import classnames from 'classnames';
 import FittingForm from "./FittingForm";
@@ -32,12 +32,11 @@ class Dashboard extends Component {
             customerList: [],
             currentTab: 0,
             customOK: null,
-            customOKSoft: null,
+            softOK: null,
             fittingData: [],
             orderLenseData: [],
             followUpData: [],
             isLoading: false,
-            type: 'GOV'
         };
     }
 
@@ -47,6 +46,7 @@ class Dashboard extends Component {
         this.setState({
             customer
         });
+        this.newOrderLense && this.newOrderLense.resetForm();
         this.getCustomOkGOVData(customer);
         this.getCustomOkSoftData(customer);
         this.getFittingData(customer);
@@ -62,7 +62,7 @@ class Dashboard extends Component {
             } else {
                 this.customOk.setData(customOK.data.customOk);
                 this.setState({customOK: customOK.data}, () => {
-                    this.newOrderLense.resetForm();
+                    // this.newOrderLense.resetForm();
                     this.getOrderLenseData(customer);
                     this.newOrderLense.setDefaultLense(customOK.data.customOk)
                 });
@@ -74,17 +74,17 @@ class Dashboard extends Component {
 
     getCustomOkSoftData(customer) {
         const doctorData = JSON.parse(localStorage.getItem('user'));
-        customerService.getCustomOkSoftById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(customOK => {
-            if (customOK.data === '') {
-                this.customOkSoft.resetForm();
-                this.setState({customOKSoft: null});
+        customerService.getCustomOkSoftById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
+            if (result.data === '') {
+                this.softOK.resetForm();
+                this.setState({softOK: null});
             } else {
-                this.customOkSoft.setData(customOK.data.customOk);
-                // this.setState({customOKSoft: customOK.data}, () => {
-                //     this.newOrderLense.resetForm();
-                //     this.getOrderLenseData(customer);
-                //     this.newOrderLense.setDefaultLense(customOK.data.customOk)
-                // });
+                this.softOK.setData(result.data.customOk);
+                this.setState({softOK: result.data}, () => {
+                    // this.newOrderLense.resetForm();
+                    this.getOrderLenseData(customer);
+                    this.newOrderLense.setDefaultLense(result.data.customOk)
+                });
             }
         }).catch(error => {
             console.log(error)
@@ -293,7 +293,7 @@ class Dashboard extends Component {
                                         <CustomerOKForm getUserData={(customer) => this.getCustomOkGOVData(customer)} ref={child => {this.customOk = child}} customer={this.state.customer}/>
                                     </TabPane>
                                     <TabPane tabId={4}>
-                                        <SoftOkForm getUserData={(customer) => this.getCustomOkSoftData(customer)} ref={child => {this.customOkSoft = child}} customer={this.state.customer}/>
+                                        <SoftOkForm getUserData={(customer) => this.getCustomOkSoftData(customer)} ref={child => {this.softOK = child}} customer={this.state.customer}/>
                                     </TabPane>
                                     <TabPane tabId={1}>
                                         {
@@ -304,30 +304,16 @@ class Dashboard extends Component {
                                         <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={this.state.fittingData.length + 1} ref={child => {this.newFitting = child}} isNew={true} customer={this.state.customer}/>
                                     </TabPane>
                                     {
-                                        this.state.customOK &&
+                                        (this.state.customOK || this.state.softOK) &&
                                         <TabPane tabId={2}>
-                                            <FormGroup row>
-                                                <div style={{ 'padding-left': 15}}>Loại kính:</div>
-                                                <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
-                                                    <Label check>
-                                                        <Input type="radio" name="type" onChange={() => this.setState({type: 'GOV'})} checked={this.state.type === 'GOV'}/>{' '}
-                                                        GOV
-                                                    </Label>
-                                                </FormGroup>
-                                                <FormGroup check>
-                                                    <Label check>
-                                                        <Input type="radio" name="type" onChange={() => this.setState({type: 'SOFT'})} checked={this.state.type === 'SOFT'}/>{' '}
-                                                        SOFT
-                                                    </Label>
-                                                </FormGroup>
-                                            </FormGroup>
                                             {
                                                 this.state.orderLenseData.map((order, index) => (
                                                     <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)} orderNo={index + 1} key={index} data={order} ref={child => {this[`order${index}`] = child}} customer={this.state.customer}/>
                                                 ))
                                             }
                                             <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)}
-                                                            defaultLense={this.state.customOK.customOk}
+                                                            defaultGOVLense={this.state.customOK ? this.state.customOK.customOk : null}
+                                                            defaultSOFTLense={this.state.softOK ? this.state.softOK.customOk : null}
                                                             orderNo={this.state.orderLenseData.length + 1} ref={child => {this.newOrderLense = child}} isNew={true} customer={this.state.customer}/>
                                         </TabPane>
                                     }

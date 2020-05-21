@@ -7,13 +7,13 @@ import {
     Form,
     Input,
     FormGroup,
-    Modal,Table, ModalHeader, ModalBody, ModalFooter
+    Modal, Table, ModalHeader, ModalBody, ModalFooter, Label
 } from 'reactstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {customerService} from "../../services/index";
 import moment from 'moment';
-import CustomerList from "../../containers/CustomerList";
+import CustomerList from "./CustomerList";
 
 class OrderLenseForm extends Component {
 
@@ -35,6 +35,9 @@ class OrderLenseForm extends Component {
         price_R: null,
         status_L: null,
         status_R: null,
+        type: 'GOV',
+        power_soft_L: '',
+        power_soft_R: '',
     };
 
     constructor(props) {
@@ -47,6 +50,7 @@ class OrderLenseForm extends Component {
     }
 
     setData(data) {
+        console.log(data);
         this.setState({
             lense_R: data.R.od_lense,
             kcode_R: data.R.od_kcode,
@@ -64,6 +68,9 @@ class OrderLenseForm extends Component {
             price_R: data.R.price,
             status_L: data.L.trangthai,
             status_R: data.R.trangthai,
+            power_soft_L: data.L.os_power,
+            power_soft_R: data.R.od_power,
+            type: data.type === 'GOV' ? 'GOV' : 'SOFT'
         })
     }
 
@@ -71,42 +78,50 @@ class OrderLenseForm extends Component {
 
     createOrderLense() {
         const doctorData = JSON.parse(localStorage.getItem('user'));
-        const {lense_R, kcode_R, power_R, side_R, lense_L, kcode_L, power_L, side_L} = this.state;
-        const data = {
+        const {lense_R, kcode_R, side_R, lense_L, kcode_L, side_L, type, power_L, power_R, power_soft_L, power_soft_R, note_order_lens} = this.state;
+        const data = (type === 'GOV') ? {
+            ...this.state,
             mabacsi : doctorData.Tenbacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
             ngaykham : new Date(),
             khid: this.props.customer.ID_KHACHHANG,
-            ...this.state
+            type: 'GOV',
+        } : {
+            ...this.state,
+            power_L: power_soft_L, power_R: power_soft_R,
+            prefix: 'STV',
+            mabacsi : doctorData.Tenbacsi,
+            idbacsi : doctorData.Id_bacsi,
+            iddttc : doctorData.Id_Dttc,
+            ngaykham : new Date(),
+            khid: this.props.customer.ID_KHACHHANG,
+            type: 'SOFT',
         };
-        if (lense_R && kcode_R && power_R && side_R && lense_L && kcode_L && power_L && side_L) {
-            if (this.props.isNew) {
-                customerService.createOrderLense(data).then(result => {
-                    if (result.status === 'success') {
-                        this.resetForm();
-                        this.setDefaultLense(this.props.defaultLense);
-                        this.props.getUserData(this.props.customer);
-                        alert('Cập nhật thành công');
-                    } else {
-                        alert(result.message)
-                    }
+        if (this.props.isNew) {
+            customerService.createOrderLense(data).then(result => {
+                if (result.status === 'success') {
+                    this.resetForm();
+                    this.setDefaultLense(this.props.defaultGOVLense);
+                    this.setDefaultLense(this.props.defaultSOFTLense);
+                    this.props.getUserData(this.props.customer);
+                    alert('Cập nhật thành công');
+                } else {
+                    alert(result.message)
+                }
 
-                }).catch(error => console.log(error))
-            } else {
-                customerService.updateOrderLense(data).then(result => {
-                    if (result.status === 'success') {
-                        this.resetForm();
-                        this.props.getUserData(this.props.customer);
-                        alert('Cập nhật thành công');
-                    } else {
-                        alert(result.message)
-                    }
-
-                }).catch(error => console.log(error))
-            }
+            }).catch(error => console.log(error))
         } else {
-            alert('Vui lòng nhập đủ thông tin lense')
+            customerService.updateOrderLense(data).then(result => {
+                if (result.status === 'success') {
+                    this.resetForm();
+                    this.props.getUserData(this.props.customer);
+                    alert('Cập nhật thành công');
+                } else {
+                    alert(result.message)
+                }
+
+            }).catch(error => console.log(error))
         }
     }
 
@@ -125,19 +140,29 @@ class OrderLenseForm extends Component {
     }
 
     setDefaultLense(data) {
-        const leftData = data.customOk_L;
-        const rightData = data.customOk_R;
-        if (leftData && rightData) {
-            this.setState({
-                lense_R: rightData.od_custom_ok_lense,
-                kcode_R: parseFloat(rightData.od_custom_ok_k_code).toFixed(2),
-                power_R: parseFloat(rightData.od_custom_ok_power).toFixed(2),
-                side_R: parseFloat(rightData.od_custom_ok_size).toFixed(2),
-                lense_L: leftData.od_custom_ok_lense,
-                kcode_L: parseFloat(leftData.od_custom_ok_k_code).toFixed(2),
-                power_L: parseFloat(leftData.od_custom_ok_power).toFixed(2),
-                side_L: parseFloat(leftData.od_custom_ok_size).toFixed(2),
-            })
+        if (data) {
+            const leftData = data.customOk_L;
+            const rightData = data.customOk_R;
+            if (leftData && rightData) {
+                if (data.type === 'GOV') {
+                    this.setState({
+                        lense_R: rightData.od_custom_ok_lense,
+                        kcode_R: parseFloat(rightData.od_custom_ok_k_code).toFixed(2),
+                        power_R: parseFloat(rightData.od_custom_ok_power).toFixed(2),
+                        side_R: parseFloat(rightData.od_custom_ok_size).toFixed(2),
+                        lense_L: leftData.od_custom_ok_lense,
+                        kcode_L: parseFloat(leftData.od_custom_ok_k_code).toFixed(2),
+                        power_L: parseFloat(leftData.od_custom_ok_power).toFixed(2),
+                        side_L: parseFloat(leftData.od_custom_ok_size).toFixed(2),
+                    })
+                }
+                if (data.type === 'SOFT') {
+                    this.setState({
+                        power_soft_L: parseFloat(leftData.power).toFixed(2),
+                        power_soft_R: parseFloat(rightData.power).toFixed(2),
+                    })
+                }
+            }
         }
     }
 
@@ -147,6 +172,7 @@ class OrderLenseForm extends Component {
 
     render() {
         let data = this.state;
+        console.log(data);
         let lenselist = [
             <option/>,
             <option>HP</option>,
@@ -180,7 +206,20 @@ class OrderLenseForm extends Component {
                 </Modal>
                 <Form>
                     <Row>
-                        <Col xs={12}>
+                        <div style={{ 'padding-left': 15}}>Loại kính:</div>
+                        <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
+                            <Label check>
+                                <Input type="radio" name="type" onChange={() => this.props.isNew && this.setState({type: 'GOV'})} checked={this.state.type === 'GOV'}/>{' '}
+                                GOV
+                            </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                            <Label check>
+                                <Input type="radio" name="type" onChange={() => this.props.isNew && this.setState({type: 'SOFT'})} checked={this.state.type === 'SOFT'}/>{' '}
+                                SOFT
+                            </Label>
+                        </FormGroup>
+                        <Col xs={12} style={{ marginTop: 10}}>
                             <h3>Suggested Order lens - Số Order: {this.state.orderNumber || '---'}</h3>
                         </Col>
                         <Col xs={6}>
@@ -189,30 +228,51 @@ class OrderLenseForm extends Component {
                                     <tbody>
                                     <tr>
                                         <th className='table-solid' rowSpan={this.props.isNew ? 1 : 2}>OS</th>
-                                        <td className='table-solid'>
-                                            Lense
-                                            <Input value={data.lense_L} onChange={(event) => this.changeValue(event, 'lense_L')} type='select' name="lense_L" id="lense_L" placeholder="">
-                                                {lenselist}
-                                            </Input>
-                                        </td>
-                                        <td className='table-solid'>
-                                            K-code
-                                            <Input value={data.kcode_L} onChange={(event) => this.changeValue(event, 'kcode_L')} type="select" name="kcode_L" id="kcode_L">
-                                                {klist}
-                                            </Input>
-                                        </td>
-                                        <td className='table-solid'>
-                                            Power
-                                            <Input value={data.power_L} onChange={(event) => this.changeValue(event, 'power_L')} type="select" name="power_L" id="power_L">
-                                                {plist}
-                                            </Input>
-                                        </td>
-                                        <td className='table-solid'>
-                                            Size
-                                            <Input value={data.side_L} onChange={(event) => this.changeValue(event, 'side_L')} type="select" name="side_L" id="side_L">
-                                                {slist}
-                                            </Input>
-                                        </td>
+                                        {
+                                            this.state.type === 'GOV' && <td className='table-solid'>
+                                                Lense
+                                                <Input value={data.lense_L} onChange={(event) => this.changeValue(event, 'lense_L')} type='select' name="lense_L" id="lense_L" placeholder="">
+                                                    {lenselist}
+                                                </Input>
+                                            </td>
+                                        }
+                                        {
+                                            this.state.type === 'GOV' && <td className='table-solid'>
+                                                K-code
+                                                <Input value={data.kcode_L} onChange={(event) => this.changeValue(event, 'kcode_L')} type="select" name="kcode_L" id="kcode_L">
+                                                    {klist}
+                                                </Input>
+                                            </td>
+                                        }
+                                        {
+                                            this.state.type === 'GOV' ? <td className='table-solid'>
+                                                Power
+                                                <Input value={data.power_L} onChange={(event) => this.changeValue(event, 'power_L')} type="select" name="power_L" id="power_L">
+                                                    {plist}
+                                                </Input>
+                                            </td> : <td className='table-solid' colSpan={2}>
+                                                Power
+                                                <Input value={data.power_soft_L} onChange={(event) => this.changeValue(event, 'power_soft_L')} type="select" name="power_L" id="power_L">
+                                                    {plist}
+                                                </Input>
+                                            </td>
+                                        }
+                                        {
+                                            this.state.type !== 'GOV' && <td className='table-solid'>
+                                                Prefix
+                                                <Input value={'STV'} type="text" name="prefixL" id="prefixL" disabled={true}>
+                                                    {slist}
+                                                </Input>
+                                            </td>
+                                        }
+                                        {
+                                            this.state.type === 'GOV' && <td className='table-solid'>
+                                                Size
+                                                <Input value={data.side_L} onChange={(event) => this.changeValue(event, 'side_L')} type="select" name="side_L" id="side_L">
+                                                    {slist}
+                                                </Input>
+                                            </td>
+                                        }
                                     </tr>
                                     {
                                         !this.props.isNew && <tr>
@@ -236,30 +296,51 @@ class OrderLenseForm extends Component {
                                     <tbody>
                                     <tr>
                                         <th className='table-solid' rowSpan={this.props.isNew ? 1 : 2}>OD</th>
-                                        <td className='table-solid'>
-                                            Lense
-                                            <Input value={data.lense_R} onChange={(event) => this.changeValue(event, 'lense_R')} type='select' name="lense_R" id="lense_R" placeholder="" >
-                                                {lenselist}
-                                            </Input>
-                                        </td>
-                                        <td className='table-solid'>
-                                            K-code
-                                            <Input value={data.kcode_R} onChange={(event) => this.changeValue(event, 'kcode_R')} type="select" name="kcode_R" id="kcode_R">
-                                                {klist}
-                                            </Input>
-                                        </td>
-                                        <td className='table-solid'>
-                                            Power
-                                            <Input value={data.power_R} onChange={(event) => this.changeValue(event, 'power_R')} type="select" name="power_R" id="power_R">
-                                                {plist}
-                                            </Input>
-                                        </td>
-                                        <td className='table-solid'>
-                                            Size
-                                            <Input value={data.side_R} onChange={(event) => this.changeValue(event, 'side_R')} type="select" name="side_R" id="side_R">
-                                                {slist}
-                                            </Input>
-                                        </td>
+                                        {
+                                            this.state.type === 'GOV' && <td className='table-solid'>
+                                                Lense
+                                                <Input value={data.lense_R} onChange={(event) => this.changeValue(event, 'lense_R')} type='select' name="lense_R" id="lense_R" placeholder="" >
+                                                    {lenselist}
+                                                </Input>
+                                            </td>
+                                        }
+                                        {
+                                            this.state.type === 'GOV' && <td className='table-solid'>
+                                                K-code
+                                                <Input value={data.kcode_R} onChange={(event) => this.changeValue(event, 'kcode_R')} type="select" name="kcode_R" id="kcode_R">
+                                                    {klist}
+                                                </Input>
+                                            </td>
+                                        }
+                                        {
+                                            this.state.type === 'GOV' ? <td className='table-solid'>
+                                                Power
+                                                <Input value={data.power_R} onChange={(event) => this.changeValue(event, 'power_R')} type="select" name="power_L" id="power_L">
+                                                    {plist}
+                                                </Input>
+                                            </td> : <td className='table-solid' colSpan={2}>
+                                                Power
+                                                <Input value={data.power_soft_R} onChange={(event) => this.changeValue(event, 'power_soft_R')} type="select" name="power_L" id="power_L">
+                                                    {plist}
+                                                </Input>
+                                            </td>
+                                        }
+                                        {
+                                            this.state.type !== 'GOV' && <td className='table-solid'>
+                                                Prefix
+                                                <Input value={'STV'} type="text" name="prefixR" id="prefixR" disabled={true}>
+                                                    {slist}
+                                                </Input>
+                                            </td>
+                                        }
+                                        {
+                                            this.state.type === 'GOV' && <td className='table-solid'>
+                                                Size
+                                                <Input value={data.side_R} onChange={(event) => this.changeValue(event, 'side_R')} type="select" name="side_R" id="side_R">
+                                                    {slist}
+                                                </Input>
+                                            </td>
+                                        }
                                     </tr>
                                     {
                                         !this.props.isNew && <tr>

@@ -15,24 +15,31 @@ const defaultProps = {};
 
 class DefaultHeader extends Component {
     render() {
-
-        // eslint-disable-next-line
+        const doctorData = JSON.parse(localStorage.getItem('profile'));
         const {children, ...attributes} = this.props;
-
         return (
             <React.Fragment>
                 <AppSidebarToggler className="d-lg-none" display="md" mobile/>
-                <Nav className="d-md-down-none" navbar>
-                    <NavItem className="px-3">
-                        <NavLink to="/dashboard" className="nav-link">FITTING</NavLink>
-                    </NavItem>
-                    <NavItem className="px-3">
-                        <NavLink to="/notifications" className="nav-link">Thông báo</NavLink>
-                    </NavItem>
-                    <NavItem className="px-3">
-                        <NavLink to="/summary" className="nav-link">Công nợ</NavLink>
-                    </NavItem>
-                </Nav>
+                {
+                    doctorData.role === 'admin' ? <Nav className="d-md-down-none" navbar>
+                        <NavItem className="px-3">
+                            <NavLink to="/admin" className="nav-link">Danh sách bác sĩ</NavLink>
+                        </NavItem>
+                        <NavItem className="px-3">
+                            <NavLink to="/adminNotification" className="nav-link">Gửi thông báo</NavLink>
+                        </NavItem>
+                    </Nav> : <Nav className="d-md-down-none" navbar>
+                        <NavItem className="px-3">
+                            <NavLink to="/dashboard" className="nav-link">FITTING</NavLink>
+                        </NavItem>
+                        <NavItem className="px-3">
+                            <NavLink to="/notifications" className="nav-link">Thông báo</NavLink>
+                        </NavItem>
+                        <NavItem className="px-3">
+                            <NavLink to="/summary" className="nav-link">Công nợ</NavLink>
+                        </NavItem>
+                    </Nav>
+                }
                 <Nav className="ml-auto" navbar>
                     <UncontrolledDropdown nav direction="down">
                         <DropdownToggle nav>

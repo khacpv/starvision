@@ -196,7 +196,7 @@ export default {
       icon: 'icon-bell',
       children: [
         {
-          name: 'Alerts',
+          name: 'Notification',
           url: '/notifications/alerts',
           icon: 'icon-bell',
         },

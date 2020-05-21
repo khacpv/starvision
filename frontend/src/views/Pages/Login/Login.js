@@ -33,8 +33,7 @@ class Login extends Component {
         if (username && password) {
             authService.login(qs.stringify({username, password})).then(result => {
                 authService.setToken(result.data.token, result.data);
-                // this.props.saveProfile(result.data);
-                this.props.history.push('/dashboard');
+                this.props.history.push(result.data.role === 'admin' ? '/admin' : '/dashboard');
                 customerService.getUserData(result.data.user_id).then(data => {
                     authService.setUser(data.data[0]);
                 }).catch(error => console.log(error))

@@ -39,13 +39,14 @@ class ModalAddCustomer extends Component {
 
     createCustomer() {
         const doctorData = JSON.parse(localStorage.getItem('profile'));
+        const user = JSON.parse(localStorage.getItem('user'));
         const {tenkh, mobile, diachi, birthday, gender, ghichu} = this.state;
         customerService.addCustomer(qs.stringify({
             tenkh, mobile, diachi, birthday, gender, ghichu,
             tenbacsi: doctorData.user_nicename,
             mabacsi: doctorData.user_id,
-            tendttc: 'doi tuong tiep can',
-            iddttc: 'ma doi tuong tiep can'
+            tendttc: user.Ten_DTTC,
+            iddttc: user.Id_Dttc
         })).then(result => {
             if (result.status === "success") {
                 alert('Đăng kí thành công');
@@ -129,7 +130,13 @@ class ModalAddCustomer extends Component {
                         </FormGroup>
                         <FormGroup>
                             <Label for="exampleText">Ghi chú</Label>
-                            <Input type="textarea" name="note" id="note" />
+                            <Input onChange={(event) => {
+                                if (!this.state.ghichu || !event.target.value) {
+                                    this.setState({ghichu: event.target.value})
+                                } else {
+                                    this.state.ghichu = event.target.value
+                                }
+                            }} type="textarea" name="note" id="note" />
                         </FormGroup>
                     </Form>
                 </ModalBody>

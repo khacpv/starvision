@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Alert, Card, CardBody, CardHeader, Col, Row} from 'reactstrap';
 import {customerService} from "../../../services";
 
-class Alerts extends Component {
+class Notification extends Component {
     constructor(props) {
         super(props);
 
@@ -59,4 +59,4 @@ class Alerts extends Component {
     }
 }
 
-export default Alerts;
+export default Notification;
