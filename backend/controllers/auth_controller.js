@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
           role: user.role,
           user_email: user.user_email,
           user_nicename: user.user_nicename,
-          user_id: user.id,
+          user_id: user.id.toString(),
           user_display_name: user.display_name,
         },
       });
