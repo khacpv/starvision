@@ -11,6 +11,8 @@ const OrderlenseController = require("../controllers/orderlense_controller");
 const FollowupController = require("../controllers/followup_controller");
 const DeptController = require("../controllers/debt_controller");
 
+const AdminOrderlenseController = require("../controllers/orderlense_controller");
+
 module.exports = (app) => {
   app.use(
     "/customer",
@@ -55,5 +57,13 @@ module.exports = (app) => {
     "/followup",
     passport.authenticate("jwt", { session: false }),
     FollowupController
+  );
+
+
+  // admin
+  app.use(
+    "/admin/orderlense",
+    passport.authenticate("jwt", { session: false }),
+    AdminOrderlenseController
   );
 };

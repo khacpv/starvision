@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
   if (!user) {
     res.status(401).send({
       code: 401,
-      msg: "Authentication failed. User not found.",
+      msg: "Tài khoản hoặc mật khẩu không chính xác",
     });
   } else {
     if (bcrypt.compareSync(password, user.password)) {
@@ -59,12 +59,12 @@ router.post("/", async (req, res) => {
           role: user.role,
           user_email: user.user_email,
           user_nicename: user.user_nicename,
-          user_id: user.id,
+          user_id: user.id.toString(),
           user_display_name: user.display_name,
         },
       });
     } else {
-      res.status(401).json({ msg: "Password is incorrect" });
+      res.status(401).json({ msg: "Tài khoản hoặc mật khẩu không chính xác" });
     }
   }
 });
