@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
     order_number: DataTypes.STRING,
     is_active: DataTypes.INTEGER,
     note: DataTypes.TEXT,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    paid: DataTypes.DOUBLE,
+    glass_money: DataTypes.DOUBLE,
+    amount: DataTypes.DOUBLE
   }, {});
   OrderLense.associate = function(models) {
     // associations can be defined here

@@ -11,7 +11,7 @@ const OrderlenseController = require("../controllers/orderlense_controller");
 const FollowupController = require("../controllers/followup_controller");
 const DeptController = require("../controllers/debt_controller");
 
-const AdminOrderlenseController = require("../controllers/orderlense_controller");
+const AdminOrderlenseController = require("../controllers/admin/orderlense_controller");
 
 module.exports = (app) => {
   app.use(
