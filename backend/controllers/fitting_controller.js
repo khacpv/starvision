@@ -18,27 +18,31 @@ router.get("/", async (req, res) => {
     let custom_result = [];
     result.forEach((element) => {
       let tmpSide = element.side;
+      let key = "od";
+      if (tmpSide == "L") {
+        key = "os";
+      }
       custom_result.push({
         fitting_no: element.fitting_no,
         [tmpSide]: {
           id: element.id,
-          os_kcode: element.kcode,
-          os_power: element.power,
-          os_size: element.size,
-          os_bcva_sph: element.bcva_sph,
-          os_bcva_cyl: element.bcva_cyl,
-          os_bcva_ax: element.bcva_ax,
-          os_bcva_va: element.bcva_va,
-          os_referaction_sph: element.referaction_sph,
-          os_referaction_cyl: element.referaction_cyl,
-          os_referaction_ax: element.referaction_ax,
-          os_comment_size: element.comment_size,
-          os_comment_vung_dieu_tri: element.comment_vung_dieu_tri,
-          os_comment_matbo: element.comment_matbo,
-          os_comment_di_chuyen: element.comment_di_chuyen,
-          os_comment_ket_luan: element.comment_ket_luan,
-          os_video: element.video,
-          os_thumb: element.thumb,
+          [key + "_kcode"]: element.kcode,
+          [key + "_power"]: element.power,
+          [key + "_size"]: element.size,
+          [key + "_bcva_sph"]: element.bcva_sph,
+          [key + "_bcva_cyl"]: element.bcva_cyl,
+          [key + "_bcva_ax"]: element.bcva_ax,
+          [key + "_bcva_va"]: element.bcva_va,
+          [key + "_referaction_sph"]: element.referaction_sph,
+          [key + "_referaction_cyl"]: element.referaction_cyl,
+          [key + "_referaction_ax"]: element.referaction_ax,
+          [key + "_comment_size"]: element.comment_size,
+          [key + "_comment_vung_dieu_tri"]: element.comment_vung_dieu_tri,
+          [key + "_comment_matbo"]: element.comment_matbo,
+          [key + "_comment_di_chuyen"]: element.comment_di_chuyen,
+          [key + "_comment_ket_luan"]: element.comment_ket_luan,
+          [key + "_video"]: element.video,
+          [key + "_thumb"]: element.thumb,
         },
       });
     });
@@ -68,7 +72,7 @@ router.post(
       });
     }
     let checkFitting = null;
-    if (req.body.id){
+    if (req.body.id) {
       checkFitting = await Fitting.findOne({
         where: {
           customer_id: req.body.khid,
@@ -79,7 +83,7 @@ router.post(
       });
     }
 
-    if (checkFitting){
+    if (checkFitting) {
       let updateFitting = Fitting.update(
         {
           doctor_code: req.body.mabacsi,
@@ -95,7 +99,7 @@ router.post(
           bcva_sph: req.body.bcva_sph,
           bcva_cyl: req.body.bcva_cyl,
           bcva_ax: req.body.bcva_ax,
-          
+
           kcode: req.body.kcode,
           power: req.body.power,
           comment_size: req.body.comment_size,

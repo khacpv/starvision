@@ -35,35 +35,37 @@ router.get("/", async (req, res) => {
   if (result) {
     let returnData = [];
     result.forEach((element) => {
-      let date = new Date(element.date_examination);
-
-      returnData.push({
-        Ngay: date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
-        So_Don_Hang: element.order_number,
-        type: element.type,
-        R: {
-          id_order: element.right.id,
-          od_lense: element.right.lense,
-          od_kcode: element.right.kcode,
-          od_power: element.right.power,
-          od_size: element.right.size,
-          note_order_lens: element.right.note,
-          price: element.right.price,
-          status: element.right.status,
-          prefix: element.prefix,
-        },
-        L: {
-          id_order: element.left.id,
-          os_lense: element.left.lense,
-          os_kcode: element.left.kcode,
-          os_power: element.left.power,
-          os_size: element.left.size,
-          note_order_lens: element.left.note,
-          price: element.left.price,
-          status: element.left.status,
-          prefix: element.prefix,
-        },
-      });
+      if (element.right && element.left) {
+        let date = new Date(element.date_examination);
+        returnData.push({
+          Ngay:
+            date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
+          So_Don_Hang: element.order_number,
+          type: element.type,
+          R: {
+            id_order: element.right.id,
+            od_lense: element.right.lense,
+            od_kcode: element.right.kcode,
+            od_power: element.right.power,
+            od_size: element.right.size,
+            note_order_lens: element.right.note,
+            price: element.right.price,
+            Status: element.right.status,
+            prefix: element.prefix,
+          },
+          L: {
+            id_order: element.left.id,
+            os_lense: element.left.lense,
+            os_kcode: element.left.kcode,
+            os_power: element.left.power,
+            os_size: element.left.size,
+            note_order_lens: element.left.note,
+            price: element.left.price,
+            Status: element.left.status,
+            prefix: element.prefix,
+          },
+        });
+      }
     });
     return res.send({ status: "success", message: "", data: returnData });
   }

@@ -41,7 +41,6 @@ router.get(
     if (customer) {
       let returnCustomer = [];
       let current_date = element.birthday;
-      let timestamp = current_date.getTime();
       let formatted_date =
         current_date.getDate() +
         "/" +
@@ -131,9 +130,16 @@ router.get(
     if (customer) {
       let returnCustomer = [];
       customer.forEach((element) => {
+        let current_date = new Date(element.birthday);
+        let formatted_date =
+          current_date.getDate() +
+          "/" +
+          Number(current_date.getMonth()+1) +
+          "/" +
+          current_date.getFullYear();
         returnCustomer.push({
           ID_KHACHHANG: element.id,
-          NAMSINH: element.birthday,
+          NAMSINH: formatted_date,
           TENKHACHHANG: element.customer_name,
           DIDONG: element.mobile,
           GIOITINH: element.gender,

@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
     let index = 1;
     result.forEach((element) => {
       let key = "od";
-      if (element.size == "L") {
+      if (element.side == "L") {
         key = "os";
       }
       let tmpSide = element.side;
