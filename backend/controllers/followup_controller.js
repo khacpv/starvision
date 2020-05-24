@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
           [key + "_image"]: element.image,
           [key + "_video"]: element.video,
           [key + "_thumb"]: element.thumb,
-          A_TH_DUBAO: element.id,
+          A_TH_DUBAO: String(element.id),
         },
       });
     });
