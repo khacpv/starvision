@@ -14,10 +14,9 @@ router.get("/", async (req, res) => {
     where: {
       customer_id: customerId,
       dttc_id: dttcId,
-      type: customerOdType
+      type: customerOdType,
     },
   });
-
   if (data) {
     let result = null;
     if (data.type == CONSTANT.CustomerOk.GOV) {
@@ -40,25 +39,25 @@ router.get("/", async (req, res) => {
             od_custom_ok_k_code: data.customok_kcode_r,
             od_custom_ok_power: data.customok_power_r,
             od_custom_ok_size: data.customok_size_r,
-            ngayfitting: data.createAt,
+            ngayfitting: data.createdAt,
           },
           customOk_L: {
-            od_refactometer_sph: data.ref_sph_l,
-            od_refactometer_cyl: data.ref_cyl_l,
-            od_refactometer_ax: data.ref_ax_l,
-            od_bcva_va: data.bcva_va_l,
-            od_bcva_sph: data.bcva_sph_l,
-            od_bcva_cyl: data.bcva_cyl_l,
-            od_bcva_ax: data.bcva_ax_l,
-            od_original_k1: data.d_k1_l,
-            od_original_k2: data.d_k2_l,
-            od_original_ave: data.d_ave_l,
-            od_original_hvid: data.d_hvid_l,
-            od_custom_ok_lense: data.customok_lense_l,
-            od_custom_ok_k_code: data.customok_kcode_l,
-            od_custom_ok_power: data.customok_power_l,
-            od_custom_ok_size: data.customok_size_l,
-            ngayfitting: data.createAt,
+            os_refactometer_sph: data.ref_sph_l,
+            os_refactometer_cyl: data.ref_cyl_l,
+            os_refactometer_ax: data.ref_ax_l,
+            os_bcva_va: data.bcva_va_l,
+            os_bcva_sph: data.bcva_sph_l,
+            os_bcva_cyl: data.bcva_cyl_l,
+            os_bcva_ax: data.bcva_ax_l,
+            os_original_k1: data.d_k1_l,
+            os_original_k2: data.d_k2_l,
+            os_original_ave: data.d_ave_l,
+            os_original_hvid: data.d_hvid_l,
+            os_custom_ok_lense: data.customok_lense_l,
+            os_custom_ok_k_code: data.customok_kcode_l,
+            os_custom_ok_power: data.customok_power_l,
+            os_custom_ok_size: data.customok_size_l,
+            ngayfitting: data.createdAt,
           },
         },
       };
@@ -181,7 +180,7 @@ router.post(
       where: {
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
-        type: req.body.type
+        type: req.body.type,
       },
     });
     if (checkCustomerOk) {

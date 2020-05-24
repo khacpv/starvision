@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
         data: {
           token: token,
           role: user.role,
-          user_email: user.user_email,
+          user_email: user.email != null ? user.email :"",
           user_nicename: user.user_nicename,
           user_id: user.id.toString(),
           user_display_name: user.display_name,
