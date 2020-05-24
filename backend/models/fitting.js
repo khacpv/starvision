@@ -8,13 +8,13 @@ module.exports = (sequelize, DataTypes) => {
     date_examination: DataTypes.STRING,
     fitting_no: DataTypes.STRING,
 
-    referaction_sph: DataTypes.DOUBLE,
-    referaction_cyl: DataTypes.DOUBLE,
+    referaction_sph: DataTypes.STRING,
+    referaction_cyl: DataTypes.STRING,
     referaction_ax: DataTypes.STRING,
 
     bcva_va: DataTypes.STRING,
-    bcva_sph: DataTypes.DOUBLE,
-    bcva_cyl: DataTypes.DOUBLE,
+    bcva_sph: DataTypes.STRING,
+    bcva_cyl: DataTypes.STRING,
     bcva_ax: DataTypes.STRING,
     
     side: DataTypes.STRING,

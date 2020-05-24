@@ -27,10 +27,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       referaction_sph: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       referaction_cyl: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       referaction_ax: {
         type: Sequelize.STRING
@@ -39,10 +39,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       bcva_sph: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_cyl: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_ax: {
         type: Sequelize.STRING
