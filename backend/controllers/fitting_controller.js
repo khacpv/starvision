@@ -51,6 +51,12 @@ router.get("/", async (req, res) => {
       message: "",
       data: custom_result,
     });
+  } else {
+    return res.send({
+      status: "success",
+      message: "",
+      data: result,
+    });
   }
   return res.send({ code: 400, msg: "error" });
 });
