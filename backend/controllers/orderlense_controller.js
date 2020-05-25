@@ -69,6 +69,9 @@ router.get("/", async (req, res) => {
     });
     return res.send({ status: "success", message: "", data: returnData });
   }
+  else{
+    return res.send({ status: "success", message: "", data: result });
+  }
   return res.send({
     status: "error",
     message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",

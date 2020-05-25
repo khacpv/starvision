@@ -12,9 +12,9 @@ const CONSTANT = require("../../config/constants.json");
 router.get("/", async (req, res) => {
   if (req.user.role == "admin") {
     let result = await OrderLense.findAll({
-      where: {
-        is_active: 1,
-      },
+      // where: {
+      //   is_active: 1,
+      // },
       include: [
         {
           model: Lense,
@@ -34,6 +34,8 @@ router.get("/", async (req, res) => {
         let date = new Date(element.date_examination)
         if (element.right && element.left){
           returnData.push({
+            id : element.id,
+            is_active: element.is_active,
             Ngay:
               date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
             So_Don_Hang: element.order_number,

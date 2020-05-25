@@ -90,6 +90,12 @@ router.get("/", async (req, res) => {
       message: "",
       data: result,
     });
+  }else{
+    return res.send({
+      status: "success",
+      message: "",
+      data: data,
+    });
   }
 
   return res.send({
