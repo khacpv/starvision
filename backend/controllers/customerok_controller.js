@@ -90,11 +90,16 @@ router.get("/", async (req, res) => {
       message: "",
       data: result,
     });
-  }else{
+  } else {
     return res.send({
       status: "success",
       message: "",
-      data: data,
+      data: {
+        customOk: {
+          customOk_R: [],
+          customOk_L: [],
+        },
+      },
     });
   }
 

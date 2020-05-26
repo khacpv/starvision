@@ -451,6 +451,12 @@ router.get(
         message: "",
         data: returnCustomer,
       });
+    }else{
+      return res.send({
+        status: "success",
+        message: "",
+        data: [],
+      });
     }
     return res.send({
       status: "error",

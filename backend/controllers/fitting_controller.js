@@ -55,7 +55,7 @@ router.get("/", async (req, res) => {
     return res.send({
       status: "success",
       message: "",
-      data: result,
+      data: [],
     });
   }
   return res.send({ code: 400, msg: "error" });
