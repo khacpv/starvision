@@ -10,7 +10,6 @@ const { Op } = Sequelize;
 router.get("/", async (req, res) => {
   let userId = req.query.userid;
   let dttcId = req.query.iddttc;
-
   let result = await FollowUp.findAll({
     where: {
       customer_id: userId,
@@ -18,7 +17,7 @@ router.get("/", async (req, res) => {
     },
   });
 
-  if (result) {
+  if (`${result.length}` > 0) {
     let returnData = [];
     let index = 1;
     result.forEach((element) => {
@@ -50,7 +49,7 @@ router.get("/", async (req, res) => {
     return res.send({
       status: "success",
       message: "",
-      data: result,
+      data: null,
     });
   }
   return res.send({ code: 400, msg: "error" });
