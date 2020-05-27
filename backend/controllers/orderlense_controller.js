@@ -17,7 +17,6 @@ router.get("/", async (req, res) => {
     where: {
       customer_id: customerId,
       dttc_id: dttcId,
-      is_active: 1,
     },
     include: [
       {
@@ -42,6 +41,7 @@ router.get("/", async (req, res) => {
             date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
           So_Don_Hang: element.order_number,
           type: element.type,
+          is_active: element.is_active,
           R: {
             id_order: element.right.id,
             od_lense: element.right.lense,
@@ -50,7 +50,7 @@ router.get("/", async (req, res) => {
             od_size: element.right.size,
             note_order_lens: element.right.note,
             price: element.right.price,
-            Status: element.right.status,
+            Status: element.right.status == 1 ? "Đã yêu cầu" : "Chưa yêu cầu",
             prefix: element.prefix,
           },
           L: {
@@ -61,15 +61,14 @@ router.get("/", async (req, res) => {
             os_size: element.left.size,
             note_order_lens: element.left.note,
             price: element.left.price,
-            Status: element.left.status,
+            Status: element.right.status == 1 ? "Đã yêu cầu" : "Chưa yêu cầu",
             prefix: element.prefix,
           },
         });
       }
     });
     return res.send({ status: "success", message: "", data: returnData });
-  }
-  else{
+  } else {
     return res.send({ status: "success", message: "", data: [] });
   }
   return res.send({
@@ -118,6 +117,7 @@ router.post(
         data: "",
       });
     }
+
     let lense_L = req.body.lense_L;
     let kcode_L = req.body.kcode_L;
     let power_L = req.body.power_L;
@@ -129,6 +129,7 @@ router.post(
     let side_R = req.body.side_R;
 
     let result = null;
+
     try {
       // get transaction
       transaction = await sequelize.transaction();
@@ -141,6 +142,8 @@ router.post(
         note: req.body.note_order_lens,
         side: "L",
         prefix: req.body.prefixLeft,
+        status: 1
+
       });
 
       let right = await Lense.create({
@@ -151,6 +154,7 @@ router.post(
         note: req.body.note_order_lens,
         side: "R",
         prefix: req.body.prefixRight,
+        status: 1
       });
       let todayStart = new Date().setHours(0, 0, 0, 0);
       let now = new Date();
@@ -202,10 +206,10 @@ router.post(
         data: "",
       });
     }
-
     if (result) {
       return res.send({ status: "success", message: "", data: "" });
     }
+
     return res.send({
       status: "error",
       message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",

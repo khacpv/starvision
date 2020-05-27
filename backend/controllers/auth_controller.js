@@ -19,9 +19,10 @@ router.post("/", async (req, res) => {
     },
   });
   if (!user) {
-    res.status(401).send({
-      code: 401,
-      msg: "Tài khoản hoặc mật khẩu không chính xác",
+    res.send({
+      status: "error",
+      message: "Sai username hoặc password.",
+      data: "",
     });
   } else {
     if (bcrypt.compareSync(password, user.password)) {
@@ -57,7 +58,7 @@ router.post("/", async (req, res) => {
         data: {
           token: token,
           role: user.role,
-          user_email: user.email != null ? user.email :"",
+          user_email: user.email != null ? user.email : "",
           user_nicename: user.user_nicename,
           user_id: user.id.toString(),
           user_display_name: user.display_name,
@@ -80,7 +81,7 @@ router.post(
   async (req, res) => {
     let data = req.body;
     let hash = bcrypt.hashSync(req.body.password, salt);
-    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).send({
@@ -93,7 +94,7 @@ router.post(
           username: data.username,
         },
       });
-      
+
       if (checkUser > 0) {
         return res.status(200).send({
           code: 400,

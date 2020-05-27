@@ -24,37 +24,37 @@ module.exports = {
         type: Sequelize.STRING
       },
       ref_sph_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       ref_cyl_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       ref_ax_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_va_r: {
         type: Sequelize.STRING
       },
       bcva_sph_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_cyl_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_ax_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       d_k1_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       d_k2_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       d_ave_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       d_hvid_r: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       customok_lense_r: {
         type: Sequelize.STRING
@@ -69,37 +69,37 @@ module.exports = {
         type: Sequelize.STRING
       },
       ref_sph_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       ref_cyl_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       ref_ax_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_va_l: {
         type: Sequelize.STRING
       },
       bcva_sph_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_cyl_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       bcva_ax_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       d_k1_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       d_k2_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       d_ave_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       d_hvid_l: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.STRING
       },
       customok_lense_l: {
         type: Sequelize.STRING
