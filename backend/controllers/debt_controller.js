@@ -25,7 +25,10 @@ router.get(
     let customer = {};
     customer = await Customer.findAll({
       where: {
-       id: doctorId
+        id: doctorId,
+      },
+      attributes: {
+        exclude: ["id"],
       },
     });
 
@@ -34,12 +37,19 @@ router.get(
       customer.forEach((element) => {
         returnCustomer.push({
           id: element.id,
-          congnothangtruoc: element.debt_last_month,
-          phatsinhthangnay: element.costs_incurred_this_month,
-          dathanhtoan: element.paid,
-          tienkinh: element.glass_money,
-          tienvtth: element.vtth_money,
-          tien_phai_thanh_toan: Number(element.debt_last_month) + Number(element.costs_incurred_this_month) -  Number(element.costs_incurred_this_month)
+          congnothangtruoc:
+            element.debt_last_month != null ? element.debt_last_month : 0,
+          phatsinhthangnay:
+            element.costs_incurred_this_month != null
+              ? element.costs_incurred_this_month
+              : 0,
+          dathanhtoan: element.paid != null ? element.paid : 0,
+          tienkinh: element.glass_money != null ? element.paid : 0,
+          tienvtth: element.vtth_money != null ? element.vtth_money : 0,
+          tien_phai_thanh_toan:
+            Number(element.debt_last_month) +
+            Number(element.costs_incurred_this_month) -
+            Number(element.costs_incurred_this_month),
         });
       });
 
