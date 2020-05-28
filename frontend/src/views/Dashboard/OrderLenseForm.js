@@ -50,7 +50,6 @@ class OrderLenseForm extends Component {
     }
 
     setData(data) {
-        console.log(data);
         this.setState({
             lense_R: data.R.od_lense,
             kcode_R: data.R.od_kcode,

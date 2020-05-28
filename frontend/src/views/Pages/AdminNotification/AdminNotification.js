@@ -44,19 +44,40 @@ class AdminNotification extends Component {
         )
     }
 
+    resetForm() {
+        this.setState({
+            options: [],
+            title: '',
+            content: '',
+            selectedList: []
+        })
+    }
+
     sendNotification() {
         const {title, content, selectedList} = this.state;
-        const receiver_id = [];
-        selectedList.map(item => {
-            receiver_id.push(item.id)
-        })
-        adminServices.addNotification({
-            title, content, receiver_id
-        }).then(result => {
-            console.log(result)
-        }).catch(error => {
-            console.log(error);
-        })
+        if (title && content && selectedList.length > 0) {
+            let receiver_id = [];
+            selectedList.map(item => {
+                receiver_id.push(item.id)
+            })
+            adminServices.addNotification({
+                title, content, receiver_id : receiver_id.join()
+            }).then(result => {
+                console.log(result)
+                if (result.status === 'success') {
+                    alert('Gửi thông báo thành công');
+                    this.resetForm()
+                } else {
+                    alert('Có lỗi xảy ra, vui lòng thử lại')
+                }
+            }).catch(error => {
+                console.log(error)
+                alert('Có lỗi xảy ra, vui lòng thử lại')
+            })
+        } else {
+            alert('Vui lòng điền đủ thông tin')
+        }
+
     }
 
     onSelect(selectedList, selectedItem) {

@@ -69,7 +69,7 @@ class CustomerList extends Component {
                                         {item.TENKHACHHANG}
                                     </td>
                                     <td className='table-solid'>
-                                        {moment(new Date(item.NAMSINH)).format('D/M/YYYY')}
+                                        {item.NAMSINH}
                                     </td>
                                     <td className='table-solid'>
                                         {item.GIOITINH === 'male' ? 'Nam' : 'Nữ'}

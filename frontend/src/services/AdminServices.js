@@ -28,6 +28,18 @@ class AdminServices {
     addNotification(data) {
         return this.axios.post('/notifications', data)
     }
+
+    getOrderLenseList() {
+        return this.axios.get(`/admin/orderlense`);
+    }
+
+    deleteOrderLense(id) {
+        return this.axios.delete(`/admin/orderlense/${id}`);
+    }
+
+    getOrderDetail(id) {
+        return this.axios.get(`/admin/orderlense/${id}`);
+    }
 }
 
 export default AdminServices;
