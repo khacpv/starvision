@@ -130,16 +130,9 @@ router.get(
     if (customer) {
       let returnCustomer = [];
       customer.forEach((element) => {
-        let current_date = new Date(element.birthday);
-        let formatted_date =
-          current_date.getDate() +
-          "/" +
-          Number(current_date.getMonth() + 1) +
-          "/" +
-          current_date.getFullYear();
         returnCustomer.push({
           ID_KHACHHANG: element.id,
-          NAMSINH: element.birthday != null ? formatted_date : "",
+          NAMSINH: element.birthday != null ? element.birthday  : "",
           TENKHACHHANG: element.customer_name,
           DIDONG: element.mobile,
           GIOITINH: element.gender,
@@ -436,17 +429,9 @@ router.get(
     if (customer) {
       let returnCustomer = [];
       customer.forEach((element) => {
-        let current_date = new Date(element.birthday);
-        let formatted_date =
-          current_date.getDate() +
-          "/" +
-          Number(current_date.getMonth() + 1) +
-          "/" +
-          current_date.getFullYear();
-
         returnCustomer.push({
           ID_KHACHHANG: element.id,
-          NAMSINH: element.birthday != null ? formatted_date : "",
+          NAMSINH: element.birthday != null ? element.birthday : "",
           TENKHACHHANG: element.customer_name,
           DIDONG: element.mobile,
           GIOITINH: element.gender,
@@ -518,7 +503,7 @@ router.get(
       customer.forEach((element) => {
         returnCustomer.push({
           ID_KHACHHANG: element.id,
-          NAMSINH: element.birthday,
+          NAMSINH: element.birthday != null? element.birthday : "",
           TENKHACHHANG: element.customer_name,
           DIDONG: element.mobile,
           GIOITINH: element.gender,
