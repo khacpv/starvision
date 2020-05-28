@@ -14,7 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {customerService} from "../../services/index";
 import moment from 'moment';
-import CustomerList from "../../containers/CustomerList";
+import CustomerList from "./CustomerList";
 import CustomerOKForm from "./CustomerOKForm";
 import classnames from 'classnames';
 import FittingForm from "./FittingForm";
@@ -32,12 +32,11 @@ class Dashboard extends Component {
             customerList: [],
             currentTab: 0,
             customOK: null,
-            customOKSoft: null,
+            softOK: null,
             fittingData: [],
             orderLenseData: [],
             followUpData: [],
             isLoading: false,
-            type: 'GOV'
         };
     }
 
@@ -47,6 +46,7 @@ class Dashboard extends Component {
         this.setState({
             customer
         });
+        this.newOrderLense && this.newOrderLense.resetForm();
         this.getCustomOkGOVData(customer);
         this.getCustomOkSoftData(customer);
         this.getFittingData(customer);
@@ -55,16 +55,16 @@ class Dashboard extends Component {
 
     getCustomOkGOVData(customer) {
         const doctorData = JSON.parse(localStorage.getItem('user'));
+        this.customOk && this.customOk.resetForm();
         customerService.getCustomOkGOVById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(customOK => {
             if (customOK.data === '') {
-                this.customOk.resetForm();
                 this.setState({customOK: null});
             } else {
-                this.customOk.setData(customOK.data.customOk);
+                this.customOk && this.customOk.setData(customOK.data.customOk);
                 this.setState({customOK: customOK.data}, () => {
-                    this.newOrderLense.resetForm();
+                    // this.newOrderLense.resetForm();
                     this.getOrderLenseData(customer);
-                    this.newOrderLense.setDefaultLense(customOK.data.customOk)
+                    this.newOrderLense && this.newOrderLense.setDefaultLense(customOK.data.customOk)
                 });
             }
         }).catch(error => {
@@ -74,17 +74,17 @@ class Dashboard extends Component {
 
     getCustomOkSoftData(customer) {
         const doctorData = JSON.parse(localStorage.getItem('user'));
-        customerService.getCustomOkSoftById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(customOK => {
-            if (customOK.data === '') {
-                this.customOkSoft.resetForm();
-                this.setState({customOKSoft: null});
+        this.softOK && this.softOK.resetForm();
+        customerService.getCustomOkSoftById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
+            if (result.data === '') {
+                this.setState({softOK: null});
             } else {
-                this.customOkSoft.setData(customOK.data.customOk);
-                // this.setState({customOKSoft: customOK.data}, () => {
-                //     this.newOrderLense.resetForm();
-                //     this.getOrderLenseData(customer);
-                //     this.newOrderLense.setDefaultLense(customOK.data.customOk)
-                // });
+                this.softOK && this.softOK.setData(result.data.customOk);
+                this.setState({softOK: result.data}, () => {
+                    // this.newOrderLense.resetForm();
+                    this.getOrderLenseData(customer);
+                    this.newOrderLense && this.newOrderLense.setDefaultLense(result.data.customOk)
+                });
             }
         }).catch(error => {
             console.log(error)
@@ -94,9 +94,9 @@ class Dashboard extends Component {
     getFittingData(customer) {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         customerService.getFittingById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(fitting => {
-            this.newFitting.resetForm();
+            this.newFitting && this.newFitting.resetForm();
             let fittingData = [];
-            fitting.data.map((data, index) => {
+            fitting.data && fitting.data.map((data, index) => {
                 if (index % 2 === 0) {
                     fittingData[index/2] = {};
                     fittingData[index/2].fitting_no = data.fitting_no;
@@ -127,7 +127,7 @@ class Dashboard extends Component {
         customerService.getOrderLenseById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
             this.setState({orderLenseData: result.data});
             result.data.map((data, index) => {
-                this[`order${index}`].setData(data);
+                this[`order${index}`] && this[`order${index}`].setData(data);
             })
         }).catch(error => console.log(error))
     }
@@ -135,9 +135,9 @@ class Dashboard extends Component {
     getFollowUpData(customer) {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         customerService.getFollowUpById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
-            this.newFollowUp.resetForm();
+            this.newFollowUp && this.newFollowUp.resetForm();
             let followData = [];
-            result.data.map((data, index) => {
+            result.data && result.data.map((data, index) => {
                 if (index % 2 === 0) {
                     followData[index/2] = {};
                     followData[index/2].ngaykham = data.ngaykham;
@@ -158,7 +158,7 @@ class Dashboard extends Component {
             });
             this.setState({followUpData: followData});
             followData.map((data, index) => {
-                this[`follow${index}`].setData(data);
+                this[`follow${index}`] && this[`follow${index}`].setData(data);
             })
         }).catch(error => console.log(error))
     }
@@ -185,12 +185,7 @@ class Dashboard extends Component {
                                     <FormGroup row>
                                         <div>Ngày sinh:</div>
                                         <div style={{ marginLeft: 25}}>
-                                            <DatePicker
-                                                disabled
-                                                className="radius-border-input"
-                                                selected={this.state.customer.NAMSINH ? new Date(this.state.customer.NAMSINH) : null}
-                                                onChange={this.handleChange}
-                                            />
+                                            <h5>{this.state.customer.NAMSINH}</h5>
                                         </div>
                                     </FormGroup>
                                 </Col>
@@ -293,7 +288,7 @@ class Dashboard extends Component {
                                         <CustomerOKForm getUserData={(customer) => this.getCustomOkGOVData(customer)} ref={child => {this.customOk = child}} customer={this.state.customer}/>
                                     </TabPane>
                                     <TabPane tabId={4}>
-                                        <SoftOkForm getUserData={(customer) => this.getCustomOkSoftData(customer)} ref={child => {this.customOkSoft = child}} customer={this.state.customer}/>
+                                        <SoftOkForm getUserData={(customer) => this.getCustomOkSoftData(customer)} ref={child => {this.softOK = child}} customer={this.state.customer}/>
                                     </TabPane>
                                     <TabPane tabId={1}>
                                         {
@@ -304,30 +299,16 @@ class Dashboard extends Component {
                                         <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={this.state.fittingData.length + 1} ref={child => {this.newFitting = child}} isNew={true} customer={this.state.customer}/>
                                     </TabPane>
                                     {
-                                        this.state.customOK &&
+                                        (this.state.customOK || this.state.softOK) &&
                                         <TabPane tabId={2}>
-                                            <FormGroup row>
-                                                <div style={{ 'padding-left': 15}}>Loại kính:</div>
-                                                <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
-                                                    <Label check>
-                                                        <Input type="radio" name="type" onChange={() => this.setState({type: 'GOV'})} checked={this.state.type === 'GOV'}/>{' '}
-                                                        GOV
-                                                    </Label>
-                                                </FormGroup>
-                                                <FormGroup check>
-                                                    <Label check>
-                                                        <Input type="radio" name="type" onChange={() => this.setState({type: 'SOFT'})} checked={this.state.type === 'SOFT'}/>{' '}
-                                                        SOFT
-                                                    </Label>
-                                                </FormGroup>
-                                            </FormGroup>
                                             {
                                                 this.state.orderLenseData.map((order, index) => (
                                                     <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)} orderNo={index + 1} key={index} data={order} ref={child => {this[`order${index}`] = child}} customer={this.state.customer}/>
                                                 ))
                                             }
                                             <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)}
-                                                            defaultLense={this.state.customOK.customOk}
+                                                            defaultGOVLense={this.state.customOK ? this.state.customOK.customOk : null}
+                                                            defaultSOFTLense={this.state.softOK ? this.state.softOK.customOk : null}
                                                             orderNo={this.state.orderLenseData.length + 1} ref={child => {this.newOrderLense = child}} isNew={true} customer={this.state.customer}/>
                                         </TabPane>
                                     }

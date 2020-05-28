@@ -1,32 +1,13 @@
 import React, {Component, lazy, Suspense} from 'react';
-import {Bar, Line} from 'react-chartjs-2';
 import {
-    Badge,
     Button,
-    ButtonDropdown,
-    ButtonGroup,
-    ButtonToolbar,
-    Card,
-    CardBody,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-    Col,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    Progress,
     Row,
-    Form,
     Input,
-    FormGroup,
-    Label,
     Container,Table
 } from 'reactstrap';
 import "react-datepicker/dist/react-datepicker.css";
-import {customerService} from "../services/index";
-import ModalAddCustomer from "../views/Dashboard/ModalAddCustomer";
+import {customerService} from "../../services";
+import ModalAddCustomer from "./ModalAddCustomer";
 import moment from 'moment';
 
 class CustomerList extends Component {
@@ -88,7 +69,7 @@ class CustomerList extends Component {
                                         {item.TENKHACHHANG}
                                     </td>
                                     <td className='table-solid'>
-                                        {moment(new Date(item.NAMSINH)).format('D/M/YYYY')}
+                                        {item.NAMSINH}
                                     </td>
                                     <td className='table-solid'>
                                         {item.GIOITINH === 'male' ? 'Nam' : 'Nữ'}

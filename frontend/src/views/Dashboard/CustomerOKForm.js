@@ -14,7 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {customerService} from "../../services/index";
 import moment from 'moment';
-import CustomerList from "../../containers/CustomerList";
+import CustomerList from "./CustomerList";
 
 class CustomerOKForm extends Component {
 
@@ -101,21 +101,21 @@ class CustomerOKForm extends Component {
             customOk_Kcode_R: data.customOk_R.od_custom_ok_k_code,
             customOk_Power_R: data.customOk_R.od_custom_ok_power,
             customOk_Size_R: data.customOk_R.od_custom_ok_size,
-            Ref_SPH_L: data.customOk_L.od_refactometer_sph,
-            Ref_CYL_L: data.customOk_L.od_refactometer_cyl,
-            Ref_AX_L: data.customOk_L.od_refactometer_ax,
-            BCVA_VA_L: data.customOk_L.od_bcva_va,
-            BCVA_SPH_L: data.customOk_L.od_bcva_sph,
-            BCVA_CYL_L: data.customOk_L.od_bcva_cyl,
-            BCVA_AX_L: data.customOk_L.od_bcva_ax,
-            D_K1_L: data.customOk_L.od_original_k1,
-            D_K2_L: data.customOk_L.od_original_k2,
-            D_AVE_L: data.customOk_L.od_original_ave,
-            D_HVID_L: data.customOk_L.od_original_hvid,
-            customOk_Lense_L: data.customOk_L.od_custom_ok_lense,
-            customOk_Kcode_L: data.customOk_L.od_custom_ok_k_code,
-            customOk_Power_L: data.customOk_L.od_custom_ok_power,
-            customOk_Size_L: data.customOk_L.od_custom_ok_size,
+            Ref_SPH_L: data.customOk_L.os_refactometer_sph,
+            Ref_CYL_L: data.customOk_L.os_refactometer_cyl,
+            Ref_AX_L: data.customOk_L.os_refactometer_ax,
+            BCVA_VA_L: data.customOk_L.os_bcva_va,
+            BCVA_SPH_L: data.customOk_L.os_bcva_sph,
+            BCVA_CYL_L: data.customOk_L.os_bcva_cyl,
+            BCVA_AX_L: data.customOk_L.os_bcva_ax,
+            D_K1_L: data.customOk_L.os_original_k1,
+            D_K2_L: data.customOk_L.os_original_k2,
+            D_AVE_L: data.customOk_L.os_original_ave,
+            D_HVID_L: data.customOk_L.os_original_hvid,
+            customOk_Lense_L: data.customOk_L.os_custom_ok_lense,
+            customOk_Kcode_L: data.customOk_L.os_custom_ok_k_code,
+            customOk_Power_L: data.customOk_L.os_custom_ok_power,
+            customOk_Size_L: data.customOk_L.os_custom_ok_size,
         })
     }
 

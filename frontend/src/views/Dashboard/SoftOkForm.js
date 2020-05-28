@@ -14,7 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {customerService} from "../../services/index";
 import moment from 'moment';
-import CustomerList from "../../containers/CustomerList";
+import CustomerList from "./CustomerList";
 
 class SoftOkForm extends Component {
 
@@ -65,7 +65,6 @@ class SoftOkForm extends Component {
     }
 
     setData(data) {
-        console.log(data);
         this.setState({
             SPH_R: data.customOk_R.sph,
             CYL_R: data.customOk_R.cyl,
