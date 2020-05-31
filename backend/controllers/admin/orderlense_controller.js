@@ -31,10 +31,10 @@ router.get("/", async (req, res) => {
     if (result) {
       let returnData = [];
       result.forEach((element) => {
-        let date = new Date(element.date_examination)
-        if (element.right && element.left){
+        let date = new Date(element.date_examination);
+        if (element.right && element.left) {
           returnData.push({
-            id : element.id,
+            id: element.id,
             is_active: element.is_active,
             Ngay:
               date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
@@ -64,7 +64,6 @@ router.get("/", async (req, res) => {
             },
           });
         }
-        
       });
       return res.send({ status: "success", message: "", data: returnData });
     }
@@ -77,7 +76,21 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  let result = await OrderLense.findByPk(req.params.id);
+  let result = await OrderLense.findOne({
+    where: {
+      id: req.params.id,
+    },
+    include: [
+      {
+        model: Lense,
+        as: "left",
+      },
+      {
+        model: Lense,
+        as: "right",
+      },
+    ],
+  });
   if (result) {
     return res.send({ code: 200, msg: "success", items: result });
   }
