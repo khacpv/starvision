@@ -22,8 +22,8 @@ router.get(
       });
     }
 
-    let customer = {};
-    customer = await Customer.findAll({
+    let dept = {};
+    dept = await Customer.findOne({
       where: {
         id: doctorId,
       },
@@ -32,31 +32,28 @@ router.get(
       },
     });
 
-    if (customer) {
-      let returnCustomer = [];
-      customer.forEach((element) => {
-        returnCustomer.push({
-          id: element.id,
-          congnothangtruoc:
-            element.debt_last_month != null ? element.debt_last_month : 0,
-          phatsinhthangnay:
-            element.costs_incurred_this_month != null
-              ? element.costs_incurred_this_month
-              : 0,
-          dathanhtoan: element.paid != null ? element.paid : 0,
-          tienkinh: element.glass_money != null ? element.paid : 0,
-          tienvtth: element.vtth_money != null ? element.vtth_money : 0,
-          tien_phai_thanh_toan:
-            Number(element.debt_last_month) +
-            Number(element.costs_incurred_this_month) -
-            Number(element.costs_incurred_this_month),
-        });
-      });
+    if (dept) {
+      dept = {
+        id: dept.id,
+        congnothangtruoc:
+          dept.debt_last_month != null ? dept.debt_last_month : 0,
+        phatsinhthangnay:
+          dept.costs_incurred_this_month != null
+            ? dept.costs_incurred_this_month
+            : 0,
+        dathanhtoan: dept.paid != null ? dept.paid : 0,
+        tienkinh: dept.glass_money != null ? dept.paid : 0,
+        tienvtth: dept.vtth_money != null ? dept.vtth_money : 0,
+        tien_phai_thanh_toan:
+          Number(dept.debt_last_month) +
+          Number(dept.costs_incurred_this_month) -
+          Number(dept.costs_incurred_this_month),
+      };
 
       res.send({
         status: "success",
         message: "",
-        data: returnCustomer,
+        data: dept,
       });
     }
   }
