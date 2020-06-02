@@ -50,7 +50,7 @@ router.get("/", async (req, res) => {
             od_size: element.right.size,
             note_order_lens: element.right.note,
             price: element.right.price,
-            Status: element.right.status == 1 ? "Đã yêu cầu" : "Chưa yêu cầu",
+            Status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
             prefix: element.prefix,
           },
           L: {
@@ -61,7 +61,7 @@ router.get("/", async (req, res) => {
             os_size: element.left.size,
             note_order_lens: element.left.note,
             price: element.left.price,
-            Status: element.right.status == 1 ? "Đã yêu cầu" : "Chưa yêu cầu",
+            Status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
             prefix: element.prefix,
           },
         });
@@ -142,8 +142,7 @@ router.post(
         note: req.body.note_order_lens,
         side: "L",
         prefix: req.body.prefixLeft,
-        status: 1
-
+        status: 1,
       });
 
       let right = await Lense.create({
@@ -154,7 +153,7 @@ router.post(
         note: req.body.note_order_lens,
         side: "R",
         prefix: req.body.prefixRight,
-        status: 1
+        status: 1,
       });
       let todayStart = new Date().setHours(0, 0, 0, 0);
       let now = new Date();
@@ -377,17 +376,24 @@ router.delete("/:id", async (req, res) => {
 router.post("/cancel", async (req, res) => {
   let orderNumber = req.body.so_don_hang;
 
-  let result = await OrderLense.update(
-    {
-      is_active: 0,
+  let result = await OrderLense.findOne({
+    where: {
+      order_number: orderNumber,
     },
-    {
-      where: {
-        order_number: orderNumber,
-      },
-    }
-  );
+  });
   if (result) {
+    await Lense.update(
+      {
+        status: 0,
+      },
+      {
+        where: {
+          id: {
+            [Op.or]: [result.id_lense_left, result.id_lense_right],
+          },
+        },
+      }
+    );
     return res.send({
       status: "success",
       message: "Cập nhật thành công",
