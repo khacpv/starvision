@@ -153,12 +153,14 @@ class OrderLenseForm extends Component {
                         kcode_L: parseFloat(leftData.od_custom_ok_k_code).toFixed(2),
                         power_L: parseFloat(leftData.od_custom_ok_power).toFixed(2),
                         side_L: parseFloat(leftData.od_custom_ok_size).toFixed(2),
+                        type: 'GOV',
                     })
                 }
                 if (data.type === 'SOFT') {
                     this.setState({
                         power_soft_L: parseFloat(leftData.power).toFixed(2),
                         power_soft_R: parseFloat(rightData.power).toFixed(2),
+                        type: 'SOFT',
                     })
                 }
             }
@@ -171,7 +173,6 @@ class OrderLenseForm extends Component {
 
     render() {
         let data = this.state;
-        console.log(data);
         let lenselist = [
             <option/>,
             <option>HP</option>,
@@ -208,13 +209,13 @@ class OrderLenseForm extends Component {
                         <div style={{ 'padding-left': 15}}>Loại kính:</div>
                         <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
                             <Label check>
-                                <Input type="radio" name="type" onChange={() => this.props.isNew && this.setState({type: 'GOV'})} checked={this.state.type === 'GOV'}/>{' '}
+                                <Input type="radio" name="type" onChange={() => (this.props.isNew && this.props.defaultGOVLense) && this.setState({type: 'GOV'})} checked={this.state.type === 'GOV'}/>{' '}
                                 GOV
                             </Label>
                         </FormGroup>
                         <FormGroup check>
                             <Label check>
-                                <Input type="radio" name="type" onChange={() => this.props.isNew && this.setState({type: 'SOFT'})} checked={this.state.type === 'SOFT'}/>{' '}
+                                <Input type="radio" name="type" onChange={() => (this.props.isNew && this.props.defaultSOFTLense) && this.setState({type: 'SOFT'})} checked={this.state.type === 'SOFT'}/>{' '}
                                 SOFT
                             </Label>
                         </FormGroup>
@@ -281,7 +282,7 @@ class OrderLenseForm extends Component {
                                             </td>
                                             <td className='table-solid' colSpan={2}>
                                                 <h4>Trạng thái</h4>
-                                                <p>{data.price_L}</p>
+                                                <p>{data.status_L}</p>
                                             </td>
                                         </tr>
                                     }
@@ -349,7 +350,7 @@ class OrderLenseForm extends Component {
                                             </td>
                                             <td className='table-solid' colSpan={2}>
                                                 <h4>Trạng thái</h4>
-                                                <p>{data.price_R}</p>
+                                                <p>{data.status_R}</p>
                                             </td>
                                         </tr>
                                     }

@@ -47,8 +47,8 @@ class Dashboard extends Component {
             customer
         });
         this.newOrderLense && this.newOrderLense.resetForm();
-        this.getCustomOkGOVData(customer);
         this.getCustomOkSoftData(customer);
+        this.getCustomOkGOVData(customer);
         this.getFittingData(customer);
         this.getFollowUpData(customer);
     }
@@ -56,15 +56,16 @@ class Dashboard extends Component {
     getCustomOkGOVData(customer) {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         this.customOk && this.customOk.resetForm();
-        customerService.getCustomOkGOVById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(customOK => {
-            if (customOK.data === '') {
+        customerService.getCustomOkGOVById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
+            console.log(result.data);
+            if (result.data === '' || !result.data.customOk || !result.data.customOk.customOk_L || result.data.customOk.customOk_L.length === 0) {
                 this.setState({customOK: null});
             } else {
-                this.customOk && this.customOk.setData(customOK.data.customOk);
-                this.setState({customOK: customOK.data}, () => {
+                this.customOk && this.customOk.setData(result.data.customOk);
+                this.setState({customOK: result.data}, () => {
                     // this.newOrderLense.resetForm();
                     this.getOrderLenseData(customer);
-                    this.newOrderLense && this.newOrderLense.setDefaultLense(customOK.data.customOk)
+                    this.newOrderLense && this.newOrderLense.setDefaultLense(result.data.customOk)
                 });
             }
         }).catch(error => {
@@ -76,7 +77,7 @@ class Dashboard extends Component {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         this.softOK && this.softOK.resetForm();
         customerService.getCustomOkSoftById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
-            if (result.data === '') {
+            if (result.data === '' || !result.data.customOK || !result.data.customOK.customOK_L || result.data.customOK.customOK_L.length === 0) {
                 this.setState({softOK: null});
             } else {
                 this.softOK && this.softOK.setData(result.data.customOk);
@@ -185,7 +186,7 @@ class Dashboard extends Component {
                                     <FormGroup row>
                                         <div>Ngày sinh:</div>
                                         <div style={{ marginLeft: 25}}>
-                                            <h5>{this.state.customer.NAMSINH}</h5>
+                                            <h5>{this.state.customer.NAMSINH ? moment(new Date(this.state.customer.NAMSINH)).format('D/M/YYYY') : ''}</h5>
                                         </div>
                                     </FormGroup>
                                 </Col>
