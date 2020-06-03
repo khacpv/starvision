@@ -233,7 +233,6 @@ router.post(
     let customerOkRight = null;
 
     if (checkCustomerCheck) {
-      let updateCustomer = null;
       if (type == CONSTANT.CustomerOk.GOV) {
         customerOkRight = await CustomerOk.update(
           {
@@ -259,7 +258,6 @@ router.post(
             },
           }
         );
-
         customerOkLeft = await CustomerOk.update(
           {
             refactometer_sph: req.body.Ref_SPH_L,
@@ -420,8 +418,8 @@ router.post(
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
         date_examination: req.body.ngaykham,
-        id_left: customerOkLeft.id,
-        id_right: customerOkRight.id,
+        id_left: customerOkLeft != null ? customerOkLeft.id : null,
+        id_right: customerOkRight != null ? customerOkRight.id : null,
         type: req.body.type,
       });
     }
@@ -464,8 +462,8 @@ router.post(
         customer_id: req.body.khid,
         dttc_id: req.body.iddttc,
         date_examination: req.body.ngaykham,
-        id_left: customerOkLeft.id,
-        id_right: customerOkRight.id,
+        id_left: customerOkLeft !=null ? customerOkLeft.id : null,
+        id_right: customerOkRight != null ? customerOkRight.id : null,
         type: req.body.type,
       });
     }
