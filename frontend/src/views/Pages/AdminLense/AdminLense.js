@@ -36,7 +36,7 @@ class AdminLense extends Component {
         )
     }
 
-    remoteOrderLense() {
+    removeOrderLense() {
         adminServices.deleteOrderLense(this.state.lenseChoosing).then(result => {
             this.setState({lenseChoosing: null, isShowModalDelete: false});
             this.getOrderLense();
@@ -46,7 +46,7 @@ class AdminLense extends Component {
     }
 
     editDoctor(data) {
-        this.props.history.push(`/detailOrderLense/${data.So_Don_Hang}`);
+        this.props.history.push(`/detailOrderLense?id=${data.id}`);
     }
 
     render() {
@@ -59,7 +59,7 @@ class AdminLense extends Component {
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={() => this.setState({isShowModalDelete: false, lenseChoosing: null})}>Bỏ qua</Button>{' '}
-                        <Button color="danger" onClick={() => this.remoteOrderLense()}>Xoá</Button>
+                        <Button color="danger" onClick={() => this.removeOrderLense()}>Xoá</Button>
                     </ModalFooter>
                 </Modal>
                 <div style={{marginTop: 20}}>
