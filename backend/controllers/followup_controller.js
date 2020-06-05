@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
 const FollowUp = models.FollowUp;
+const FollowUpCheck = models.FollowUpCheck;
 const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
 const Sequelize = require("sequelize");
@@ -10,14 +11,26 @@ const { Op } = Sequelize;
 router.get("/", async (req, res) => {
   let userId = req.query.userid;
   let dttcId = req.query.iddttc;
-  let result = await FollowUp.findAll({
+  let result = await FollowUpCheck.findAll({
     where: {
       customer_id: userId,
       dttc_id: dttcId,
     },
+    include: [
+      {
+        model: FollowUp,
+        as: "left",
+      },
+      {
+        model: FollowUp,
+        as: "right",
+      },
+    ],
   });
 
   if (`${result.length}` > 0) {
+    let R,
+      L = null;
     let returnData = [];
     let index = 1;
     result.forEach((element) => {
@@ -25,19 +38,31 @@ router.get("/", async (req, res) => {
       if (element.side == "L") {
         key = "os";
       }
+      R = {
+        A_TH_DUBAO: element.right.id,
+        od_bcva_va: element.right.bcva_va,
+        od_image: element.right.image,
+        od_video: element.right.video,
+        od_thumb: element.right.thumb,
+      };
+
+      L = {
+        A_TH_DUBAO: element.left.id,
+        os_bcva_va: element.left.bcva_va,
+        os_image: element.left.image,
+        os_video: element.left.video,
+        os_thumb: element.left.thumb,
+        
+      };
+
       let tmpSide = element.side;
       returnData.push({
         followup_no: element.followup_no,
         comment: element.note,
         ngaykham: element.date_examination,
         ngaytaikham: element.re_examination_date,
-        [tmpSide]: {
-          [key + "_bcva_va"]: element.bcva_va,
-          [key + "_image"]: element.image,
-          [key + "_video"]: element.video,
-          [key + "_thumb"]: element.thumb,
-          A_TH_DUBAO: String(element.id),
-        },
+        ...(R != null && { R: R }),
+        ...(L != null && { L: L }),
       });
     });
     return res.send({
@@ -193,12 +218,6 @@ router.post(
       transaction = await sequelize.transaction();
 
       right = await FollowUp.create({
-        doctor_code: req.body.mabacsi,
-        doctor_id: req.body.idbacsi,
-        customer_id: req.body.khid,
-        dttc_id: req.body.iddttc,
-        date_examination: req.body.ngaykham,
-        re_examination_date: req.body.ngaytaikham,
         followup_no: 1,
         note: req.body.note,
         side: "R",
@@ -207,16 +226,9 @@ router.post(
         video: video_R,
         thumb: thumb_R,
       });
+
       left = await FollowUp.create({
-        doctor_code: req.body.mabacsi,
-        doctor_id: req.body.idbacsi,
-        customer_id: req.body.khid,
-        dttc_id: req.body.iddttc,
-        date_examination: req.body.ngaykham,
-        re_examination_date: req.body.ngaytaikham,
-
         followup_no: 2,
-
         note: req.body.note,
         side: "L",
         bcva_va: bcva_va_L,
@@ -224,7 +236,23 @@ router.post(
         video: video_L,
         thumb: thumb_L,
       });
-
+      if (left && right) {
+        await FollowUpCheck.create({
+          doctor_code: req.body.mabacsi,
+          doctor_id: req.body.idbacsi,
+          customer_id: req.body.khid,
+          dttc_id: req.body.iddttc,
+          date_examination: req.body.ngaykham,
+          re_examination_date: req.body.ngaytaikham,
+          id_left: left.id,
+          id_right: right.id,
+        });
+        return res.send({
+          status: "success",
+          message: "",
+          data: "",
+        });
+      }
       // commit
       await transaction.commit();
     } catch (err) {
@@ -238,13 +266,7 @@ router.post(
         data: "",
       });
     }
-    if (left && right) {
-      return res.send({
-        status: "success",
-        message: "",
-        data: "",
-      });
-    }
+
     return res.send({
       status: "error",
       message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
