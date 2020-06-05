@@ -36,13 +36,15 @@ router.get("/", async (req, res) => {
     result.forEach((element) => {
       if (element.right && element.left) {
         let date = new Date(element.date_examination);
-        returnData.push({
-          Ngay:
-            date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
-          So_Don_Hang: element.order_number,
-          type: element.type,
-          is_active: element.is_active,
-          R: {
+        let R,
+          L = null;
+        if (
+          element.right.lense != null &&
+          element.right.kcode != null &&
+          element.right.power != null &&
+          element.right.size != null
+        ) {
+          R = {
             id_order: element.right.id,
             od_lense: element.right.lense,
             od_kcode: element.right.kcode,
@@ -52,8 +54,15 @@ router.get("/", async (req, res) => {
             price: element.right.price,
             Status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
             prefix: element.prefix,
-          },
-          L: {
+          };
+        }
+        if (
+          element.left.lense != null &&
+          element.left.kcode != null &&
+          element.left.power != null &&
+          element.left.size != null
+        ) {
+          L = {
             id_order: element.left.id,
             os_lense: element.left.lense,
             os_kcode: element.left.kcode,
@@ -63,7 +72,16 @@ router.get("/", async (req, res) => {
             price: element.left.price,
             Status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
             prefix: element.prefix,
-          },
+          };
+        }
+        returnData.push({
+          Ngay:
+            date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
+          So_Don_Hang: element.order_number,
+          type: element.type,
+          is_active: element.is_active,
+          ...(R != null && { R: R }),
+          ...(L != null && { L: L }),
         });
       }
     });
@@ -71,11 +89,6 @@ router.get("/", async (req, res) => {
   } else {
     return res.send({ status: "success", message: "", data: [] });
   }
-  return res.send({
-    status: "error",
-    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
-    data: "",
-  });
 });
 
 router.get("/:id", async (req, res) => {
