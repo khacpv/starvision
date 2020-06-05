@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     CustomerCheck.belongsTo(models.CustomerOk, { as: 'left', foreignKey: 'id_left' });
     CustomerCheck.belongsTo(models.CustomerOk, { as: 'right', foreignKey: 'id_right' });
+    CustomerCheck.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customer_id' });
   };
   return CustomerCheck;
 };

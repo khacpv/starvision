@@ -3,13 +3,14 @@ const router = express.Router();
 const models = require("../models/index");
 const Customer = models.Customer;
 const CustomerOk = models.CustomerOk;
+const CustomerCheck = models.CustomerCheck;
 const Fitting = models.Fitting;
 const OrderLense = models.OrderLense;
 const Lense = models.Lense;
 const { check, validationResult } = require("express-validator");
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
-
+const CONSTANT = require("../config/constants.json");
 router.get(
   "/",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
@@ -132,7 +133,7 @@ router.get(
       customer.forEach((element) => {
         returnCustomer.push({
           ID_KHACHHANG: element.id,
-          NAMSINH: element.birthday != null ? element.birthday  : "",
+          NAMSINH: element.birthday != null ? element.birthday : "",
           TENKHACHHANG: element.customer_name,
           DIDONG: element.mobile,
           GIOITINH: element.gender,
@@ -336,7 +337,10 @@ router.get(
       });
     }
 
-    let customerOk = await CustomerOk.findAll({
+    let customerCheck = await CustomerCheck.findAll({
+      where: {
+        type: CONSTANT.CustomerOk.GOV,
+      },
       include: [
         {
           model: Customer,
@@ -344,9 +348,8 @@ router.get(
         },
       ],
     });
-
     const customerIdOk = new Set();
-    customerOk.forEach((element) => {
+    customerCheck.forEach((element) => {
       if (element.customer) {
         customerIdOk.add(element.customer.id);
       }
@@ -361,7 +364,7 @@ router.get(
         },
       },
     });
-    if (customer || customerOk) {
+    if (customer || customerCheck) {
       let returnCustomer = [];
       customer.forEach((element) => {
         returnCustomer.push({
@@ -503,7 +506,75 @@ router.get(
       customer.forEach((element) => {
         returnCustomer.push({
           ID_KHACHHANG: element.id,
-          NAMSINH: element.birthday != null? element.birthday : "",
+          NAMSINH: element.birthday != null ? element.birthday : "",
+          TENKHACHHANG: element.customer_name,
+          DIDONG: element.mobile,
+          GIOITINH: element.gender,
+          DIACHI: element.address,
+        });
+      });
+
+      return res.send({
+        status: "success",
+        message: "",
+        data: returnCustomer,
+      });
+    }
+    return res.send({
+      status: "error",
+      message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+      data: "",
+    });
+  }
+);
+
+router.get(
+  "/not_customok_soft",
+  [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
+  async (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.send({
+        status: "error",
+        message: errors.array()[0].msg,
+        data: "",
+      });
+    }
+
+    let customerCheck = await CustomerCheck.findAll({
+      where: {
+        type: CONSTANT.CustomerOk.SOFT,
+      },
+      include: [
+        {
+          model: Customer,
+          as: "customer",
+        },
+      ],
+    });
+
+    const customerIdOk = new Set();
+    customerCheck.forEach((element) => {
+      if (element.customer) {
+        customerIdOk.add(element.customer.id);
+      }
+    });
+    let customerIdOkArr = Array.from(customerIdOk);
+
+    let customer = await Customer.findAll({
+      where: {
+        doctor_name: req.query.tenbacsi,
+        id: {
+          [Op.notIn]: customerIdOkArr,
+        },
+      },
+    });
+    if (customer || customerCheck) {
+      let returnCustomer = [];
+      customer.forEach((element) => {
+        returnCustomer.push({
+          ID_KHACHHANG: element.id,
+          NAMSINH: element.birthday,
           TENKHACHHANG: element.customer_name,
           DIDONG: element.mobile,
           GIOITINH: element.gender,
