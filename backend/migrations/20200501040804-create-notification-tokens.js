@@ -1,17 +1,14 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Tokens', {
+    return queryInterface.createTable('NotificationTokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      access_token: {
-        type: Sequelize.TEXT
-      },
-      refresh_token: {
+      token: {
         type: Sequelize.TEXT
       },
       expired: {

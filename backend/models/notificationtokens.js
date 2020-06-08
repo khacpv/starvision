@@ -1,8 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Tokens = sequelize.define('Tokens', {
-    access_token: DataTypes.TEXT,
-    refresh_token: DataTypes.TEXT,
+  const Tokens = sequelize.define('NotificationTokens', {
+    token: DataTypes.TEXT,
     expired: DataTypes.DATE,
     user_id: DataTypes.INTEGER
   }, {});

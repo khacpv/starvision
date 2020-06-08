@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
 const Notifications = models.Notifications;
+const NotificationTokens = models.NotificationTokens;
 const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
 var admin = require("firebase-admin");
@@ -11,11 +12,42 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://starvision-e75c5.firebaseio.com",
 });
+router.post("/token", async (req, res) => {
+  let user_id = req.body.user_id;
+  let token = req.body.token;
 
-const notification_options = {
-  priority: "high",
-  timeToLive: 60 * 60 * 24,
-};
+  let checkToken = await NotificationTokens.findOne({
+    where: {
+      user_id: user_id,
+      token: token,
+    },
+  });
+  if (!checkToken) {
+    let result = await NotificationTokens.create({
+      token: token,
+      user_id: user_id,
+    });
+    if (result) {
+      return res.send({
+        status: "success",
+        message: "",
+        data: "",
+      });
+    }
+  } else {
+    return res.send({
+      status: "success",
+      message: "",
+      data: "",
+    });
+  }
+
+  return res.send({
+    status: "error",
+    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+    data: "",
+  });
+});
 
 router.get("/", async (req, res) => {
   let result = await Notifications.findAll({
@@ -90,67 +122,116 @@ router.post("/", async (req, res) => {
     });
   }
   let customerList = req.body.receiver_id.split(",");
-  const registrationToken = req.body.registrationToken;
+  const device_type = req.body.device_type;
+  let notice = null;
+  try {
+    // get transaction
+    transaction = await sequelize.transaction();
+    customerList.forEach(async (customerId) => {
+      let token = await NotificationTokens.findOne({
+        where: {
+          user_id: customerId,
+        },
+      });
+      if (token) {
+        let result = await Notifications.create({
+          title: req.body.title,
+          content: req.body.content,
+          sender_id: req.user.id,
+          receiver_id: customerId,
+          send_at: new Date(),
+        });
 
-  // try {
-  //   // get transaction
-  //   transaction = await sequelize.transaction();
-  customerList.forEach(async (customerId) => {
-    let result = await Notifications.create({
-      title: req.body.title,
-      content: req.body.content,
-      sender_id: req.user.id,
-      receiver_id: customerId,
-      send_at: new Date(),
+        data = {
+          notification: {
+            title: req.body.title,
+            body: req.body.content,
+          },
+          user: {
+            sender_id: String(req.user.id),
+            receiver_id: String(customerId),
+          },
+        };
+        if (device_type == "ios") {
+          notice = await sendNotificationToDeviceIOS(data, token.token);
+        } else {
+          notice = await sendNotificationToDeviceAndroid(data, token.token);
+        }
+      }
     });
-  });
-  //  await transaction.commit();
+    await transaction.commit();
+  } catch {
+    // Rollback transaction only if the transaction object is defined
+    if (transaction) await transaction.rollback();
 
-  var payload = {
-    notification: {
-      title: req.body.title,
-      body: req.body.content,
-    },
-  };
-
-  var options = {
-    priority: "high",
-    timeToLive: 60 * 60 * 24,
-  };
-  let notice = await admin
-    .messaging()
-    .sendToDevice(registrationToken, payload, options)
-    .then(function (response) {
-      console.log("Successfully sent message:", response);
-      console.log(response.results[0].error);
-    })
-    .catch(function (error) {
-      console.log("Error sending message:", error);
+    return res.send({
+      status: "error",
+      message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+      data: "",
     });
-
+  }
   return res.send({
     status: "success",
-    message:notice,
-    data: "",
-  });
-
-  // commit
-  // } catch (err) {
-  //   // Rollback transaction only if the transaction object is defined
-  //   if (transaction) await transaction.rollback();
-
-  //   return res.send({
-  //     status: "error",
-  //     message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
-  //     data: "",
-  //   });
-  // }
-
-  return res.send({
-    status: "error",
-    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
     data: "",
   });
 });
+
+function sendNotificationToDeviceIOS(data, token) {
+  let ios = {
+    headers: {
+      "apns-priority": "10", //mức độ ưu tiên khi push notification
+      "apns-expiration": "360000", // hết hạn trong 1h
+    },
+    payload: {
+      aps: {
+        badge: 1,
+        sound: "default",
+      },
+    },
+  };
+  let message = {
+    notification: data.notification,
+    data: data.user,
+    apns: ios,
+    token: token, // token của thiết bị muốn push notification
+  };
+  admin
+    .messaging()
+    .send(message)
+    .then((response) => {
+      console.log("ios");
+      console.log(response);
+      // Response is a message ID string.
+    })
+    .catch((error) => {
+      //return error
+    });
+}
+function sendNotificationToDeviceAndroid(data, token) {
+  var message = {
+    notification: data.notification,
+    data: data.user,
+    android: {
+      ttl: 3600 * 1000,
+      notification: {
+        icon: "stock_ticker_update",
+        color: "#f45342",
+      },
+    },
+    token: token,
+  };
+  admin
+    .messaging()
+    .send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log("android");
+      console.log(response);
+      return response;
+    })
+    .catch((error) => {
+      //return error
+    });
+}
 
 module.exports = router;
