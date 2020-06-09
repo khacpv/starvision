@@ -30,16 +30,28 @@ router.post("/token", async (req, res) => {
     if (result) {
       return res.send({
         status: "success",
-        message: "",
+        message: "Đã thêm mới token",
         data: "",
       });
     }
   } else {
-    return res.send({
-      status: "success",
-      message: "",
-      data: "",
-    });
+    let result = await NotificationTokens.update(
+      {
+        token: token,
+      },
+      {
+        where: {
+          user_id: user_id,
+        },
+      }
+    );
+    if (result) {
+      return res.send({
+        status: "success",
+        message: "Đã cập nhật token",
+        data: "",
+      });
+    }
   }
 
   return res.send({
@@ -52,6 +64,9 @@ router.post("/token", async (req, res) => {
 router.get("/", async (req, res) => {
   let result = await Notifications.findAll({
     attributes: ["id", "title", "content", "send_at", "is_read"],
+    order: [
+      ['send_at', 'DESC'],
+  ],
   });
   if (result) {
     return res.send({
@@ -103,6 +118,30 @@ router.post("/read", async (req, res) => {
       status: "success",
       message: "",
       data: "",
+    });
+  }
+  return res.send({
+    status: "error",
+    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+    data: "",
+  });
+});
+router.post("/read/all", async (req, res) => {
+  let result = await Notifications.update(
+    {
+      is_read: 1,
+    },
+    {
+      where: {
+        receiver_id: req.body.user_id,
+      },
+    }
+  );
+  if (result) {
+    return res.send({
+      status: "success",
+      message: "",
+      data: req.body.user_id,
     });
   }
   return res.send({

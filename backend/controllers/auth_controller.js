@@ -8,7 +8,9 @@ var salt = bcrypt.genSaltSync(10);
 const { check, validationResult } = require("express-validator");
 const config = require("../config/config");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
+const NotificationTokens = models.NotificationTokens;
 router.post("/", async (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
@@ -118,7 +120,7 @@ router.post(
           data: user,
         });
       } else {
-        return res.status(400).send({
+        return res.send({
           code: 400,
           msg: "Register Error",
         });
@@ -127,4 +129,36 @@ router.post(
   }
 );
 
+router.post(
+  "/logout",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    if (req.user) {
+      let notificatiion_token = await NotificationTokens.findOne({
+        user_id: req.user.id,
+      });
+      if (notificatiion_token) {
+        let result = await NotificationTokens.destroy({
+          where: { user_id: req.user.id },
+        });
+        if (result) {
+          return res.send({
+            status: "success",
+            data: "Đăng xuất thành công",
+          });
+        }
+      }
+      return res.send({
+        status: "error",
+        message: "Bạn đã đăng xuất",
+        data: "",
+      });
+    }
+    return res.send({
+      status: "error",
+      message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+      data: "",
+    });
+  }
+);
 module.exports = router;
