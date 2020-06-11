@@ -69,6 +69,8 @@ class FittingForm extends Component {
         size_R: '',
         id_left: null,
         id_right: null,
+        thumb_L: null,
+        thumb_R: null
     };
 
     constructor(props) {
@@ -82,7 +84,6 @@ class FittingForm extends Component {
     }
 
     setData(data) {
-        console.log(data);
         this.setState({
             referaction_sph_L: data.fitting_left.os_referaction_sph,
             referaction_cyl_L: data.fitting_left.os_referaction_cyl,
@@ -100,6 +101,7 @@ class FittingForm extends Component {
             comment_ket_luan_L: data.fitting_left.os_comment_ket_luan,
             video_L: data.fitting_left.os_video,
             size_L: data.fitting_left.os_size,
+            thumb_L: data.fitting_left.os_thumb,
             referaction_sph_R: data.fitting_right.od_referaction_sph,
             referaction_cyl_R: data.fitting_right.od_referaction_cyl,
             referaction_ax_R: data.fitting_right.od_referaction_ax,
@@ -116,6 +118,7 @@ class FittingForm extends Component {
             comment_ket_luan_R: data.fitting_right.od_comment_ket_luan,
             video_R: data.fitting_right.od_video,
             size_R: data.fitting_right.od_size,
+            thumb_R: data.fitting_right.od_thumb,
             id_left: data.fitting_left.id,
             id_right: data.fitting_right.id,
         });
@@ -553,7 +556,7 @@ class FittingForm extends Component {
                                                             fluid={false}
                                                             width={250}
                                                             height={400}
-                                                            poster="/assets/poster.png"
+                                                            poster={this.state.thumb_L}
                                                             src={this.state.video_L}
                                                         />
                                                     </div>
@@ -801,7 +804,7 @@ class FittingForm extends Component {
                                                             fluid={false}
                                                             width={250}
                                                             height={400}
-                                                            poster="/assets/poster.png"
+                                                            poster={this.state.thumb_R}
                                                             src={this.state.video_R}
                                                         />
                                                     </div>

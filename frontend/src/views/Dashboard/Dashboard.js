@@ -57,7 +57,6 @@ class Dashboard extends Component {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         this.customOk && this.customOk.resetForm();
         customerService.getCustomOkGOVById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
-            console.log(result.data);
             if (result.data === '' || !result.data.customOk || !result.data.customOk.customOk_L || result.data.customOk.customOk_L.length === 0) {
                 this.setState({customOK: null});
             } else {
@@ -77,7 +76,7 @@ class Dashboard extends Component {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         this.softOK && this.softOK.resetForm();
         customerService.getCustomOkSoftById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
-            if (result.data === '' || !result.data.customOK || !result.data.customOK.customOK_L || result.data.customOK.customOK_L.length === 0) {
+            if (result.data === '' || !result.data.customOk || !result.data.customOk.customOk_L || result.data.customOk.customOk_L.length === 0) {
                 this.setState({softOK: null});
             } else {
                 this.softOK && this.softOK.setData(result.data.customOk);
@@ -137,28 +136,8 @@ class Dashboard extends Component {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         customerService.getFollowUpById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
             this.newFollowUp && this.newFollowUp.resetForm();
-            let followData = [];
+            this.setState({followUpData: result.data});
             result.data && result.data.map((data, index) => {
-                if (index % 2 === 0) {
-                    followData[index/2] = {};
-                    followData[index/2].ngaykham = data.ngaykham;
-                    followData[index/2].ngaytaikham = data.ngaytaikham;
-                    followData[index/2].note = data.comment;
-                    if (data.L) {
-                        followData[index/2].follow_left = data.L;
-                    } else {
-                        followData[index/2].follow_right = data.R;
-                    }
-                } else {
-                    if (data.L) {
-                        followData[(index - 1)/2].follow_left = data.L;
-                    } else {
-                        followData[(index - 1)/2].follow_right = data.R;
-                    }
-                }
-            });
-            this.setState({followUpData: followData});
-            followData.map((data, index) => {
                 this[`follow${index}`] && this[`follow${index}`].setData(data);
             })
         }).catch(error => console.log(error))
@@ -293,34 +272,34 @@ class Dashboard extends Component {
                                     </TabPane>
                                     <TabPane tabId={1}>
                                         {
-                                            this.state.fittingData.map((fitting, index) => (
+                                            this.state.fittingData && this.state.fittingData.map((fitting, index) => (
                                                 <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={index + 1} key={index} data={fitting} ref={child => {this[`fitting${index}`] = child}} customer={this.state.customer}/>
                                             ))
                                         }
-                                        <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={this.state.fittingData.length + 1} ref={child => {this.newFitting = child}} isNew={true} customer={this.state.customer}/>
+                                        <FittingForm getUserData={(customer) => this.getFittingData(customer)} fittingNo={this.state.fittingData ? (this.state.fittingData.length + 1) : 1} ref={child => {this.newFitting = child}} isNew={true} customer={this.state.customer}/>
                                     </TabPane>
                                     {
                                         (this.state.customOK || this.state.softOK) &&
                                         <TabPane tabId={2}>
                                             {
-                                                this.state.orderLenseData.map((order, index) => (
+                                                this.state.orderLenseData && this.state.orderLenseData.map((order, index) => (
                                                     <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)} orderNo={index + 1} key={index} data={order} ref={child => {this[`order${index}`] = child}} customer={this.state.customer}/>
                                                 ))
                                             }
                                             <OrderLenseForm getUserData={(customer) => this.getOrderLenseData(customer)}
                                                             defaultGOVLense={this.state.customOK ? this.state.customOK.customOk : null}
                                                             defaultSOFTLense={this.state.softOK ? this.state.softOK.customOk : null}
-                                                            orderNo={this.state.orderLenseData.length + 1} ref={child => {this.newOrderLense = child}} isNew={true} customer={this.state.customer}/>
+                                                            orderNo={this.state.orderLenseData ? (this.state.orderLenseData.length + 1) : 1} ref={child => {this.newOrderLense = child}} isNew={true} customer={this.state.customer}/>
                                         </TabPane>
                                     }
                                     <TabPane tabId={3}>
                                         {
-                                            this.state.followUpData.map((order, index) => (
+                                            this.state.followUpData && this.state.followUpData.map((order, index) => (
                                                 <FollowUpForm getUserData={(customer) => this.getFollowUpData(customer)} orderNo={index + 1} key={index} data={order} ref={child => {this[`follow${index}`] = child}} customer={this.state.customer}/>
                                             ))
                                         }
                                         <FollowUpForm getUserData={(customer) => this.getFollowUpData(customer)}
-                                                        followNo={this.state.followUpData.length + 1} ref={child => {this.newFollowUp = child}} isNew={true} customer={this.state.customer}/>
+                                                        followNo={this.state.followUpData ? (this.state.followUpData.length + 1) : 1} ref={child => {this.newFollowUp = child}} isNew={true} customer={this.state.customer}/>
                                     </TabPane>
                                 </TabContent>
                             </div> : <div style={{height: '100px', textAlign: 'center'}}>
