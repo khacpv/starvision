@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     date_examination: DataTypes.STRING,
     re_examination_date: DataTypes.STRING,
     id_left: DataTypes.INTEGER,
-    id_right: DataTypes.INTEGER
+    id_right: DataTypes.INTEGER,
+    note: DataTypes.STRING,
   }, {});
   FollowUpCheck.associate = function(models) {
     // associations can be defined here
