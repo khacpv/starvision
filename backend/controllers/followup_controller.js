@@ -32,8 +32,7 @@ router.get("/", async (req, res) => {
     let R,
       L = null;
     let returnData = [];
-    let index = 1;
-    result.forEach((element) => {
+    result.forEach((element, index) => {
       let key = "od";
       if (element.side == "L") {
         key = "os";
@@ -57,7 +56,7 @@ router.get("/", async (req, res) => {
 
       let tmpSide = element.side;
       returnData.push({
-        followup_no: element.followup_no,
+        followup_no: Number(index+1),
         comment: element.note,
         ngaykham: element.date_examination,
         ngaytaikham: element.re_examination_date,
