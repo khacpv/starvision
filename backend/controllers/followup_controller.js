@@ -51,12 +51,11 @@ router.get("/", async (req, res) => {
         os_image: element.left.image,
         os_video: element.left.video,
         os_thumb: element.left.thumb,
-        
       };
 
       let tmpSide = element.side;
       returnData.push({
-        followup_no: Number(index+1),
+        followup_no: Number(index + 1),
         comment: element.note,
         ngaykham: element.date_examination,
         ngaytaikham: element.re_examination_date,
@@ -129,17 +128,15 @@ router.post(
     let checkFollowup = 0;
     // update
     if (req.body.id_left && req.body.id_right) {
-      checkFollowup = await FollowUp.count({
+      checkFollowup = await FollowUpCheck.count({
         where: {
           customer_id: req.body.khid,
           dttc_id: req.body.iddttc,
-          id: {
-            [Op.or]: [req.body.id_left, req.body.id_right],
-          },
+          id_left: req.body.id_left,
+          id_right: req.body.id_right,
         },
       });
     }
-
     if (checkFollowup > 0) {
       try {
         // get transaction
@@ -147,10 +144,6 @@ router.post(
 
         right = await FollowUp.update(
           {
-            doctor_code: req.body.mabacsi,
-            doctor_id: req.body.idbacsi,
-            date_examination: req.body.ngaykham,
-            re_examination_date: req.body.ngaytaikham,
             note: req.body.note,
             bcva_va: bcva_va_R,
             image: image_R,
@@ -159,19 +152,12 @@ router.post(
           },
           {
             where: {
-              customer_id: req.body.khid,
-              dttc_id: req.body.iddttc,
               id: req.body.id_right,
-              side: "R",
             },
           }
         );
         left = await FollowUp.update(
           {
-            doctor_code: req.body.mabacsi,
-            doctor_id: req.body.idbacsi,
-            date_examination: req.body.ngaykham,
-            re_examination_date: req.body.ngaytaikham,
             note: req.body.note,
             bcva_va: bcva_va_L,
             image: image_L,
@@ -180,10 +166,7 @@ router.post(
           },
           {
             where: {
-              customer_id: req.body.khid,
-              dttc_id: req.body.iddttc,
               id: req.body.id_left,
-              side: "L",
             },
           }
         );
@@ -203,6 +186,24 @@ router.post(
       }
 
       if (left && right) {
+        if (left && right) {
+          await FollowUpCheck.update(
+            {
+              doctor_code: req.body.mabacsi,
+              doctor_id: req.body.idbacsi,
+              date_examination: req.body.ngaykham,
+              re_examination_date: req.body.ngaytaikham,
+              note: req.body.note,
+            },
+            {
+              where: {
+                id_left: req.body.id_left,
+                id_right: req.body.id_right,
+              },
+            }
+          );
+        }
+
         return res.send({
           status: "success",
           message: "update",
@@ -245,7 +246,7 @@ router.post(
           re_examination_date: req.body.ngaytaikham,
           id_left: left.id,
           id_right: right.id,
-          note: req.body.note
+          note: req.body.note,
         });
         return res.send({
           status: "success",
