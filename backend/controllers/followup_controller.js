@@ -246,6 +246,7 @@ router.post(
           re_examination_date: req.body.ngaytaikham,
           id_left: left.id,
           id_right: right.id,
+          note: req.body.note
         });
         return res.send({
           status: "success",
