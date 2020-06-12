@@ -4,6 +4,7 @@ const models = require("../models/index");
 const OrderLense = models.OrderLense;
 const Lense = models.Lense;
 const Customer = models.Customer;
+const Doctor = models.Doctors;
 const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
 const Op = require("../config/db").Sequelize.Op;
@@ -39,9 +40,9 @@ router.get("/", async (req, res) => {
         let R,
           L = null;
         if (
-          element.right.lense != null &&
-          element.right.kcode != null &&
-          element.right.power != null &&
+          element.right.lense != null ||
+          element.right.kcode != null ||
+          element.right.power != null ||
           element.right.size != null
         ) {
           R = {
@@ -57,9 +58,9 @@ router.get("/", async (req, res) => {
           };
         }
         if (
-          element.left.lense != null &&
-          element.left.kcode != null &&
-          element.left.power != null &&
+          element.left.lense != null ||
+          element.left.kcode != null ||
+          element.left.power != null ||
           element.left.size != null
         ) {
           L = {
@@ -246,9 +247,9 @@ router.post(
         data: "",
       });
     }
-    let customerCount = await Customer.count({
+    let customerCount = await Doctor.count({
       where: {
-        id: req.body.khid,
+        doctor_id: req.body.idbacsi,
         dttc_id: req.body.iddttc,
       },
     });
