@@ -47,14 +47,15 @@ router.get("/", async (req, res) => {
         ) {
           R = {
             id_order: element.right.id,
-            od_lense: element.right.lense,
-            od_kcode: element.right.kcode,
-            od_power: element.right.power,
-            od_size: element.right.size,
-            note_order_lens: element.right.note,
-            price: element.right.price,
+            od_lense: element.right.lense != null ? element.right.lense : "",
+            od_kcode: element.right.kcode != null ? element.right.kcode : "",
+            od_power: element.right.power != null ? element.right.power : "",
+            od_size: element.right.size != null ? element.right.size : "",
+            note_order_lens:
+              element.right.note != null ? element.right.note : "",
+            price: element.right.price != null ? element.right.price : "",
             Status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
-            prefix: element.prefix,
+            prefix: element.prefix != null ? element.prefix : "",
           };
         }
         if (
@@ -64,15 +65,15 @@ router.get("/", async (req, res) => {
           element.left.size != null
         ) {
           L = {
-            id_order: element.left.id,
-            os_lense: element.left.lense,
-            os_kcode: element.left.kcode,
-            os_power: element.left.power,
-            os_size: element.left.size,
-            note_order_lens: element.left.note,
-            price: element.left.price,
+            id_order: element.left.id != null ? element.left.id : "",
+            os_lense: element.left.lense != null ? element.left.lense : "",
+            os_kcode: element.left.kcode != null ? element.left.kcode : "",
+            os_power: element.left.power != null ? element.left.power : "",
+            os_size: element.left.size != null ? element.left.size : "",
+            note_order_lens: element.left.note != null ? element.left.note : "",
+            price: element.left.price != null ? element.left.price : "",
             Status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
-            prefix: element.prefix,
+            prefix: element.prefix != null ? element.prefix : "",
           };
         }
         returnData.push({
