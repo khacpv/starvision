@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
 const Customer = models.Customer;
-const CustomerOk = models.CustomerOk;
+const User = models.Users;
+const Doctor = models.Doctors;
+const UserRequest = models.UserRequest;
 const CustomerCheck = models.CustomerCheck;
 const Fitting = models.Fitting;
-const OrderLense = models.OrderLense;
-const Lense = models.Lense;
 const { check, validationResult } = require("express-validator");
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
@@ -298,20 +298,48 @@ router.post(
   }
 );
 
-router.get(
+router.post(
   "/forgotpass",
   [
     check("username", "Chưa điền thông tin người dùng.").not().isEmpty(),
     check("lienhe", "Chưa điền thông tin liên hệ").not().isEmpty(),
   ],
   async (req, res) => {
-    let username = req.query.username;
-    let contact = req.query.lienhe;
+    let username = req.body.username;
+    let phone = req.body.lienhe;
     let errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.send({
+
+    let user = await User.findOne({
+      where: {
+        username: username,
+      },
+    });
+
+    if (user) {
+
+      let doctor = await Doctor.findOne({
+        user_id: user.id,
+        phone: phone
+      });
+
+      if (doctor){
+        let user_request = await UserRequest.create({
+          user_id: user.id,
+          username: user.username,
+          type: CONSTANT.UserRequest.FORGOT_PASSWORD,
+          note: `Password: ${doctor.password}`,
+        });
+      }else{
+        res.send({
+          status: "error",
+          message: "Sai thông tin số điện thoại.",
+          data: "",
+        });
+      }
+    } else {
+      res.send({
         status: "error",
-        message: errors.array()[0].msg,
+        message: "Tên đăng nhập không tồn tại.",
         data: "",
       });
     }
