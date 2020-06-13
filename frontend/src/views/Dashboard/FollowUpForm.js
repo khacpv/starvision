@@ -31,7 +31,8 @@ class FollowUpForm extends Component {
         ngaykham: moment(new Date()).format('YYYY-MM-DD'),
         ngaytaikham: null,
         id_left: null,
-        id_right: null
+        id_right: null,
+        followup_no: null
     };
 
     constructor(props) {
@@ -60,7 +61,8 @@ class FollowUpForm extends Component {
             thumb_L: data.L.os_thumb,
             note: data.comment,
             ngaykham: data.ngaykham,
-            ngaytaikham: data.ngaytaikham
+            ngaytaikham: data.ngaytaikham,
+            followup_no: data.followup_no
         })
     }
 
