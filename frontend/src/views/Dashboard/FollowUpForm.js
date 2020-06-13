@@ -31,7 +31,8 @@ class FollowUpForm extends Component {
         ngaykham: moment(new Date()).format('YYYY-MM-DD'),
         ngaytaikham: null,
         id_left: null,
-        id_right: null
+        id_right: null,
+        followup_no: null
     };
 
     constructor(props) {
@@ -48,19 +49,20 @@ class FollowUpForm extends Component {
 
     setData(data) {
         this.setState({
-            bcva_va_R: data.follow_right.od_bcva_va,
-            image_R: data.follow_right.od_image,
-            video_R: data.follow_right.od_video,
-            id_right: data.follow_right.A_TH_DUBAO,
-            thumb_R: '',
-            bcva_va_L: data.follow_left.od_bcva_va,
-            image_L: data.follow_left.od_image,
-            video_L: data.follow_left.od_video,
-            id_left: data.follow_left.A_TH_DUBAO,
-            thumb_L: '',
-            note: data.note,
+            bcva_va_R: data.R.od_bcva_va,
+            image_R: data.R.od_image,
+            video_R: data.R.od_video,
+            id_right: data.R.A_TH_DUBAO,
+            thumb_R: data.R.od_thumb,
+            bcva_va_L: data.L.os_bcva_va,
+            image_L: data.L.os_image,
+            video_L: data.L.os_video,
+            id_left: data.L.A_TH_DUBAO,
+            thumb_L: data.L.os_thumb,
+            note: data.comment,
             ngaykham: data.ngaykham,
-            ngaytaikham: data.ngaytaikham
+            ngaytaikham: data.ngaytaikham,
+            followup_no: data.followup_no
         })
     }
 
@@ -197,7 +199,7 @@ class FollowUpForm extends Component {
                                                         fluid={false}
                                                         width={250}
                                                         height={400}
-                                                        poster="/assets/poster.png"
+                                                        poster={this.state.thumb_L}
                                                         src={this.state.video_L}
                                                     />
                                                 </div>
@@ -241,7 +243,7 @@ class FollowUpForm extends Component {
                                                         fluid={false}
                                                         width={250}
                                                         height={500}
-                                                        poster="/assets/poster.png"
+                                                        poster={this.state.thumb_R}
                                                         src={this.state.video_R}
                                                     />
                                                 </div>
