@@ -16,7 +16,6 @@ const AdminOrderlenseController = require("../controllers/admin/orderlense_contr
 module.exports = (app) => {
   app.use(
     "/customer",
-    passport.authenticate("jwt", { session: false }),
     CustomerController
   );
   app.use(
