@@ -1,10 +1,13 @@
 {
-    "CustomerOk":{
+    "CustomerOk": {
         "GOV": "GOV",
         "SOFT": "SOFT"
     },
-    "OrderLense":{
+    "OrderLense": {
         "SOFT": "SOFT",
         "GOV": "GOV"
+    },
+    "UserRequest": {
+        "FORGOT_PASSWORD": 1
     }
 }
