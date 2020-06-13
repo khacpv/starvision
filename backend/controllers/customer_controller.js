@@ -11,10 +11,12 @@ const { check, validationResult } = require("express-validator");
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
 const CONSTANT = require("../config/constants.json");
+const passport = require("passport");
+
 router.get(
   "/",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  async (req, res) => {
+  passport.authenticate("jwt", { session: false }),async (req, res) => {
     let doctorName = req.query.tenbacsi;
 
     let errors = validationResult(req);
@@ -72,7 +74,8 @@ router.get(
 router.get(
   "/search",
   [check("d_name", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  async (req, res) => {
+  
+  passport.authenticate("jwt", { session: false }),async (req, res) => {
     const doctorName = req.query.d_name;
     let customerName = req.query.c_name;
     let from = req.query.from;
@@ -153,7 +156,7 @@ router.get(
 router.get(
   "/history",
   [check("d_name", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  async (req, res) => {
+  passport.authenticate("jwt", { session: false }),async (req, res) => {
     const doctorName = req.query.d_name;
     let customerName = req.query.c_name;
     let from = req.query.from;
@@ -237,7 +240,7 @@ router.post(
     check("iddttc", "IDDTTC không được bỏ trống.").not().isEmpty(),
     check("birthday", "Ngày sinh không được bỏ trống.").not().isEmpty(),
   ],
-  async (req, res) => {
+  passport.authenticate("jwt", { session: false }),async (req, res) => {
     let data = req.body;
     let errors = validationResult(req);
     let count = (await Customer.count({})) + 1;
@@ -355,7 +358,7 @@ router.post(
 router.get(
   "/not_customok",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  async (req, res) => {
+  passport.authenticate("jwt", { session: false }),async (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -422,7 +425,7 @@ router.get(
 router.get(
   "/not_fitting",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  async (req, res) => {
+  passport.authenticate("jwt", { session: false }),async (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -493,7 +496,7 @@ router.get(
 router.get(
   "/fitting",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  async (req, res) => {
+  passport.authenticate("jwt", { session: false }),async (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -559,7 +562,7 @@ router.get(
 router.get(
   "/not_customok_soft",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  async (req, res) => {
+  passport.authenticate("jwt", { session: false }),async (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
