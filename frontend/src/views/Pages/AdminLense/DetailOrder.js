@@ -35,7 +35,6 @@ class DetailOrder extends Component {
         this.setState({isLoading: true});
         adminServices.getOrderDetail(id)
             .then(result => {
-                console.log(result)
                 if (result.msg === 'success') {
                     this.setState({data: result.items})
                 }
@@ -54,7 +53,6 @@ class DetailOrder extends Component {
     }
 
     render() {
-        console.log(this.state.data)
         const data = this.state.data;
         if (data) {
             return (

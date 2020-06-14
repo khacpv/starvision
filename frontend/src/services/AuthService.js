@@ -13,6 +13,10 @@ class AuthService {
         localStorage.removeItem('profile');
     }
 
+    forgotPassword(data) {
+        return this.axios.post(`/customer/forgotPass`, data);
+    }
+
     setToken(token, profile) {
         localStorage.setItem('token', token);
         localStorage.setItem('profile', JSON.stringify(profile));

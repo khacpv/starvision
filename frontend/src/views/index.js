@@ -24,7 +24,7 @@ import Dashboard from './Dashboard';
 import FollowUp from './FollowUp';
 import {CoreUIIcons, Flags, FontAwesome, SimpleLineIcons} from './Icons';
 import {Notification, Badges, Modals} from './Notifications';
-import {Login, Page404, Page500, Register} from './Pages';
+import {Login, Page404, Page500, Register, ForgotPassword} from './Pages';
 import {Colors, Typography} from './Theme';
 import Widgets from './Widgets';
 
@@ -66,6 +66,7 @@ export {
     Cards,
     Breadcrumbs,
     Paginations,
-    FollowUp
+    FollowUp,
+    ForgotPassword
 };
 
