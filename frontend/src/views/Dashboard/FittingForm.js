@@ -268,7 +268,6 @@ class FittingForm extends Component {
         uploadService.uploadFile(file, this.props.customer)
         .then(data => {
                 // TODO: hide loading icon
-                console.log(`uploaded to:`, data.Location, data);
                 if (eyeSide === 'left') {
                     this.setState({video_L: data.Location, isLoadingLeft: false})
                 }

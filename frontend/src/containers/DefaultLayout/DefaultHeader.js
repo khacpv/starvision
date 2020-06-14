@@ -17,61 +17,65 @@ class DefaultHeader extends Component {
     render() {
         const doctorData = JSON.parse(localStorage.getItem('profile'));
         const {children, ...attributes} = this.props;
-        return (
-            <React.Fragment>
-                <AppSidebarToggler className="d-lg-none" display="md" mobile/>
-                {
-                    doctorData.role === 'admin' ? <Nav className="d-md-down-none" navbar>
-                        <NavItem className="px-3">
-                            <NavLink to="/admin" className="nav-link">Danh sách bác sĩ</NavLink>
-                        </NavItem>
-                        <NavItem className="px-3">
-                            <NavLink to="/adminNotification" className="nav-link">Gửi thông báo</NavLink>
-                        </NavItem>
-                        <NavItem className="px-3">
-                            <NavLink to="/adminLense" className="nav-link">Order lense</NavLink>
-                        </NavItem>
-                    </Nav> : <Nav className="d-md-down-none" navbar>
-                        <NavItem className="px-3">
-                            <NavLink to="/dashboard" className="nav-link">FITTING</NavLink>
-                        </NavItem>
-                        <NavItem className="px-3">
-                            <NavLink to="/notifications" className="nav-link">Thông báo</NavLink>
-                        </NavItem>
-                        <NavItem className="px-3">
-                            <NavLink to="/summary" className="nav-link">Công nợ</NavLink>
-                        </NavItem>
+        if (doctorData) {
+            return (
+                <React.Fragment>
+                    <AppSidebarToggler className="d-lg-none" display="md" mobile/>
+                    {
+                        doctorData.role === 'admin' ? <Nav className="d-md-down-none" navbar>
+                            <NavItem className="px-3">
+                                <NavLink to="/admin" className="nav-link">Danh sách bác sĩ</NavLink>
+                            </NavItem>
+                            <NavItem className="px-3">
+                                <NavLink to="/adminNotification" className="nav-link">Gửi thông báo</NavLink>
+                            </NavItem>
+                            <NavItem className="px-3">
+                                <NavLink to="/adminLense" className="nav-link">Order lense</NavLink>
+                            </NavItem>
+                        </Nav> : <Nav className="d-md-down-none" navbar>
+                            <NavItem className="px-3">
+                                <NavLink to="/dashboard" className="nav-link">FITTING</NavLink>
+                            </NavItem>
+                            <NavItem className="px-3">
+                                <NavLink to="/notifications" className="nav-link">Thông báo</NavLink>
+                            </NavItem>
+                            <NavItem className="px-3">
+                                <NavLink to="/summary" className="nav-link">Công nợ</NavLink>
+                            </NavItem>
+                        </Nav>
+                    }
+                    <Nav className="ml-auto" navbar>
+                        <UncontrolledDropdown nav direction="down">
+                            <DropdownToggle nav>
+                                <img src={'../../assets/img/avatar.png'} className="img-avatar"
+                                     alt="admin@bootstrapmaster.com"/>
+                            </DropdownToggle>
+                            <DropdownMenu right>
+                                <DropdownItem header tag="div"
+                                              className="text-center"><strong>Account</strong></DropdownItem>
+                                {/*<DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge color="info">42</Badge></DropdownItem>*/}
+                                {/*<DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge></DropdownItem>*/}
+                                {/*<DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge color="danger">42</Badge></DropdownItem>*/}
+                                {/*<DropdownItem><i className="fa fa-comments"></i> Comments<Badge color="warning">42</Badge></DropdownItem>*/}
+                                {/*<DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>*/}
+                                {/*<DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>*/}
+                                {/*<DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>*/}
+                                {/*<DropdownItem><i className="fa fa-usd"></i> Payments<Badge color="secondary">42</Badge></DropdownItem>*/}
+                                {/*<DropdownItem><i className="fa fa-file"></i> Projects<Badge color="primary">42</Badge></DropdownItem>*/}
+                                {/*<DropdownItem divider />*/}
+                                {/*<DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>*/}
+                                <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i>
+                                    Đăng xuất</DropdownItem>
+                            </DropdownMenu>
+                        </UncontrolledDropdown>
                     </Nav>
-                }
-                <Nav className="ml-auto" navbar>
-                    <UncontrolledDropdown nav direction="down">
-                        <DropdownToggle nav>
-                            <img src={'../../assets/img/avatar.png'} className="img-avatar"
-                                 alt="admin@bootstrapmaster.com"/>
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                            <DropdownItem header tag="div"
-                                          className="text-center"><strong>Account</strong></DropdownItem>
-                            {/*<DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge color="info">42</Badge></DropdownItem>*/}
-                            {/*<DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge></DropdownItem>*/}
-                            {/*<DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge color="danger">42</Badge></DropdownItem>*/}
-                            {/*<DropdownItem><i className="fa fa-comments"></i> Comments<Badge color="warning">42</Badge></DropdownItem>*/}
-                            {/*<DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>*/}
-                            {/*<DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>*/}
-                            {/*<DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>*/}
-                            {/*<DropdownItem><i className="fa fa-usd"></i> Payments<Badge color="secondary">42</Badge></DropdownItem>*/}
-                            {/*<DropdownItem><i className="fa fa-file"></i> Projects<Badge color="primary">42</Badge></DropdownItem>*/}
-                            {/*<DropdownItem divider />*/}
-                            {/*<DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>*/}
-                            <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i>
-                                Đăng xuất</DropdownItem>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </Nav>
-                {/*<AppAsideToggler className="d-md-down-none" />*/}
-                {/*<AppAsideToggler className="d-lg-none" mobile />*/}
-            </React.Fragment>
-        );
+                    {/*<AppAsideToggler className="d-md-down-none" />*/}
+                    {/*<AppAsideToggler className="d-lg-none" mobile />*/}
+                </React.Fragment>
+            );
+        } else {
+            return <div/>
+        }
     }
 }
 

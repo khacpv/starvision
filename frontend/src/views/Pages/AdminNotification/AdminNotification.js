@@ -63,7 +63,6 @@ class AdminNotification extends Component {
             adminServices.addNotification({
                 title, content, receiver_id : receiver_id.join()
             }).then(result => {
-                console.log(result)
                 if (result.status === 'success') {
                     alert('Gửi thông báo thành công');
                     this.resetForm()

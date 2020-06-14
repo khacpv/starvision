@@ -18,7 +18,6 @@ class Notification extends Component {
     }
 
     render() {
-        console.log(this.state.notifications)
         return (
             <div className="animated fadeIn">
                 <Row>

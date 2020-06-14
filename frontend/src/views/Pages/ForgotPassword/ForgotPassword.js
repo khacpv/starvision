@@ -19,30 +19,33 @@ import qs from 'qs';
 import {saveProfile} from "../../../actions/AccountAction";
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {customerService} from "../../../services/index";
+import {customerService} from "../../../services";
+import AdminDashboard from "../AdminDashboard";
 
-class Login extends Component {
+class ForgotPassword extends Component {
 
     state = {
         username: '',
-        password: ''
+        lienhe: ''
     };
 
-    login() {
-        const {username, password} = this.state;
-        if (username && password) {
-            authService.login(qs.stringify({username, password})).then(result => {
-                authService.setToken(result.data.token, result.data);
-                this.props.history.push(result.data.role === 'admin' ? '/admin' : '/dashboard');
-                customerService.getUserData(result.data.user_id).then(data => {
-                    authService.setUser(data.data[0]);
-                }).catch(error => console.log(error))
-            }).catch((error) => {
-                alert('thông tin đăng nhập không chính xác')
-            });
+    getPassword() {
+        const {username, lienhe} = this.state;
+        if (username && lienhe) {
+            authService.forgotPassword({username, lienhe}).then(result => {
+                if (result.status === 'success') {
+                    alert('Hệ thống đang xử lí, chúng tôi sẽ liên lạc sau khi xác nhận thông tin')
+                    this.props.history.push('login')
+                } else {
+                    alert(result.message)
+                }
+            }).catch(error => {
+                alert('Có lỗi xảy ra , vui lòng thử lại sau')
+            })
         } else {
-            alert('Vui lòng nhập đủ thông tin')
+            alert('Vui lòng nhập đầy đủ thông tin')
         }
+
     }
 
     render() {
@@ -55,8 +58,8 @@ class Login extends Component {
                                 <Card className="p-4">
                                     <CardBody>
                                         <Form>
-                                            <h1>Đăng nhập</h1>
-                                            <p className="text-muted">Đăng nhập vào hệ thống</p>
+                                            <h1>Quên mật khẩu</h1>
+                                            <p className="text-muted">Để đặt lại mật khẩu của bạn, nhập đúng thông tin và chúng tôi sẽ gửi cho bạn hướng dẫn</p>
                                             <InputGroup className="mb-3">
                                                 <InputGroupAddon addonType="prepend">
                                                     <InputGroupText>
@@ -71,17 +74,12 @@ class Login extends Component {
                                                         <i className="icon-lock"/>
                                                     </InputGroupText>
                                                 </InputGroupAddon>
-                                                <Input onChange={(event) => this.state.password = event.target.value} type="password" placeholder="Mật khẩu"
+                                                <Input onChange={(event) => this.state.lienhe = event.target.value} type="text" placeholder="Số điện thoại hoặc email"
                                                        autoComplete="current-password"/>
                                             </InputGroup>
                                             <Row>
                                                 <Col xs="6">
-                                                    <Button onClick={() => this.login()} color="primary" className="px-4">Hoàn tất</Button>
-                                                </Col>
-                                                <Col xs="6" className="text-right">
-                                                    <Button onClick={() => {
-                                                        this.props.history.push('/forgotPassword')
-                                                    }} color="link" className="px-0">Quên mật khẩu?</Button>
+                                                    <Button onClick={() => this.getPassword()} color="primary" className="px-4">Hoàn tất</Button>
                                                 </Col>
                                             </Row>
                                         </Form>
@@ -96,16 +94,4 @@ class Login extends Component {
     }
 }
 
-Login.propTypes = {
-    saveProfile: PropTypes.func,
-};
-
-const mapStateToProps = state => ({
-
-});
-
-const actions = dispatch => ({
-    saveProfile: (data) => dispatch(saveProfile(data))
-});
-
-export default connect(mapStateToProps, actions)(Login);
+export default ForgotPassword;
