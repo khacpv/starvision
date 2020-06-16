@@ -151,7 +151,7 @@ router.get("/", async (req, res) => {
               hk: customerOkRight.original_k1,
               vk: customerOkRight.original_k2,
               power: customerOkRight.power,
-              ngayfitting: customerOkRight.createAt,
+              ngayfitting: customerOkRight.createdAt,
             }
           : [];
 
@@ -163,7 +163,7 @@ router.get("/", async (req, res) => {
               hk: customerOkLeft.original_k1,
               vk: customerOkLeft.original_k2,
               power: customerOkLeft.power,
-              ngayfitting: customerOkLeft.createAt,
+              ngayfitting: customerOkLeft.createdAt,
             }
           : []),
         (result = {

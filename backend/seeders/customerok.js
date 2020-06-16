@@ -64,6 +64,7 @@ function leftData() {
                 power: spl_san_pham[6],
                 size: spl_san_pham[7],
                 ngayfitting: spl[21],
+                contract_code: spl[5],
               }).then(function (data) {
                 CustomerCheck.findOne({
                   where: {
@@ -164,6 +165,7 @@ function rightData() {
                 power: spl_san_pham[6],
                 size: spl_san_pham[7],
                 ngayfitting: spl[21],
+                contract_code: spl[5],
               }).then(function (data) {
                 CustomerCheck.findOne({
                   where: {
@@ -190,7 +192,6 @@ function rightData() {
                       customer_id: spl[1],
                       dttc_id: spl[2],
                       date_examination: spl[31],
-                      contract_code: spl[5],
                       id_left: data.id,
                       id_right: null,
                       type: "GOV",
