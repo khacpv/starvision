@@ -15,7 +15,7 @@ module.exports = {
       }], {});
     */
     try {
-      let du_bao = fs.readFileSync(appDir + "/du_bao.txt", "UTF-8");
+      let du_bao = fs.readFileSync(appDir + "/customerok.txt", "UTF-8");
       let du_bao_san_pham = fs.readFileSync(
         appDir + "/du_bao_san_pham.txt",
         "UTF-8"
@@ -32,8 +32,35 @@ module.exports = {
           }
         });
 
+
         if (fitting_type.includes(Number(spl[9]))) {
-          fs.appendFileSync(appDir + "/customerok.txt", dubao + "\r\n"); 
+          let count = 0;
+          data_dubaos.forEach((dubao1, index1) => {
+            let spl1 = dubao1.split("\t");
+            if (spl[1] == spl1[1] && fitting_type.includes(Number(spl1[9]))) {
+              count++;
+            }
+            if (count == 3){
+              console.log(spl[1]);
+              
+            }
+          });
+        //   // fs.appendFileSync(appDir + "/customerok.txt", dubao + "\r\n");
+        //   data_du_bao_san_pham.forEach((dubaosanpham, index) => {
+        //     let spl_san_pham = dubaosanpham.split("\t");
+        //     spl_san_pham.forEach((element, index) => {
+        //       if (element == "NULL") {
+        //         spl_san_pham[index] = null;
+        //       }
+        //     });
+
+        //     if (Number(spl[9] == 163)){
+
+        //     }
+        //     if (Number(spl[9]) == 164){
+
+        //     }
+        //   });
         }
       });
     } catch (err) {
@@ -51,5 +78,5 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-  }
+  },
 };

@@ -79,8 +79,8 @@ module.exports = {
                 createdAt: spl[21],
                 updatedAt: spl[21],
                 comment_size: comment_array[0],
-                comment_matbo: comment_array[1],
-                comment_vung_dieu_tri: comment_array[2],
+                comment_matbo: comment_array[2],
+                comment_vung_dieu_tri: comment_array[1],
                 comment_di_chuyen: comment_array[3],
                 comment_ket_luan: comment_array[4],
               });
