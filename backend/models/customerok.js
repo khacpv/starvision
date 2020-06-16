@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
     lense: DataTypes.STRING,
     k_code: DataTypes.STRING,
     power: DataTypes.STRING,
-    size: DataTypes.STRING
+    size: DataTypes.STRING,
+    contract_code: DataTypes.STRING
   }, {});
   CustomerOk.associate = function(models) {
     // associations can be defined here
