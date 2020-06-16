@@ -209,8 +209,8 @@ function rightData() {
   }
 }
 async function main() {
-  // await leftData();
-  await rightData();
+  await leftData();
+  // await rightData();
 }
 
 main();
