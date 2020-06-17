@@ -5,6 +5,8 @@ const models = require("../models/index");
 const { mainModule } = require("process");
 const CustomerOk = models.CustomerOk;
 const CustomerCheck = models.CustomerCheck;
+const sequelize = require("../config/db").sequelize;
+const Op = require("../config/db").Sequelize.Op;
 
 function leftData() {
   try {
@@ -46,7 +48,7 @@ function leftData() {
             }
             if (Number(spl[9] == 163)) {
               console.log(spl[9]);
-              
+
               CustomerOk.create({
                 refactometer_sph: spl_san_pham[14],
                 refactometer_cyl: spl_san_pham[15],
@@ -208,9 +210,92 @@ function rightData() {
     console.error(err);
   }
 }
+async function fillFullDataLeft() {
+  CustomerCheck.findAll({
+    where: {
+      id_left: null,
+    },
+  }).then(function (data) {
+    if (data) {
+      data.forEach((element) => {
+        CustomerOk.create({
+          refactometer_sph: null,
+          refactometer_cyl: null,
+          refactometer_ax: null,
+          bcva_va: null,
+          bcva_sph: null,
+          bcva_cyl: null,
+          bcva_ax: null,
+          original_k1: null,
+          original_k2: null,
+          original_ave: null,
+          original_hvid: null,
+          lense: null,
+          k_code: null,
+          power: null,
+          size: null,
+        }).then(function (customerCreate) {
+          CustomerCheck.update(
+            {
+              id_left: customerCreate.id,
+            },
+            {
+              where: {
+                id: element.id,
+              },
+            }
+          );
+        });
+      });
+    }
+  });
+}
+
+async function fillFullDataRight() {
+  CustomerCheck.findAll({
+    where: {
+      id_right: null,
+    },
+  }).then(function (data) {
+    if (data) {
+      data.forEach((element) => {
+        customerOkRight = CustomerOk.create({
+          refactometer_sph: null,
+          refactometer_cyl: null,
+          refactometer_ax: null,
+          bcva_va: null,
+          bcva_sph: null,
+          bcva_cyl: null,
+          bcva_ax: null,
+          original_k1: null,
+          original_k2: null,
+          original_ave: null,
+          original_hvid: null,
+          lense: null,
+          k_code: null,
+          power: null,
+          size: null,
+        }).then(function (customerCreate) {
+          CustomerCheck.update(
+            {
+              id_right: customerCreate.id,
+            },
+            {
+              where: {
+                id: element.id,
+              },
+            }
+          );
+        });
+      });
+    }
+  });
+}
 async function main() {
-  await leftData();
+  // await leftData();
   // await rightData();
+  await fillFullDataLeft();
+  await fillFullDataRight();
 }
 
 main();
