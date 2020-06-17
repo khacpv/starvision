@@ -151,7 +151,7 @@ class Dashboard extends Component {
         const {currentTab} = this.state;
         return (
             <div className="animated fadeIn overflow-content">
-                <Row style={{ width: '1600px'}}>
+                <Row style={{ width: '1600px', minHeight: '1200px'}}>
                     <Col xs='3'>
                         <CustomerList getUserData={(customer) => this.getUserData(customer)}/>
                     </Col>
