@@ -29,29 +29,43 @@ router.get("/", async (req, res) => {
   });
 
   if (`${result.length}` > 0) {
-    let R,
-      L = null;
     let returnData = [];
     result.forEach((element, index) => {
+      let R,
+      L = null;
       let key = "od";
       if (element.side == "L") {
         key = "os";
       }
-      R = {
-        A_TH_DUBAO: element.right.id,
-        od_bcva_va: element.right.bcva_va,
-        od_image: element.right.image,
-        od_video: element.right.video,
-        od_thumb: element.right.thumb,
-      };
+      if (
+        element.right.bcva_va != null ||
+        element.right.image != null ||
+        element.right.video != null ||
+        element.right.thumb != null
+      ) {
+        R = {
+          A_TH_DUBAO: element.right.id,
+          od_bcva_va: element.right.bcva_va,
+          od_image: element.right.image,
+          od_video: element.right.video,
+          od_thumb: element.right.thumb,
+        };
+      }
 
-      L = {
-        A_TH_DUBAO: element.left.id,
-        os_bcva_va: element.left.bcva_va,
-        os_image: element.left.image,
-        os_video: element.left.video,
-        os_thumb: element.left.thumb,
-      };
+      if (
+        element.left.bcva_va != null ||
+        element.left.image != null ||
+        element.left.video != null ||
+        element.left.thumb != null
+      ) {
+        L = {
+          A_TH_DUBAO: element.left.id,
+          os_bcva_va: element.left.bcva_va,
+          os_image: element.left.image,
+          os_video: element.left.video,
+          os_thumb: element.left.thumb,
+        };
+      }
 
       let tmpSide = element.side;
       returnData.push({
