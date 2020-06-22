@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
     let returnData = [];
     result.forEach((element, index) => {
       let R,
-      L = null;
+        L = null;
       let key = "od";
       if (element.side == "L") {
         key = "os";
@@ -120,7 +120,19 @@ router.post(
     let thumb_L = req.body.thumb_L;
     let image_L = req.body.image_L;
 
-    if (bcva_va_R == null || bcva_va_R == "") {
+    let check_bcva_r = bcva_va_R && bcva_va_R != "" ? bcva_va_R : null;
+
+    let check_video_r = video_R && video_R != "" ? video_R : null;
+
+    let check_thumb_r = thumb_R && thumb_R != "" ? thumb_R : null;
+
+    let check_image_r = image_R && image_R != "" ? image_R : null;
+
+    if (
+      (check_bcva_r != "" && (check_video_r == "" || check_image_r == "")) ||
+      (check_bcva_r == "" && check_video_r == "" && check_image_r != "") ||
+      ((check_bcva_r == "" || check_image_r == "") && check_video_r != "")
+    ) {
       res.send({
         status: "error",
         message: "Mắt phải cần nhập đủ dữ liệu!",
@@ -128,7 +140,19 @@ router.post(
       });
     }
 
-    if (bcva_va_L == null || bcva_va_L == "") {
+    let check_bcva_l = bcva_va_L && bcva_va_L != "" ? bcva_va_L : null;
+
+    let check_video_l = video_L && video_L != "" ? video_L : null;
+
+    let check_thumb_l = thumb_L && thumb_L != "" ? thumb_L : null;
+
+    let check_image_l = image_L && image_L != "" ? image_L : null;
+
+    if (
+      (check_bcva_l != "" && (check_video_l == "" || check_image_l == "")) ||
+      (check_bcva_l == "" && check_video_l == "" && check_image_l != "") ||
+      ((check_bcva_l == "" || check_image_l == "") && check_video_l != "")
+    ){
       res.send({
         status: "error",
         message: "Mắt trái cần nhập đủ dữ liệu",
