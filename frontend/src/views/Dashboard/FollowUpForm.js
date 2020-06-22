@@ -75,7 +75,6 @@ class FollowUpForm extends Component {
             mabacsi : doctorData.Tenbacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
-            ngaykham : new Date(),
             khid: this.props.customer.ID_KHACHHANG,
             ...this.state
         };
@@ -141,17 +140,13 @@ class FollowUpForm extends Component {
             <div style={{ 'margin-top': '50px'}}>
                 <Form>
                     <Row>
-                        {
-                            !this.props.isNew && <Col xs={12}>
-                                <h3>Ngày khám: {this.state.ngaykham || '---'}</h3>
-                            </Col>
-                        }
                         <Col xs={12}>
                             <FormGroup row style={{marginLeft: 5}}>
                                 <div>Ngày khám:</div>
                                 <div style={{ marginLeft: 25}}>
                                     <DatePicker
                                         className="radius-border-input"
+                                        dateFormat="dd/MM/yyyy"
                                         selected={this.state.ngaykham ? new Date(this.state.ngaykham) : null}
                                         onChange={(date) => this.setState({ngaykham: date})}
                                     />
@@ -169,7 +164,7 @@ class FollowUpForm extends Component {
                                             <Input value={data.bcva_va_L} onChange={(event) => this.changeValue(event, 'bcva_va_L')} type={'text'} name="bcva_va_L" id="bcva_va_L" placeholder=""/>
                                         </td>
                                         <td className='table-solid-start'>
-                                            Topo's image
+                                            Ảnh
                                             {
                                                 data.isLoadingImageL ? <ReactLoading type={'spin'} color={'grey'} height={20} width={20} />
                                                 : <Input style={{marginTop: 10}} onChange={(event) => this.changeFile(event.target.files[0], 'image_L', event)} type="file" name="image_L" id="image_L"/>
@@ -213,7 +208,7 @@ class FollowUpForm extends Component {
                                             <Input value={data.bcva_va_R} onChange={(event) => this.changeValue(event, 'bcva_va_R')} type={'text'} name="bcva_va_R" id="bcva_va_R" placeholder="" />
                                         </td>
                                         <td className='table-solid-start'>
-                                            Topo's image
+                                            Ảnh
                                             {
                                                 data.isLoadingImageR ? <ReactLoading type={'spin'} color={'grey'} height={20} width={20} />
                                                 : <Input style={{marginTop: 10}} onChange={(event) => this.changeFile(event.target.files[0], 'image_R', event)} type="file" name="image_R" id="image_R"/>
@@ -262,6 +257,7 @@ class FollowUpForm extends Component {
                                 <div style={{ marginLeft: 25}}>
                                     <DatePicker
                                         className="radius-border-input"
+                                        dateFormat="dd/MM/yyyy"
                                         selected={this.state.ngaytaikham ? new Date(this.state.ngaytaikham) : null}
                                         onChange={(date) => this.setState({ngaytaikham: date})}
                                     />
