@@ -101,6 +101,7 @@ class ModalAddCustomer extends Component {
                             <Label for="dob" style={{ 'padding-right': 20}}>Ngày sinh:</Label>
                             <DatePicker
                                 className="radius-border-input"
+                                dateFormat="dd/MM/yyyy"
                                 selected={this.state.birthday}
                                 maxDate={new Date()}
                                 showYearDropdown={true}

@@ -103,7 +103,7 @@ class AdminDashboard extends Component {
                                         {item.name}
                                     </td>
                                     <td className='table-solid'>
-                                        {item.birthday || ''}
+                                        {item.birthday ? moment(new Date(item.birthday)).format('DD/MM/YYYY') : ''}
                                     </td>
                                     <td className='table-solid'>
                                         {item.phone}

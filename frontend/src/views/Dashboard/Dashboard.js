@@ -245,7 +245,7 @@ class Dashboard extends Component {
                                         </NavLink>
                                     </NavItem>
                                     {
-                                        this.state.customOK && <NavItem>
+                                        (this.state.customOK || this.state.softOK) && <NavItem>
                                             <NavLink
                                                 className={classnames({ active: currentTab === 2 })}
                                                 onClick={() => { this.changeTab(2); }}

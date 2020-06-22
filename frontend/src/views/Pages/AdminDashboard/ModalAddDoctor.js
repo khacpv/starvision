@@ -54,7 +54,7 @@ class ModalAddDoctor extends Component {
     setDataDefault(data) {
         this.setState({
             name: data.name,
-            birthday: data.birthday ? new Date(data.birthday) : null,
+            birthday: data.birthday,
             department_name: data.department_name,
             address: data.address,
             phone: data.phone,
@@ -164,7 +164,8 @@ class ModalAddDoctor extends Component {
                             <Label for="dob" style={{ 'padding-right': 20}}>Ngày sinh:</Label>
                             <DatePicker
                                 className="radius-border-input"
-                                selected={this.state.birthday}
+                                dateFormat="dd/MM/yyyy"
+                                selected={this.state.birthday ? new Date(this.state.birthday) : null}
                                 maxDate={new Date()}
                                 showYearDropdown={true}
                                 onChange={(value) => this.setState({birthday: value})}

@@ -38,6 +38,7 @@ class OrderLenseForm extends Component {
         type: 'GOV',
         power_soft_L: '',
         power_soft_R: '',
+        ngay_tao: moment(new Date()).format('YYYY-MM-DD'),
     };
 
     constructor(props) {
@@ -69,7 +70,8 @@ class OrderLenseForm extends Component {
             status_R: data.R.trangthai,
             power_soft_L: data.L.os_power,
             power_soft_R: data.R.od_power,
-            type: data.type === 'GOV' ? 'GOV' : 'SOFT'
+            type: data.type === 'GOV' ? 'GOV' : 'SOFT',
+            ngay_tao: data.Ngay
         })
     }
 
@@ -77,9 +79,20 @@ class OrderLenseForm extends Component {
 
     createOrderLense() {
         const doctorData = JSON.parse(localStorage.getItem('user'));
-        const {lense_R, kcode_R, side_R, lense_L, kcode_L, side_L, type, power_L, power_R, power_soft_L, power_soft_R, note_order_lens} = this.state;
+        const {lense_R, kcode_R, side_R, lense_L, kcode_L, side_L, type,
+            power_L, power_R, power_soft_L, power_soft_R, note_order_lens,
+            ngay_tao,id_orderlense_R , id_orderlense_L} = this.state;
         const data = (type === 'GOV') ? {
-            ...this.state,
+            lense_R,
+            kcode_R,
+            side_R,
+            power_L,
+            lense_L,
+            kcode_L,
+            side_L,
+            power_R,
+            note_order_lens,
+            ngay_tao,
             mabacsi : doctorData.Tenbacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
@@ -87,8 +100,9 @@ class OrderLenseForm extends Component {
             khid: this.props.customer.ID_KHACHHANG,
             type: 'GOV',
         } : {
-            ...this.state,
             power_L: power_soft_L, power_R: power_soft_R,
+            ngay_tao,
+            note_order_lens,
             prefix: 'STV',
             mabacsi : doctorData.Tenbacsi,
             idbacsi : doctorData.Id_bacsi,
@@ -111,7 +125,7 @@ class OrderLenseForm extends Component {
 
             }).catch(error => console.log(error))
         } else {
-            customerService.updateOrderLense(data).then(result => {
+            customerService.updateOrderLense({...data, id_orderlense_L, id_orderlense_R}).then(result => {
                 if (result.status === 'success') {
                     this.resetForm();
                     this.props.getUserData(this.props.customer);
@@ -221,6 +235,19 @@ class OrderLenseForm extends Component {
                         </FormGroup>
                         <Col xs={12} style={{ marginTop: 10}}>
                             <h3>Suggested Order lens - Số Order: {this.state.orderNumber || '---'}</h3>
+                        </Col>
+                        <Col xs={12}>
+                            <FormGroup row style={{marginLeft: 5}}>
+                                <div>Ngày khám:</div>
+                                <div style={{ marginLeft: 25}}>
+                                    <DatePicker
+                                        className="radius-border-input"
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={this.state.ngay_tao ? new Date(this.state.ngay_tao) : null}
+                                        onChange={(date) => this.setState({ngay_tao: date})}
+                                    />
+                                </div>
+                            </FormGroup>
                         </Col>
                         <Col xs={6}>
                             <div>
