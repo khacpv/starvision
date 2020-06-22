@@ -64,9 +64,7 @@ router.post("/token", async (req, res) => {
 router.get("/", async (req, res) => {
   let result = await Notifications.findAll({
     attributes: ["id", "title", "content", "send_at", "is_read"],
-    order: [
-      ['send_at', 'DESC'],
-  ],
+    order: [["send_at", "DESC"]],
   });
   if (result) {
     return res.send({
@@ -86,19 +84,13 @@ router.get("/count_unread", async (req, res) => {
   let result = await Notifications.count({
     where: {
       is_read: 0,
+      receiver_id: req.user.id,
     },
   });
-  if (result) {
-    return res.send({
-      status: "success",
-      message: "",
-      data: result,
-    });
-  }
   return res.send({
-    status: "error",
-    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
-    data: "",
+    status: "success",
+    message: "",
+    data: result,
   });
 });
 
