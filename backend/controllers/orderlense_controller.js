@@ -76,9 +76,10 @@ router.get("/", async (req, res) => {
             prefix: element.prefix != null ? element.prefix : "",
           };
         }
+        let ngay_tao =
+          date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
         returnData.push({
-          Ngay:
-            date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
+          Ngay: element.date_examination,
           So_Don_Hang: element.order_number,
           type: element.type,
           is_active: element.is_active,
@@ -142,6 +143,7 @@ router.post(
     let kcode_R = req.body.kcode_R;
     let power_R = req.body.power_R;
     let side_R = req.body.side_R;
+    let ngay_tao = req.body.ngay_tao;
 
     let result = null;
 
@@ -172,7 +174,6 @@ router.post(
       });
       let todayStart = new Date().setHours(0, 0, 0, 0);
       let now = new Date();
-
       let date = new Date();
       let orderNumberCount = await OrderLense.count({
         where: {
@@ -199,7 +200,7 @@ router.post(
           doctor_id: req.body.idbacsi,
           customer_id: req.body.khid,
           dttc_id: req.body.iddttc,
-          date_examination: new Date().toString(),
+          date_examination: ngay_tao,
           type: req.body.type,
           id_lense_left: left.id,
           id_lense_right: right.id,
@@ -285,7 +286,7 @@ router.post(
     let power_R = req.body.power_R;
     let side_R = req.body.side_R;
     let id_orderlense_R = req.body.id_orderlense_R;
-
+    let ngay_tao = req.body.ngay_tao;
     let result = null;
 
     let orderLense = await OrderLense.findOne({
@@ -350,7 +351,20 @@ router.post(
         }
       );
       if (left && right) {
-        result = true;
+        result = await OrderLense.update(
+          {
+            doctor_code: req.body.mabacsi,
+            doctor_id: req.body.idbacsi,
+            customer_id: req.body.khid,
+            dttc_id: req.body.iddttc,
+            date_examination: ngay_tao,
+          },
+          {
+            where: {
+              id: orderLense.id,
+            },
+          }
+        );
       }
       // commit
       await transaction.commit();
