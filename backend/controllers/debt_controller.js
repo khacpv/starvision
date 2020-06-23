@@ -33,24 +33,28 @@ router.get(
     });
 
     if (dept) {
+      let congnothangtruoc =
+        dept.debt_last_month != null ? dept.debt_last_month : 0;
+      let phatsinhthangnay =
+        dept.costs_incurred_this_month != null
+          ? dept.costs_incurred_this_month
+          : 0;
+      let dathanhtoan = dept.paid != null ? dept.paid : 0;
+      let tienkinh = dept.glass_money != null ? dept.glass_money : 0;
+      let tienvtth = dept.vtth_money != null ? dept.vtth_money : 0;
+
       dept = {
-        congnothangtruoc: String(
-          dept.debt_last_month != null ? dept.debt_last_month : 0
-        ),
-        phatsinhthangnay: String(
-          dept.costs_incurred_this_month != null
-            ? dept.costs_incurred_this_month
-            : 0
-        ),
-        dathanhtoan: String(dept.paid != null ? dept.paid : 0),
-        tienkinh: String(dept.glass_money != null ? dept.glass_money : 0),
-        tienvtth: String(dept.vtth_money != null ? dept.vtth_money : 0),
+        congnothangtruoc: String(congnothangtruoc),
+        phatsinhthangnay: String(phatsinhthangnay),
+        dathanhtoan: String(dathanhtoan),
+        tienkinh: String(tienkinh),
+        tienvtth: String(tienvtth),
         tien_phai_thanh_toan: String(
-          Number(dept.glass_money) +
-            Number(tienvtth) +
-            Number(dept.debt_last_month) +
-            Number(dept.costs_incurred_this_month) -
-            Number(dept.paid)
+          tienkinh +
+            tienvtth +
+            congnothangtruoc +
+            phatsinhthangnay -
+            dathanhtoan
         ),
       };
 
