@@ -46,9 +46,11 @@ router.get(
         tienkinh: String(dept.glass_money != null ? dept.glass_money : 0),
         tienvtth: String(dept.vtth_money != null ? dept.vtth_money : 0),
         tien_phai_thanh_toan: String(
-          Number(dept.debt_last_month) +
+          Number(dept.glass_money) +
+            Number(tienvtth) +
+            Number(dept.debt_last_month) +
             Number(dept.costs_incurred_this_month) -
-            Number(dept.costs_incurred_this_month)
+            Number(dept.paid)
         ),
       };
 
