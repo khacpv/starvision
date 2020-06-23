@@ -34,20 +34,22 @@ router.get(
 
     if (dept) {
       dept = {
-        id: dept.id,
-        congnothangtruoc:
-          dept.debt_last_month != null ? dept.debt_last_month : 0,
-        phatsinhthangnay:
+        congnothangtruoc: String(
+          dept.debt_last_month != null ? dept.debt_last_month : 0
+        ),
+        phatsinhthangnay: String(
           dept.costs_incurred_this_month != null
             ? dept.costs_incurred_this_month
-            : 0,
-        dathanhtoan: dept.paid != null ? dept.paid : 0,
-        tienkinh: dept.glass_money != null ? dept.paid : 0,
-        tienvtth: dept.vtth_money != null ? dept.vtth_money : 0,
-        tien_phai_thanh_toan:
+            : 0
+        ),
+        dathanhtoan: String(dept.paid != null ? dept.paid : 0),
+        tienkinh: String(dept.glass_money != null ? dept.glass_money : 0),
+        tienvtth: String(dept.vtth_money != null ? dept.vtth_money : 0),
+        tien_phai_thanh_toan: String(
           Number(dept.debt_last_month) +
-          Number(dept.costs_incurred_this_month) -
-          Number(dept.costs_incurred_this_month),
+            Number(dept.costs_incurred_this_month) -
+            Number(dept.costs_incurred_this_month)
+        ),
       };
 
       res.send({
