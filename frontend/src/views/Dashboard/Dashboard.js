@@ -150,8 +150,8 @@ class Dashboard extends Component {
     render() {
         const {currentTab} = this.state;
         return (
-            <div className="animated fadeIn overflow-content">
-                <Row style={{ width: '1600px', minHeight: '1200px'}}>
+            <div className="animated fadeIn">
+                <Row style={{minHeight: '1200px'}}>
                     <Col xs='3'>
                         <CustomerList getUserData={(customer) => this.getUserData(customer)}/>
                     </Col>
@@ -165,7 +165,7 @@ class Dashboard extends Component {
                                     <FormGroup row>
                                         <div>Ngày sinh:</div>
                                         <div style={{ marginLeft: 25}}>
-                                            <h5>{this.state.customer.NAMSINH ? moment(new Date(this.state.customer.NAMSINH)).format('D/M/YYYY') : ''}</h5>
+                                            <h5>{this.state.customer.NAMSINH}</h5>
                                         </div>
                                     </FormGroup>
                                 </Col>

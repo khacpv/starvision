@@ -66,7 +66,7 @@ class CustomerOKForm extends Component {
         if ((BCVA_VA_L && BCVA_SPH_L && BCVA_CYL_L && BCVA_AX_L) || (BCVA_VA_R && BCVA_SPH_R && BCVA_CYL_R && BCVA_AX_R)) {
             const doctorData = JSON.parse(localStorage.getItem('user'));
             const data = {
-                mabacsi : doctorData.Tenbacsi,
+                mabacsi : doctorData.Mabacsi,
                 idbacsi : doctorData.Id_bacsi,
                 iddttc : doctorData.Id_Dttc,
                 ngaykham : new Date(),
@@ -313,6 +313,18 @@ class CustomerOKForm extends Component {
 
     render() {
         let data = this.state;
+        let refSphList = [<option/>];
+        for (let k = -15; k <= 10; k += 0.25) {
+            refSphList.push(<option key={k}>{k.toFixed(2)}</option>);
+        }
+        let refCylList = [<option/>];
+        for (let k = -10; k <= 0; k += 0.25) {
+            refCylList.push(<option key={k}>{k.toFixed(2)}</option>);
+        }
+        let bvcaVaList = [<option/>];
+        for (let k = 0.1; k <= 1; k += 0.1) {
+            bvcaVaList.push(<option key={k}>{k.toFixed(1)}</option>);
+        }
         return (
             <div>
                 <Form>
@@ -325,9 +337,9 @@ class CustomerOKForm extends Component {
                                     <thead>
                                     <tr>
                                         <th className='table-solid'></th>
-                                        <th className='table-solid'>VA</th>
-                                        <th className='table-solid'>SPH</th>
-                                        <th className='table-solid'>CYL</th>
+                                        <th className='table-solid' style={{ width: '90px'}}>VA</th>
+                                        <th className='table-solid' style={{ width: '100px'}}>SPH</th>
+                                        <th className='table-solid' style={{ width: '100px'}}>CYL</th>
                                         <th className='table-solid'>AX</th>
                                     </tr>
                                     </thead>
@@ -336,10 +348,14 @@ class CustomerOKForm extends Component {
                                         <th className='table-solid'>Refactometer</th>
                                         <td className='table-solid'/>
                                         <td className='table-solid'>
-                                            <Input value={data.Ref_SPH_L} onChange={(event) => this.changeValue(event, 'Ref_SPH_L')} type="number" name="Ref_SPH_L" id="Ref_SPH_L" placeholder="" />
+                                            <Input value={data.Ref_SPH_L} onChange={(event) => this.changeValue(event, 'Ref_SPH_L')} type="select" name="Ref_SPH_L" id="Ref_SPH_L" placeholder="" >
+                                                {refSphList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
-                                            <Input value={data.Ref_CYL_L} onChange={(event) => this.changeValue(event, 'Ref_CYL_L')} type="number"  name="Ref_CYL_L" id="Ref_CYL_L" placeholder="" />
+                                            <Input value={data.Ref_CYL_L} onChange={(event) => this.changeValue(event, 'Ref_CYL_L')} type="select"  name="Ref_CYL_L" id="Ref_CYL_L" placeholder="" >
+                                                {refCylList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
                                             <Input value={data.Ref_AX_L} onChange={(event) => this.changeValue(event, 'Ref_AX_L')} type="text"  name="Ref_AX_L" id="Ref_AX_L" placeholder="" />
@@ -348,13 +364,19 @@ class CustomerOKForm extends Component {
                                     <tr>
                                         <th className='table-solid'>BCVA</th>
                                         <td className='table-solid'>
-                                            <Input value={data.BCVA_VA_L} onChange={(event) => this.changeValue(event, 'BCVA_VA_L')} type="text"  name="BCVA_VA_L" id="BCVA_VA_L" placeholder="" />
+                                            <Input value={data.BCVA_VA_L} onChange={(event) => this.changeValue(event, 'BCVA_VA_L')} type="select"  name="BCVA_VA_L" id="BCVA_VA_L" placeholder="" >
+                                                {bvcaVaList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
-                                            <Input value={data.BCVA_SPH_L} onChange={(event) => this.changeValue(event, 'BCVA_SPH_L')} type="number"  name="BCVA_SPH_L" id="BCVA_SPH_L" placeholder="" />
+                                            <Input value={data.BCVA_SPH_L} onChange={(event) => this.changeValue(event, 'BCVA_SPH_L')} type="select"  name="BCVA_SPH_L" id="BCVA_SPH_L" placeholder="" >
+                                                {refSphList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
-                                            <Input value={data.BCVA_CYL_L} onChange={(event) => this.changeValue(event, 'BCVA_CYL_L')} type="number"  name="BCVA_CYL_L" id="BCVA_CYL_L" placeholder="" />
+                                            <Input value={data.BCVA_CYL_L} onChange={(event) => this.changeValue(event, 'BCVA_CYL_L')} type="select"  name="BCVA_CYL_L" id="BCVA_CYL_L" placeholder="" >
+                                                {refCylList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
                                             <Input value={data.BCVA_AX_L} onChange={(event) => this.changeValue(event, 'BCVA_AX_L')} type="text"  name="BCVA_AX_L" id="BCVA_AX_L" placeholder="" />
@@ -427,9 +449,9 @@ class CustomerOKForm extends Component {
                                     <thead>
                                     <tr>
                                         <th className='table-solid'></th>
-                                        <th className='table-solid'>VA</th>
-                                        <th className='table-solid'>SPH</th>
-                                        <th className='table-solid'>CYL</th>
+                                        <th className='table-solid' style={{ width: '90px'}}>VA</th>
+                                        <th className='table-solid' style={{ width: '100px'}}>SPH</th>
+                                        <th className='table-solid' style={{ width: '100px'}}>CYL</th>
                                         <th className='table-solid'>AX</th>
                                     </tr>
                                     </thead>
@@ -438,10 +460,14 @@ class CustomerOKForm extends Component {
                                         <th className='table-solid'>Refactometer</th>
                                         <td className='table-solid'/>
                                         <td className='table-solid'>
-                                            <Input value={data.Ref_SPH_R} onChange={(event) => this.changeValue(event, 'Ref_SPH_R')} type="number" name="Ref_SPH_R" id="Ref_SPH_R" placeholder="" />
+                                            <Input value={data.Ref_SPH_R} onChange={(event) => this.changeValue(event, 'Ref_SPH_R')} type="select" name="Ref_SPH_R" id="Ref_SPH_R" placeholder="" >
+                                                {refSphList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
-                                            <Input value={data.Ref_CYL_R} onChange={(event) => this.changeValue(event, 'Ref_CYL_R')} type="number"  name="Ref_CYL_R" id="Ref_CYL_R" placeholder="" />
+                                            <Input value={data.Ref_CYL_R} onChange={(event) => this.changeValue(event, 'Ref_CYL_R')} type="select"  name="Ref_CYL_R" id="Ref_CYL_R" placeholder="" >
+                                                {refCylList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
                                             <Input value={data.Ref_AX_R} onChange={(event) => this.changeValue(event, 'Ref_AX_R')} type="text"  name="Ref_AX_R" id="Ref_AX_R" placeholder="" />
@@ -450,13 +476,19 @@ class CustomerOKForm extends Component {
                                     <tr>
                                         <th className='table-solid'>BCVA</th>
                                         <td className='table-solid'>
-                                            <Input value={data.BCVA_VA_R} onChange={(event) => this.changeValue(event, 'BCVA_VA_R')} type="text"  name="BCVA_VA_R" id="BCVA_VA_R" placeholder="" />
+                                            <Input value={data.BCVA_VA_R} onChange={(event) => this.changeValue(event, 'BCVA_VA_R')} type="select"  name="BCVA_VA_R" id="BCVA_VA_R" placeholder="" >
+                                                {bvcaVaList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
-                                            <Input value={data.BCVA_SPH_R} onChange={(event) => this.changeValue(event, 'BCVA_SPH_R')} type="number"  name="BCVA_SPH_R" id="BCVA_SPH_R" placeholder="" />
+                                            <Input value={data.BCVA_SPH_R} onChange={(event) => this.changeValue(event, 'BCVA_SPH_R')} type="select"  name="BCVA_SPH_R" id="BCVA_SPH_R" placeholder="" >
+                                                {refSphList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
-                                            <Input value={data.BCVA_CYL_R} onChange={(event) => this.changeValue(event, 'BCVA_CYL_R')} type="number"  name="BCVA_CYL_R" id="BCVA_CYL_R" placeholder="" />
+                                            <Input value={data.BCVA_CYL_R} onChange={(event) => this.changeValue(event, 'BCVA_CYL_R')} type="select"  name="BCVA_CYL_R" id="BCVA_CYL_R" placeholder="" >
+                                                {refCylList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid'>
                                             <Input value={data.BCVA_AX_R} onChange={(event) => this.changeValue(event, 'BCVA_AX_R')} type="text"  name="BCVA_AX_R" id="BCVA_AX_R" placeholder="" />
@@ -523,8 +555,8 @@ class CustomerOKForm extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Button onClick={() => this.resetForm()} style={{ 'margin-left': 15}}>Làm mới</Button>
-                        <Button onClick={() => this.createCustomOk()} style={{ 'margin-left': 15}} color={'primary'}>Cập nhật</Button>
+                        <Button onClick={() => this.resetForm()} style={{ marginLeft: 15}}>Làm mới</Button>
+                        <Button onClick={() => this.createCustomOk()} style={{ marginLeft: 15}} color={'primary'}>Cập nhật</Button>
                     </Row>
                 </Form>
             </div>

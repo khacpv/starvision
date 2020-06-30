@@ -19,7 +19,7 @@ class Notification extends Component {
 
     render() {
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{ width: '1200px'}}>
                 <Row>
                     <Col xs="12" md="12">
                         <Card>

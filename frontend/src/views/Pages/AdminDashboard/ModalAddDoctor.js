@@ -161,7 +161,7 @@ class ModalAddDoctor extends Component {
                             }} value={this.state.email} type="mail" name="email" id="email" placeholder="" />
                         </FormGroup>
                         <FormGroup>
-                            <Label for="dob" style={{ 'padding-right': 20}}>Ngày sinh:</Label>
+                            <Label for="dob" style={{ paddingRight: 20}}>Ngày sinh:</Label>
                             <DatePicker
                                 className="radius-border-input"
                                 dateFormat="dd/MM/yyyy"
@@ -172,7 +172,7 @@ class ModalAddDoctor extends Component {
                             />
                         </FormGroup>
                         <FormGroup row>
-                            <div style={{ 'padding-left': 15}}>Giới tính:</div>
+                            <div style={{ paddingLeft: 15}}>Giới tính:</div>
                             <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
                                 <Label check>
                                     <Input type="radio" checked={this.state.gender === 'male'} name="gender" onChange={() => this.setState({gender: 'male'})} />{' '}
@@ -185,7 +185,7 @@ class ModalAddDoctor extends Component {
                                     Nữ
                                 </Label>
                             </FormGroup>
-                            <FormGroup check style={{ 'margin-left': 10}}>
+                            <FormGroup check style={{ marginLeft: 10}}>
                                 <Label check>
                                     <Input type="radio" checked={this.state.gender === 'other'} name="gender" onChange={() => this.setState({gender: 'other'})} />{' '}
                                     Khác

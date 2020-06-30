@@ -127,7 +127,7 @@ class FittingForm extends Component {
     createFitting() {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         const data = {
-            mabacsi: doctorData.Tenbacsi,
+            mabacsi: doctorData.Mabacsi,
             idbacsi: doctorData.Id_bacsi,
             iddttc: doctorData.Id_Dttc,
             ngaykham: new Date(),
@@ -301,14 +301,26 @@ class FittingForm extends Component {
         ];
         let slist = [<option/>];
         for (let s = 10.4; s <= 11.6; s += 0.2) {
-            slist.push(<option>{s.toFixed(2)}</option>);
+            slist.push(<option key={s}>{s.toFixed(2)}</option>);
+        }
+        let refSphList = [<option/>];
+        for (let k = -15; k <= 10; k += 0.25) {
+            refSphList.push(<option key={k}>{k.toFixed(2)}</option>);
+        }
+        let refCylList = [<option/>];
+        for (let k = -10; k <= 0; k += 0.25) {
+            refCylList.push(<option key={k}>{k.toFixed(2)}</option>);
+        }
+        let bvcaVaList = [<option/>];
+        for (let k = 0.1; k <= 1; k += 0.1) {
+            bvcaVaList.push(<option key={k}>{k.toFixed(1)}</option>);
         }
         return (
-            <div style={{'margin-top': '20px'}}>
+            <div style={{marginTop: '20px'}}>
                 <div>
                     <Button
                         onClick={() => this.setState({isOpen: !this.state.isOpen})}
-                        style={{'margin-bottom': 15}}
+                        style={{marginBottom: 15}}
                         color={'info'}
                     >
                         Fitting lần {this.props.fittingNo}( Click để{' '}
@@ -325,7 +337,7 @@ class FittingForm extends Component {
                                         <tbody>
                                         <tr>
                                             <th className="table-solid">Fitting</th>
-                                            <td className="table-solid">
+                                            <td className="table-solid" style={{ width: '100px'}}>
                                                 K-code
                                                 <Input
                                                     value={data.kcode_L}
@@ -339,7 +351,7 @@ class FittingForm extends Component {
                                                     {klist}
                                                 </Input>
                                             </td>
-                                            <td className="table-solid">
+                                            <td className="table-solid" style={{ width: '100px'}}>
                                                 Power
                                                 <Input
                                                     value={data.power_L}
@@ -367,7 +379,7 @@ class FittingForm extends Component {
                                                     {slist}
                                                 </Input>
                                             </td>
-                                            <td className="table-solid"/>
+                                            <td className="table-solid" style={{ width: '100px'}}/>
                                         </tr>
                                         <tr>
                                             <th className="table-solid">BCVA</th>
@@ -378,11 +390,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'bcva_sph_L')
                                                     }
-                                                    type="number"
+                                                    type="select"
                                                     name="bcva_sph_L"
                                                     id="bcva_sph_L"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {refSphList}
+                                                </Input>
                                             </td>
                                             <td className="table-solid">
                                                 CYL
@@ -391,11 +405,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'bcva_cyl_L')
                                                     }
-                                                    type="number"
+                                                    type="select"
                                                     name="bcva_cyl_L"
                                                     id="bcva_cyl_L"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {refCylList}
+                                                </Input>
                                             </td>
                                             <td className="table-solid">
                                                 AX
@@ -417,11 +433,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'bcva_va_L')
                                                     }
-                                                    type="text"
+                                                    type="select"
                                                     name="bcva_va_L"
                                                     id="bcva_va_L"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {bvcaVaList}
+                                                </Input>
                                             </td>
                                         </tr>
                                         <tr>
@@ -432,11 +450,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'referaction_sph_L')
                                                     }
-                                                    type="number"
+                                                    type="select"
                                                     name="referaction_sph_L"
                                                     id="referaction_sph_L"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {refSphList}
+                                                </Input>
                                             </td>
                                             <td className="table-solid">
                                                 <Input
@@ -444,11 +464,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'referaction_cyl_L')
                                                     }
-                                                    type="number"
+                                                    type="select"
                                                     name="referaction_cyl_L"
                                                     id="referaction_cyl_L"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {refCylList}
+                                                </Input>
                                             </td>
                                             <td className="table-solid">
                                                 <Input
@@ -466,7 +488,7 @@ class FittingForm extends Component {
                                         </tr>
                                         <tr>
                                             <th className="table-solid">Comments</th>
-                                            <td className="table-solid" colspan="4">
+                                            <td className="table-solid" colSpan="4">
                                                 <div>
                                                     <h5>Vùng điều trị:</h5>
                                                     <Input
@@ -482,7 +504,7 @@ class FittingForm extends Component {
                                                         id="comment_vung_dieu_tri_L"
                                                         placeholder=""
                                                     />
-                                                    <h5 style={{'margin-top': 5}}>Mắt bò:</h5>
+                                                    <h5 style={{marginTop: 5}}>Mắt bò:</h5>
                                                     <Input
                                                         value={data.comment_matbo_L}
                                                         onChange={(event) =>
@@ -493,7 +515,7 @@ class FittingForm extends Component {
                                                         id="comment_matbo_L"
                                                         placeholder=""
                                                     />
-                                                    <h5 style={{'margin-top': 5}}>Size:</h5>
+                                                    <h5 style={{marginTop: 5}}>Size:</h5>
                                                     <Input
                                                         value={data.comment_size_L}
                                                         onChange={(event) =>
@@ -504,7 +526,7 @@ class FittingForm extends Component {
                                                         id="comment_size_L"
                                                         placeholder=""
                                                     />
-                                                    <h5 style={{'margin-top': 5}}>Di chuyển:</h5>
+                                                    <h5 style={{marginTop: 5}}>Di chuyển:</h5>
                                                     <Input
                                                         value={data.comment_di_chuyen_L}
                                                         onChange={(event) =>
@@ -515,7 +537,7 @@ class FittingForm extends Component {
                                                         id="comment_di_chuyen_L"
                                                         placeholder=""
                                                     />
-                                                    <h5 style={{'margin-top': 5}}>Kết luận:</h5>
+                                                    <h5 style={{marginTop: 5}}>Kết luận:</h5>
                                                     <Input
                                                         value={data.comment_ket_luan_L}
                                                         onChange={(event) =>
@@ -531,7 +553,7 @@ class FittingForm extends Component {
                                         </tr>
                                         <tr>
                                             <th className="table-solid">Video</th>
-                                            <td className="table-solid" colspan="4">
+                                            <td className="table-solid" colSpan="4">
                                                 {
                                                     this.state.isLoadingLeft ? <ReactLoading type={'spin'} color={'grey'} height={20} width={20} />
                                                         : <Input
@@ -573,7 +595,7 @@ class FittingForm extends Component {
                                         <tbody>
                                         <tr>
                                             <th className="table-solid">Fitting</th>
-                                            <td className="table-solid">
+                                            <td className="table-solid" style={{ width: '100px'}}>
                                                 K-code
                                                 <Input
                                                     value={data.kcode_R}
@@ -587,7 +609,7 @@ class FittingForm extends Component {
                                                     {klist}
                                                 </Input>
                                             </td>
-                                            <td className="table-solid">
+                                            <td className="table-solid" style={{ width: '100px'}}>
                                                 Power
                                                 <Input
                                                     value={data.power_R}
@@ -615,7 +637,7 @@ class FittingForm extends Component {
                                                     {slist}
                                                 </Input>
                                             </td>
-                                            <td className="table-solid"/>
+                                            <td className="table-solid" style={{ width: '100px'}}/>
                                         </tr>
                                         <tr>
                                             <th className="table-solid">BCVA</th>
@@ -626,11 +648,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'bcva_sph_R')
                                                     }
-                                                    type="number"
+                                                    type="select"
                                                     name="bcva_sph_R"
                                                     id="bcva_sph_R"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {refSphList}
+                                                </Input>
                                             </td>
                                             <td className="table-solid">
                                                 CYL
@@ -639,11 +663,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'bcva_cyl_R')
                                                     }
-                                                    type="number"
+                                                    type="select"
                                                     name="bcva_cyl_R"
                                                     id="bcva_cyl_R"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {refCylList}
+                                                </Input>
                                             </td>
                                             <td className="table-solid">
                                                 AX
@@ -665,11 +691,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'bcva_va_R')
                                                     }
-                                                    type="text"
+                                                    type="select"
                                                     name="bcva_va_R"
                                                     id="bcva_va_R"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {bvcaVaList}
+                                                </Input>
                                             </td>
                                         </tr>
                                         <tr>
@@ -680,11 +708,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'referaction_sph_R')
                                                     }
-                                                    type="number"
+                                                    type="select"
                                                     name="referaction_sph_R"
                                                     id="referaction_sph_R"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {refSphList}
+                                                </Input>
                                             </td>
                                             <td className="table-solid">
                                                 <Input
@@ -692,11 +722,13 @@ class FittingForm extends Component {
                                                     onChange={(event) =>
                                                         this.changeValue(event, 'referaction_cyl_R')
                                                     }
-                                                    type="number"
+                                                    type="select"
                                                     name="referaction_cyl_R"
                                                     id="referaction_cyl_R"
                                                     placeholder=""
-                                                />
+                                                >
+                                                    {refCylList}
+                                                </Input>
                                             </td>
                                             <td className="table-solid">
                                                 <Input
@@ -714,7 +746,7 @@ class FittingForm extends Component {
                                         </tr>
                                         <tr>
                                             <th className="table-solid">Comments</th>
-                                            <td className="table-solid" colspan="4">
+                                            <td className="table-solid" colSpan="4">
                                                 <div>
                                                     <h5>Vùng điều trị:</h5>
                                                     <Input
@@ -730,7 +762,7 @@ class FittingForm extends Component {
                                                         id="comment_vung_dieu_tri_R"
                                                         placeholder=""
                                                     />
-                                                    <h5 style={{'margin-top': 5}}>Mắt bò:</h5>
+                                                    <h5 style={{marginTop: 5}}>Mắt bò:</h5>
                                                     <Input
                                                         value={data.comment_matbo_R}
                                                         onChange={(event) =>
@@ -741,7 +773,7 @@ class FittingForm extends Component {
                                                         id="comment_matbo_R"
                                                         placeholder=""
                                                     />
-                                                    <h5 style={{'margin-top': 5}}>Size:</h5>
+                                                    <h5 style={{marginTop: 5}}>Size:</h5>
                                                     <Input
                                                         value={data.comment_size_R}
                                                         onChange={(event) =>
@@ -752,7 +784,7 @@ class FittingForm extends Component {
                                                         id="comment_size_R"
                                                         placeholder=""
                                                     />
-                                                    <h5 style={{'margin-top': 5}}>Di chuyển:</h5>
+                                                    <h5 style={{marginTop: 5}}>Di chuyển:</h5>
                                                     <Input
                                                         value={data.comment_di_chuyen_R}
                                                         onChange={(event) =>
@@ -763,7 +795,7 @@ class FittingForm extends Component {
                                                         id="comment_di_chuyen_R"
                                                         placeholder=""
                                                     />
-                                                    <h5 style={{'margin-top': 5}}>Kết luận:</h5>
+                                                    <h5 style={{marginTop: 5}}>Kết luận:</h5>
                                                     <Input
                                                         value={data.comment_ket_luan_R}
                                                         onChange={(event) =>
@@ -779,7 +811,7 @@ class FittingForm extends Component {
                                         </tr>
                                         <tr>
                                             <th className="table-solid">Video</th>
-                                            <td className="table-solid" colspan="4">
+                                            <td className="table-solid" colSpan="4">
                                                 {
                                                     this.state.isLoadingRight ? <ReactLoading type={'spin'} color={'grey'} height={20} width={20} />
                                                         : <Input
@@ -818,13 +850,13 @@ class FittingForm extends Component {
                         <Row>
                             <Button
                                 onClick={() => this.resetForm()}
-                                style={{'margin-left': 15}}
+                                style={{marginLeft: 15}}
                             >
                                 Làm mới
                             </Button>
                             <Button
                                 onClick={() => this.createFitting()}
-                                style={{'margin-left': 15}}
+                                style={{marginLeft: 15}}
                                 color={this.props.isNew ? 'success' : 'primary'}
                             >
                                 {this.props.isNew ? 'Tạo mới' : 'Cập nhật'}

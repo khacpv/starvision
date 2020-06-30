@@ -36,7 +36,7 @@ class Summary extends Component {
     render() {
         const data = this.state.data;
         return (
-            <div className="animated fadeIn" style={{backgroundColor: 'white', padding: '30px 45px 30px 45px'}}>
+            <div className="animated fadeIn" style={{backgroundColor: 'white', padding: '30px 45px 30px 45px', width: '1200px'}}>
                 <Row style={{ justifyContent: 'space-between'}}>
                     <h2>Công nợ hàng tháng</h2>
                     <h2>{moment(new Date()).format('DD/MM/YYYY')}</h2>
