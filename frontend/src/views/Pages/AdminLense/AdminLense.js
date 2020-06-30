@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import {adminServices} from "../../../services";
 import moment from "moment";
+import Paginations from "../../Base/Paginations";
 
 class AdminLense extends Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class AdminLense extends Component {
 
     render() {
         return (
-            <div className="animated fadeIn" style={{backgroundColor: 'white', padding: '30px 45px 30px 45px'}}>
+            <div className="animated fadeIn" style={{backgroundColor: 'white', padding: '30px 45px 30px 45px', width: '1200px'}}>
                 <Modal isOpen={this.state.isShowModalDelete} toggle={() => {}}>
                     <ModalHeader toggle={() => this.setState({isShowModalDelete: false, lenseChoosing: null})}>Xác nhận</ModalHeader>
                     <ModalBody>
@@ -87,8 +88,8 @@ class AdminLense extends Component {
                                     </td>
                                     <td>
                                         <Row style={{justifyContent: 'center'}}>
-                                            <Button onClick={() => this.editDoctor(item)} style={{ 'margin-left': 15}} color={'primary'}>Chi tiết</Button>
-                                            <Button onClick={() => this.setState({isShowModalDelete: true, lenseChoosing: item.id})} style={{ 'margin-left': 15}} color={'danger'}>Xoá</Button>
+                                            <Button onClick={() => this.editDoctor(item)} style={{ marginLeft: 15}} color={'primary'}>Chi tiết</Button>
+                                            <Button onClick={() => this.setState({isShowModalDelete: true, lenseChoosing: item.id})} style={{ marginLeft: 15}} color={'danger'}>Xoá</Button>
                                         </Row>
                                     </td>
                                 </tr>
@@ -97,6 +98,7 @@ class AdminLense extends Component {
                         </tbody>
                     </Table>
                 </div>
+                <Paginations/>
             </div>
         );
     }

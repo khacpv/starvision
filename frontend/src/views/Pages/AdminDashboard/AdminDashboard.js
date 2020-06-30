@@ -1,7 +1,6 @@
 import React, {Component, lazy, Suspense} from 'react';
 import {
     Button,
-    Col,
     Row,
     Label, Table, Input, ModalHeader, ModalBody, ModalFooter, Modal,
 } from 'reactstrap';
@@ -9,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import {adminServices} from "../../../services";
 import ModalAddDoctor from "./ModalAddDoctor";
+import Paginations from "../../Base/Paginations";
 
 class AdminDashboard extends Component {
     constructor(props) {
@@ -59,7 +59,7 @@ class AdminDashboard extends Component {
 
     render() {
         return (
-            <div className="animated fadeIn" style={{backgroundColor: 'white', padding: '30px 45px 30px 45px'}}>
+            <div className="animated fadeIn" style={{backgroundColor: 'white', padding: '30px 45px 30px 45px', width: '1200px'}}>
                 <ModalAddDoctor ref={child => {this.modalDoctor = child}} resetList={() => this.getDoctors()} isOpen={this.state.isAddDoctor} closeModal={() => this.setState({isAddDoctor: false})}/>
                 <Modal isOpen={this.state.isShowModalDelete} toggle={() => {}}>
                     <ModalHeader toggle={() => this.setState({isShowModalDelete: false, doctorWillBeDeleted: null})}>Xác nhận</ModalHeader>
@@ -113,8 +113,8 @@ class AdminDashboard extends Component {
                                     </td>
                                     <td>
                                         <Row style={{justifyContent: 'center'}}>
-                                            <Button onClick={() => this.editDoctor(item)} style={{ 'margin-left': 15}} color={'primary'}>Chi tiết</Button>
-                                            <Button onClick={() => this.setState({isShowModalDelete: true, doctorWillBeDeleted: item.id})} style={{ 'margin-left': 15}} color={'danger'}>Xoá</Button>
+                                            <Button onClick={() => this.editDoctor(item)} style={{ marginLeft: 15}} color={'primary'}>Chi tiết</Button>
+                                            <Button onClick={() => this.setState({isShowModalDelete: true, doctorWillBeDeleted: item.id})} style={{ marginLeft: 15}} color={'danger'}>Xoá</Button>
                                         </Row>
                                     </td>
                                 </tr>
@@ -123,6 +123,7 @@ class AdminDashboard extends Component {
                         </tbody>
                     </Table>
                 </div>
+                <Paginations/>
             </div>
         );
     }

@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
 import {customerService} from "../../services/index";
 import _ from 'lodash';
+import moment from "moment";
 
 class ModalAddCustomer extends Component {
 
@@ -42,9 +43,10 @@ class ModalAddCustomer extends Component {
         const user = JSON.parse(localStorage.getItem('user'));
         const {tenkh, mobile, diachi, birthday, gender, ghichu} = this.state;
         customerService.addCustomer(qs.stringify({
-            tenkh, mobile, diachi, birthday, gender, ghichu,
-            tenbacsi: doctorData.user_nicename,
-            mabacsi: doctorData.user_id,
+            tenkh, mobile, diachi, gender, ghichu,
+            birthday: moment(new Date(birthday)).format('DD/MM/YYYY '),
+            tenbacsi: user.Tenbacsi,
+            mabacsi: user.Mabacsi,
             tendttc: user.Ten_DTTC,
             iddttc: user.Id_Dttc
         })).then(result => {
@@ -98,7 +100,7 @@ class ModalAddCustomer extends Component {
                             }} type="text" name="address" id="address" placeholder="" />
                         </FormGroup>
                         <FormGroup>
-                            <Label for="dob" style={{ 'padding-right': 20}}>Ngày sinh:</Label>
+                            <Label for="dob" style={{ paddingRight: 20}}>Ngày sinh:</Label>
                             <DatePicker
                                 className="radius-border-input"
                                 dateFormat="dd/MM/yyyy"
@@ -109,7 +111,7 @@ class ModalAddCustomer extends Component {
                             />
                         </FormGroup>
                         <FormGroup row>
-                            <div style={{ 'padding-left': 15}}>Giới tính:</div>
+                            <div style={{ paddingLeft: 15}}>Giới tính:</div>
                             <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
                                 <Label check>
                                     <Input type="radio" name="radio1" onChange={() => this.setState({gender: 'male'})} />{' '}
@@ -122,7 +124,7 @@ class ModalAddCustomer extends Component {
                                     Nữ
                                 </Label>
                             </FormGroup>
-                            <FormGroup check style={{ 'margin-left': 10}}>
+                            <FormGroup check style={{ marginLeft: 10}}>
                                 <Label check>
                                     <Input type="radio" name="radio1" onChange={() => this.setState({gender: 'other'})} />{' '}
                                     Khác

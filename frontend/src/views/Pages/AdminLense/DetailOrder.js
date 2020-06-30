@@ -56,7 +56,7 @@ class DetailOrder extends Component {
         const data = this.state.data;
         if (data) {
             return (
-                <div className="animated fadeIn" style={{backgroundColor: 'white', padding: '30px 45px 30px 45px'}}>
+                <div className="animated fadeIn" style={{backgroundColor: 'white', padding: '30px 45px 30px 45px', width: '1200px'}}>
                     <Modal isOpen={this.state.isShowModalDelete} toggle={() => {}}>
                         <ModalHeader toggle={() => this.setState({isShowModalDelete: false})}>Xác nhận</ModalHeader>
                         <ModalBody>
@@ -68,7 +68,7 @@ class DetailOrder extends Component {
                         </ModalFooter>
                     </Modal>
                     <Row>
-                        <h3 style={{ 'padding-left': 15}}>Loại kính: {data.type === 'SOFT' ? 'SOFT-OK' : 'GOV-OK'}</h3>
+                        <h3 style={{ paddingLeft: 15}}>Loại kính: {data.type === 'SOFT' ? 'SOFT-OK' : 'GOV-OK'}</h3>
                         <Col xs={12} style={{ marginTop: 10}}>
                             <h3>Suggested Order lens - Số Order: {data.order_number || '---'}</h3>
                             <h4>Ngày đặt hàng: {data.createdAt ? moment(new Date(data.createdAt)).format('MM-DD-YYYY') : ''}</h4>

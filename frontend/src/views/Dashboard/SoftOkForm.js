@@ -46,7 +46,7 @@ class SoftOkForm extends Component {
         if ((SPH_R && CYL_R && HK_R && VK_R) || (SPH_L && CYL_L && HK_L && VK_L)) {
             const doctorData = JSON.parse(localStorage.getItem('user'));
             const data = {
-                mabacsi : doctorData.Tenbacsi,
+                mabacsi : doctorData.Mabacsi,
                 idbacsi : doctorData.Id_bacsi,
                 iddttc : doctorData.Id_Dttc,
                 ngaykham : new Date(),
@@ -214,8 +214,8 @@ class SoftOkForm extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Button onClick={() => this.resetForm()} style={{ 'margin-left': 15}}>Làm mới</Button>
-                        <Button onClick={() => this.createCustomOk()} style={{ 'margin-left': 15}} color={'primary'}>Cập nhật</Button>
+                        <Button onClick={() => this.resetForm()} style={{ marginLeft: 15}}>Làm mới</Button>
+                        <Button onClick={() => this.createCustomOk()} style={{ marginLeft: 15}} color={'primary'}>Cập nhật</Button>
                     </Row>
                 </Form>
             </div>

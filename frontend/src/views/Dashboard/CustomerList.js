@@ -25,8 +25,8 @@ class CustomerList extends Component {
 
     searchCustomer() {
         this.setState({isLoading: true});
-        const doctorData = JSON.parse(localStorage.getItem('profile'));
-        customerService.searchCustomer(doctorData.user_nicename, this.state.customerSearchName)
+        const doctorData = JSON.parse(localStorage.getItem('user'));
+        customerService.searchCustomer(doctorData.Tenbacsi, this.state.customerSearchName)
             .then(result => {
                 this.setState({customerList: result.data, isLoading: false})
             }).catch(error => {
@@ -69,7 +69,7 @@ class CustomerList extends Component {
                                         {item.TENKHACHHANG}
                                     </td>
                                     <td className='table-solid'>
-                                        {moment(new Date(item.NAMSINH)).format('D/M/YYYY')}
+                                        {item.NAMSINH}
                                     </td>
                                     <td className='table-solid'>
                                         {item.GIOITINH === 'male' ? 'Nam' : 'Nữ'}

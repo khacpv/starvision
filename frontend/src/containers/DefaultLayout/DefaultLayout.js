@@ -43,7 +43,7 @@ class DefaultLayout extends Component {
 
     render() {
         return (
-            <div className="app">
+            <div className="app" style={{ width: '1500px' }}>
                 <AppHeader fixed>
                     <Suspense fallback={this.loading()}>
                         <DefaultHeader onLogout={e => this.signOut(e)}/>
@@ -52,7 +52,7 @@ class DefaultLayout extends Component {
                 <div className="app-body">
                     <main className="main">
                         <AppBreadcrumb appRoutes={routes} router={router}/>
-                        <Container fluid>
+                        <Container fluid style={{ padding: '0px 10px 0px 10px'}}>
                             <Suspense fallback={this.loading()}>
                                 <Switch>
                                     {routes.map((route, idx) => {

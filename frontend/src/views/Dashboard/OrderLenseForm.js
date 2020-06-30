@@ -93,7 +93,7 @@ class OrderLenseForm extends Component {
             power_R,
             note_order_lens,
             ngay_tao,
-            mabacsi : doctorData.Tenbacsi,
+            mabacsi : doctorData.Mabacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
             ngaykham : new Date(),
@@ -104,7 +104,7 @@ class OrderLenseForm extends Component {
             ngay_tao,
             note_order_lens,
             prefix: 'STV',
-            mabacsi : doctorData.Tenbacsi,
+            mabacsi : doctorData.Mabacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
             ngaykham : new Date(),
@@ -163,10 +163,10 @@ class OrderLenseForm extends Component {
                         kcode_R: parseFloat(rightData.od_custom_ok_k_code).toFixed(2),
                         power_R: parseFloat(rightData.od_custom_ok_power).toFixed(2),
                         side_R: parseFloat(rightData.od_custom_ok_size).toFixed(2),
-                        lense_L: leftData.od_custom_ok_lense,
-                        kcode_L: parseFloat(leftData.od_custom_ok_k_code).toFixed(2),
-                        power_L: parseFloat(leftData.od_custom_ok_power).toFixed(2),
-                        side_L: parseFloat(leftData.od_custom_ok_size).toFixed(2),
+                        lense_L: leftData.os_custom_ok_lense,
+                        kcode_L: parseFloat(leftData.os_custom_ok_k_code).toFixed(2),
+                        power_L: parseFloat(leftData.os_custom_ok_power).toFixed(2),
+                        side_L: parseFloat(leftData.os_custom_ok_size).toFixed(2),
                         type: 'GOV',
                     })
                 }
@@ -196,18 +196,18 @@ class OrderLenseForm extends Component {
         ];
         let klist = [(<option/>)];
         for (let k = 38; k <= 50 ; k+= 0.25) {
-            klist.push(<option>{k.toFixed(2)}</option>)
+            klist.push(<option key={k}>{k.toFixed(2)}</option>)
         }
         let plist = [(<option/>)];
         for (let p = -15; p <= -5.25 ; p+= 0.25) {
-            plist.push(<option>{p.toFixed(2)}</option>)
+            plist.push(<option key={p}>{p.toFixed(2)}</option>)
         }
         let slist = [(<option/>)];
         for (let s = 9.6; s <= 12.4 ; s+= 0.2) {
-            slist.push(<option>{s.toFixed(2)}</option>)
+            slist.push(<option key={s}>{s.toFixed(2)}</option>)
         }
         return (
-            <div style={{ 'margin-top': '20px'}}>
+            <div style={{ marginTop: '20px'}}>
                 <Modal isOpen={this.state.isShowModal} toggle={() => {}}>
                     <ModalHeader toggle={() => this.setState({isShowModal: false})}>Xác nhận</ModalHeader>
                     <ModalBody>
@@ -220,7 +220,7 @@ class OrderLenseForm extends Component {
                 </Modal>
                 <Form>
                     <Row>
-                        <div style={{ 'padding-left': 15}}>Loại kính:</div>
+                        <div style={{ paddingLeft: 15}}>Loại kính:</div>
                         <FormGroup check style={{ 'margin': '0px 10px 0px 10px'}}>
                             <Label check>
                                 <Input type="radio" name="type" onChange={() => (this.props.isNew && this.props.defaultGOVLense) && this.setState({type: 'GOV'})} checked={this.state.type === 'GOV'}/>{' '}
@@ -392,9 +392,9 @@ class OrderLenseForm extends Component {
                                 <Input value={data.note_order_lens} onChange={(event) => this.changeValue(event, 'note_order_lens')} type="textarea" name="text" id="exampleText" placeholder="Ghi chú đặt kính" />
                             </FormGroup>
                         </Col>
-                        <Button onClick={() => this.createOrderLense()} style={{ 'margin-left': 15}} color={this.props.isNew ? 'success' : 'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
+                        <Button onClick={() => this.createOrderLense()} style={{ marginLeft: 15}} color={this.props.isNew ? 'success' : 'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
                         {
-                            !this.props.isNew && <Button onClick={() => this.setState({isShowModal: true})} style={{ 'margin-left': 15}} color={'danger'}>Huỷ đơn</Button>
+                            !this.props.isNew && <Button onClick={() => this.setState({isShowModal: true})} style={{ marginLeft: 15}} color={'danger'}>Huỷ đơn</Button>
                         }
                     </Row>
                 </Form>

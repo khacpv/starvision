@@ -72,7 +72,7 @@ class FollowUpForm extends Component {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         const {bcva_va_R, note, bcva_va_L, ngaykham} = this.state;
         const data = {
-            mabacsi : doctorData.Tenbacsi,
+            mabacsi : doctorData.Mabacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
             khid: this.props.customer.ID_KHACHHANG,
@@ -136,8 +136,12 @@ class FollowUpForm extends Component {
 
     render() {
         let data = this.state;
+        let bvcaVaList = [<option/>];
+        for (let k = 0.1; k <= 1; k += 0.1) {
+            bvcaVaList.push(<option key={k}>{k.toFixed(1)}</option>);
+        }
         return (
-            <div style={{ 'margin-top': '50px'}}>
+            <div style={{ marginTop: '50px'}}>
                 <Form>
                     <Row>
                         <Col xs={12}>
@@ -161,7 +165,9 @@ class FollowUpForm extends Component {
                                         <th className='table-solid'>Mắt trái</th>
                                         <td className='table-solid-start'>
                                             BVCA
-                                            <Input value={data.bcva_va_L} onChange={(event) => this.changeValue(event, 'bcva_va_L')} type={'text'} name="bcva_va_L" id="bcva_va_L" placeholder=""/>
+                                            <Input value={data.bcva_va_L} onChange={(event) => this.changeValue(event, 'bcva_va_L')} type={'select'} name="bcva_va_L" id="bcva_va_L" placeholder="">
+                                                {bvcaVaList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid-start'>
                                             Ảnh
@@ -205,7 +211,9 @@ class FollowUpForm extends Component {
                                         <th className='table-solid'>Mắt phải</th>
                                         <td className='table-solid-start'>
                                             BVCA
-                                            <Input value={data.bcva_va_R} onChange={(event) => this.changeValue(event, 'bcva_va_R')} type={'text'} name="bcva_va_R" id="bcva_va_R" placeholder="" />
+                                            <Input value={data.bcva_va_R} onChange={(event) => this.changeValue(event, 'bcva_va_R')} type={'select'} name="bcva_va_R" id="bcva_va_R" placeholder="" >
+                                                {bvcaVaList}
+                                            </Input>
                                         </td>
                                         <td className='table-solid-start'>
                                             Ảnh
@@ -269,7 +277,7 @@ class FollowUpForm extends Component {
                                 <Input value={data.note} onChange={(event) => this.changeValue(event, 'note')} type="textarea" name="text" id="exampleText" placeholder="Kết luận" />
                             </FormGroup>
                         </Col>
-                        <Button onClick={() => this.createFollowUp()} style={{ 'margin-left': 15}} color={this.props.isNew ? 'success' : 'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
+                        <Button onClick={() => this.createFollowUp()} style={{ marginLeft: 15}} color={this.props.isNew ? 'success' : 'primary'}>{this.props.isNew ? 'Tạo mới' : 'Cập nhật'}</Button>
                     </Row>
                 </Form>
             </div>
