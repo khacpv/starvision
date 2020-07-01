@@ -65,18 +65,25 @@ class SoftOkForm extends Component {
     }
 
     setData(data) {
-        this.setState({
-            SPH_R: data.customOk_R.sph,
-            CYL_R: data.customOk_R.cyl,
-            HK_R: data.customOk_R.hk,
-            VK_R: data.customOk_R.vk,
-            SPH_L: data.customOk_L.sph,
-            CYL_L: data.customOk_L.cyl,
-            HK_L: data.customOk_L.hk,
-            VK_L: data.customOk_L.vk,
-            Power_L: data.customOk_L.power,
-            Power_R: data.customOk_R.power
-        })
+        if (data.customOk_R) {
+            this.setState({
+                SPH_R: data.customOk_R.sph,
+                CYL_R: data.customOk_R.cyl,
+                HK_R: data.customOk_R.hk,
+                VK_R: data.customOk_R.vk,
+                Power_R: data.customOk_R.power
+            })
+        }
+        if (data.customOk_L) {
+            this.setState({
+                SPH_L: data.customOk_L.sph,
+                CYL_L: data.customOk_L.cyl,
+                HK_L: data.customOk_L.hk,
+                VK_L: data.customOk_L.vk,
+                Power_L: data.customOk_L.power,
+            })
+        }
+
     }
 
     changeValue(event, param) {

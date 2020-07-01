@@ -46,7 +46,6 @@ class AdminNotification extends Component {
 
     resetForm() {
         this.setState({
-            options: [],
             title: '',
             content: '',
             selectedList: []
@@ -58,7 +57,7 @@ class AdminNotification extends Component {
         if (title && content && selectedList.length > 0) {
             let receiver_id = [];
             selectedList.map(item => {
-                receiver_id.push(item.id)
+                receiver_id.push(item.user_id)
             })
             adminServices.addNotification({
                 title, content, receiver_id : receiver_id.join()

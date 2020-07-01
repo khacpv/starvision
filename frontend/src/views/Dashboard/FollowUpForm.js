@@ -48,35 +48,47 @@ class FollowUpForm extends Component {
     }
 
     setData(data) {
-        this.setState({
-            bcva_va_R: data.R.od_bcva_va,
-            image_R: data.R.od_image,
-            video_R: data.R.od_video,
-            id_right: data.R.A_TH_DUBAO,
-            thumb_R: data.R.od_thumb,
-            bcva_va_L: data.L.os_bcva_va,
-            image_L: data.L.os_image,
-            video_L: data.L.os_video,
-            id_left: data.L.A_TH_DUBAO,
-            thumb_L: data.L.os_thumb,
-            note: data.comment,
-            ngaykham: data.ngaykham,
-            ngaytaikham: data.ngaytaikham,
-            followup_no: data.followup_no
-        })
+        if (data.R) {
+            this.setState({
+                bcva_va_R: data.R.od_bcva_va,
+                image_R: data.R.od_image,
+                video_R: data.R.od_video,
+                id_right: data.R.A_TH_DUBAO,
+                thumb_R: data.R.od_thumb,
+                note: data.comment,
+                ngaykham: moment(data.ngaykham, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                ngaytaikham: data.ngaytaikham ? moment(data.ngaytaikham, 'DD/MM/YYYY').format('YYYY-MM-DD') : null,
+                followup_no: data.followup_no
+            })
+        }
+        if (data.L) {
+            this.setState({
+                bcva_va_L: data.L.os_bcva_va,
+                image_L: data.L.os_image,
+                video_L: data.L.os_video,
+                id_left: data.L.A_TH_DUBAO,
+                thumb_L: data.L.os_thumb,
+                note: data.comment,
+                ngaykham: moment(data.ngaykham, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                ngaytaikham: data.ngaytaikham ? moment(data.ngaytaikham, 'DD/MM/YYYY').format('YYYY-MM-DD') : null,
+                followup_no: data.followup_no
+            })
+        }
     }
 
     loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
     createFollowUp() {
         const doctorData = JSON.parse(localStorage.getItem('user'));
-        const {bcva_va_R, note, bcva_va_L, ngaykham} = this.state;
+        const {bcva_va_R, note, bcva_va_L, ngaykham, ngaytaikham} = this.state;
         const data = {
+            ...this.state,
+            ngaykham: moment(ngaykham, 'YYYY-MM-DD').format('DD/MM/YYYY'),
+            ngaytaikham: ngaytaikham ? moment(ngaytaikham, 'YYYY-MM-DD').format('DD/MM/YYYY') : null,
             mabacsi : doctorData.Mabacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
             khid: this.props.customer.ID_KHACHHANG,
-            ...this.state
         };
         if (bcva_va_R && bcva_va_L && note && ngaykham) {
             customerService.createFollowUp(data).then(result => {
@@ -152,7 +164,7 @@ class FollowUpForm extends Component {
                                         className="radius-border-input"
                                         dateFormat="dd/MM/yyyy"
                                         selected={this.state.ngaykham ? new Date(this.state.ngaykham) : null}
-                                        onChange={(date) => this.setState({ngaykham: date})}
+                                        onChange={(date) => this.setState({ngaykham: moment(new Date(date)).format('YYYY-MM-DD')})}
                                     />
                                 </div>
                             </FormGroup>
@@ -267,7 +279,7 @@ class FollowUpForm extends Component {
                                         className="radius-border-input"
                                         dateFormat="dd/MM/yyyy"
                                         selected={this.state.ngaytaikham ? new Date(this.state.ngaytaikham) : null}
-                                        onChange={(date) => this.setState({ngaytaikham: date})}
+                                        onChange={(date) => this.setState({ngaytaikham: moment(new Date(date)).format('YYYY-MM-DD')})}
                                     />
                                 </div>
                             </FormGroup>

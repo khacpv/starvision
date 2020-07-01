@@ -85,38 +85,44 @@ class CustomerOKForm extends Component {
     }
 
     setData(data) {
-        this.setState({
-            Ref_SPH_R: data.customOk_R.od_refactometer_sph,
-            Ref_CYL_R: data.customOk_R.od_refactometer_cyl,
-            Ref_AX_R: data.customOk_R.od_refactometer_ax,
-            BCVA_VA_R: data.customOk_R.od_bcva_va,
-            BCVA_SPH_R: data.customOk_R.od_bcva_sph,
-            BCVA_CYL_R: data.customOk_R.od_bcva_cyl,
-            BCVA_AX_R: data.customOk_R.od_bcva_ax,
-            D_K1_R: data.customOk_R.od_original_k1,
-            D_K2_R: data.customOk_R.od_original_k2,
-            D_AVE_R: data.customOk_R.od_original_ave,
-            D_HVID_R: data.customOk_R.od_original_hvid,
-            customOk_Lense_R: data.customOk_R.od_custom_ok_lense,
-            customOk_Kcode_R: data.customOk_R.od_custom_ok_k_code,
-            customOk_Power_R: data.customOk_R.od_custom_ok_power,
-            customOk_Size_R: data.customOk_R.od_custom_ok_size,
-            Ref_SPH_L: data.customOk_L.os_refactometer_sph,
-            Ref_CYL_L: data.customOk_L.os_refactometer_cyl,
-            Ref_AX_L: data.customOk_L.os_refactometer_ax,
-            BCVA_VA_L: data.customOk_L.os_bcva_va,
-            BCVA_SPH_L: data.customOk_L.os_bcva_sph,
-            BCVA_CYL_L: data.customOk_L.os_bcva_cyl,
-            BCVA_AX_L: data.customOk_L.os_bcva_ax,
-            D_K1_L: data.customOk_L.os_original_k1,
-            D_K2_L: data.customOk_L.os_original_k2,
-            D_AVE_L: data.customOk_L.os_original_ave,
-            D_HVID_L: data.customOk_L.os_original_hvid,
-            customOk_Lense_L: data.customOk_L.os_custom_ok_lense,
-            customOk_Kcode_L: data.customOk_L.os_custom_ok_k_code,
-            customOk_Power_L: data.customOk_L.os_custom_ok_power,
-            customOk_Size_L: data.customOk_L.os_custom_ok_size,
-        })
+        if (data.customOk_R) {
+            this.setState({
+                Ref_SPH_R: data.customOk_R.od_refactometer_sph,
+                Ref_CYL_R: data.customOk_R.od_refactometer_cyl,
+                Ref_AX_R: data.customOk_R.od_refactometer_ax,
+                BCVA_VA_R: data.customOk_R.od_bcva_va,
+                BCVA_SPH_R: data.customOk_R.od_bcva_sph,
+                BCVA_CYL_R: data.customOk_R.od_bcva_cyl,
+                BCVA_AX_R: data.customOk_R.od_bcva_ax,
+                D_K1_R: data.customOk_R.od_original_k1,
+                D_K2_R: data.customOk_R.od_original_k2,
+                D_AVE_R: data.customOk_R.od_original_ave,
+                D_HVID_R: data.customOk_R.od_original_hvid,
+                customOk_Lense_R: data.customOk_R.od_custom_ok_lense,
+                customOk_Kcode_R: data.customOk_R.od_custom_ok_k_code,
+                customOk_Power_R: data.customOk_R.od_custom_ok_power,
+                customOk_Size_R: data.customOk_R.od_custom_ok_size,
+            })
+        }
+        if (data.customOk_L) {
+            this.setState({
+                Ref_SPH_L: data.customOk_L.os_refactometer_sph,
+                Ref_CYL_L: data.customOk_L.os_refactometer_cyl,
+                Ref_AX_L: data.customOk_L.os_refactometer_ax,
+                BCVA_VA_L: data.customOk_L.os_bcva_va,
+                BCVA_SPH_L: data.customOk_L.os_bcva_sph,
+                BCVA_CYL_L: data.customOk_L.os_bcva_cyl,
+                BCVA_AX_L: data.customOk_L.os_bcva_ax,
+                D_K1_L: data.customOk_L.os_original_k1,
+                D_K2_L: data.customOk_L.os_original_k2,
+                D_AVE_L: data.customOk_L.os_original_ave,
+                D_HVID_L: data.customOk_L.os_original_hvid,
+                customOk_Lense_L: data.customOk_L.os_custom_ok_lense,
+                customOk_Kcode_L: data.customOk_L.os_custom_ok_k_code,
+                customOk_Power_L: data.customOk_L.os_custom_ok_power,
+                customOk_Size_L: data.customOk_L.os_custom_ok_size,
+            })
+        }
     }
 
     changeValue(event, param) {

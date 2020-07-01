@@ -43,7 +43,7 @@ class DefaultLayout extends Component {
 
     render() {
         return (
-            <div className="app" style={{ width: '1500px' }}>
+            <div className="app" style={{ width: '1600px' }}>
                 <AppHeader fixed>
                     <Suspense fallback={this.loading()}>
                         <DefaultHeader onLogout={e => this.signOut(e)}/>

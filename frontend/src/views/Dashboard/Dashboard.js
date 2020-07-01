@@ -57,7 +57,7 @@ class Dashboard extends Component {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         this.customOk && this.customOk.resetForm();
         customerService.getCustomOkGOVById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
-            if (result.data === '' || !result.data.customOk || !result.data.customOk.customOk_L || result.data.customOk.customOk_L.length === 0) {
+            if (result.data === '' || !result.data.customOk || (result.data.customOk.customOk_L.length === 0 && result.data.customOk.customOk_R.length === 0)) {
                 this.setState({customOK: null});
             } else {
                 this.customOk && this.customOk.setData(result.data.customOk);
@@ -76,7 +76,7 @@ class Dashboard extends Component {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         this.softOK && this.softOK.resetForm();
         customerService.getCustomOkSoftById(customer.ID_KHACHHANG, doctorData.Id_Dttc).then(result => {
-            if (result.data === '' || !result.data.customOk || !result.data.customOk.customOk_L || result.data.customOk.customOk_L.length === 0) {
+            if (result.data === '' || !result.data.customOk || (result.data.customOk.customOk_L.length === 0 && result.data.customOk.customOk_R.length === 0)) {
                 this.setState({softOK: null});
             } else {
                 this.softOK && this.softOK.setData(result.data.customOk);
