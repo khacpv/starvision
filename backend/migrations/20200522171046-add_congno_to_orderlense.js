@@ -10,9 +10,9 @@ module.exports = {
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
     return Promise.all([
-      queryInterface.addColumn("OrderLenses", "paid", Sequelize.DOUBLE),
-      queryInterface.addColumn("OrderLenses", "glass_money", Sequelize.DOUBLE),
-      queryInterface.addColumn("OrderLenses", "amount", Sequelize.DOUBLE),
+      queryInterface.addColumn("Lenses", "paid", Sequelize.DOUBLE),
+      queryInterface.addColumn("Lenses", "glass_money", Sequelize.DOUBLE),
+      queryInterface.addColumn("Lenses", "amount", Sequelize.DOUBLE),
     ]);
   },
 
@@ -25,9 +25,9 @@ module.exports = {
       return queryInterface.dropTable('users');
     */
     return Promise.all([
-      queryInterface.removeColumn("OrderLenses", "paid"),
-      queryInterface.removeColumn("OrderLenses", "glass_money"),
-      queryInterface.removeColumn("OrderLenses", "amount"),
+      queryInterface.removeColumn("Lenses", "paid"),
+      queryInterface.removeColumn("Lenses", "glass_money"),
+      queryInterface.removeColumn("Lenses", "amount"),
     ]);
   },
 };

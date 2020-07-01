@@ -15,6 +15,8 @@ router.get("/", async (req, res) => {
       // where: {
       //   is_active: 1,
       // },
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset),
       include: [
         {
           model: Lense,
@@ -31,13 +33,12 @@ router.get("/", async (req, res) => {
     if (result) {
       let returnData = [];
       result.forEach((element) => {
-        let date = new Date(element.date_examination);
         if (element.right && element.left) {
           returnData.push({
             id: element.id,
             is_active: element.is_active,
             Ngay:
-              date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
+            element.date_examination,
             So_Don_Hang: element.order_number,
             type: element.type,
             R: {
@@ -48,7 +49,10 @@ router.get("/", async (req, res) => {
               od_size: element.right.size,
               note_order_lens: element.right.note,
               price: element.right.price,
-              status: element.right.status,
+              paid: element.right.paid,
+              glass_money: element.right.glass_money,
+              amount: element.right.amount,
+              status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
               prefix: element.prefix,
             },
             L: {
@@ -59,7 +63,10 @@ router.get("/", async (req, res) => {
               os_size: element.left.size,
               note_order_lens: element.left.note,
               price: element.left.price,
-              status: element.left.status,
+              paid: element.right.paid,
+              glass_money: element.right.glass_money,
+              amount: element.right.amount,
+              status:element.left.status == 1 ? "Đã yêu cầu" : "Đã hủy",
               prefix: element.prefix,
             },
           });
@@ -138,6 +145,7 @@ router.post(
       let kcode_R = req.body.kcode_R;
       let power_R = req.body.power_R;
       let side_R = req.body.side_R;
+      let ngay_tao = req.body.ngay_tao;
 
       let result = null;
       try {
@@ -152,6 +160,13 @@ router.post(
           note: req.body.note_order_lens,
           side: "L",
           prefix: req.body.prefixLeft,
+          paid: req.body.paid,
+          glass_money: req.body.glass_money,
+          amount: req.body.amount,
+          paid: req.body.paid_L,
+          glass_money: req.body.glass_money_L,
+          amount: req.body.amount_L,
+          price: req.body.price_L 
         });
 
         let right = await Lense.create({
@@ -162,6 +177,10 @@ router.post(
           note: req.body.note_order_lens,
           side: "R",
           prefix: req.body.prefixRight,
+          paid: req.body.paid_R,
+          glass_money: req.body.glass_money_R,
+          amount: req.body.amount_R,
+          price: req.body.price_R
         });
         let todayStart = new Date().setHours(0, 0, 0, 0);
         let now = new Date();
@@ -192,15 +211,12 @@ router.post(
             doctor_id: req.body.idbacsi,
             customer_id: req.body.khid,
             dttc_id: req.body.iddttc,
-            date_examination: new Date().toString(),
+            date_examination: ngay_tao,
             type: req.body.type,
             id_lense_left: left.id,
             id_lense_right: right.id,
             is_active: 1,
             order_number: order_number,
-            paid: req.body.paid,
-            glass_money: req.body.glass_money,
-            amount: req.body.amount,
           });
         }
         // commit
@@ -282,6 +298,7 @@ router.put(
       let kcode_R = req.body.kcode_R;
       let power_R = req.body.power_R;
       let side_R = req.body.side_R;
+      let ngay_tao = req.body.ngay_tao;
 
       let result = null;
 
@@ -312,6 +329,7 @@ router.put(
             size: side_L,
             note: req.body.note_order_lens,
             prefix: req.body.prefixLeft,
+            date_examination: ngay_tao
           },
           {
             where: {

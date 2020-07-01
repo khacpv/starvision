@@ -188,6 +188,12 @@ router.post("/", async (req, res) => {
         } else {
           notice = await sendNotificationToDeviceAndroid(data, token.token);
         }
+      }else{
+        return res.send({
+          status: "error",
+          message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+          data: "",
+        });
       }
     });
     await transaction.commit();
