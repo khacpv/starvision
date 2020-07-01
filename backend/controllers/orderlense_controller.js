@@ -72,7 +72,7 @@ router.get("/", async (req, res) => {
             os_size: element.left.size != null ? element.left.size : "",
             note_order_lens: element.left.note != null ? element.left.note : "",
             price: element.left.price != null ? element.left.price : "",
-            Status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
+            Status: element.left.status == 1 ? "Đã yêu cầu" : "Đã hủy",
             prefix: element.prefix != null ? element.prefix : "",
           };
         }

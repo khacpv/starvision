@@ -15,6 +15,8 @@ router.get("/", async (req, res) => {
       // where: {
       //   is_active: 1,
       // },
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset),
       include: [
         {
           model: Lense,
@@ -37,7 +39,7 @@ router.get("/", async (req, res) => {
             id: element.id,
             is_active: element.is_active,
             Ngay:
-              date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
+            element.date_examination,
             So_Don_Hang: element.order_number,
             type: element.type,
             R: {
@@ -48,7 +50,7 @@ router.get("/", async (req, res) => {
               od_size: element.right.size,
               note_order_lens: element.right.note,
               price: element.right.price,
-              status: element.right.status,
+              status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
               prefix: element.prefix,
             },
             L: {
@@ -59,7 +61,7 @@ router.get("/", async (req, res) => {
               os_size: element.left.size,
               note_order_lens: element.left.note,
               price: element.left.price,
-              status: element.left.status,
+              status:element.left.status == 1 ? "Đã yêu cầu" : "Đã hủy",
               prefix: element.prefix,
             },
           });
@@ -138,6 +140,7 @@ router.post(
       let kcode_R = req.body.kcode_R;
       let power_R = req.body.power_R;
       let side_R = req.body.side_R;
+      let ngay_tao = req.body.ngay_tao;
 
       let result = null;
       try {
@@ -192,7 +195,7 @@ router.post(
             doctor_id: req.body.idbacsi,
             customer_id: req.body.khid,
             dttc_id: req.body.iddttc,
-            date_examination: new Date().toString(),
+            date_examination: ngay_tao,
             type: req.body.type,
             id_lense_left: left.id,
             id_lense_right: right.id,
@@ -282,6 +285,7 @@ router.put(
       let kcode_R = req.body.kcode_R;
       let power_R = req.body.power_R;
       let side_R = req.body.side_R;
+      let ngay_tao = req.body.ngay_tao;
 
       let result = null;
 
@@ -312,6 +316,7 @@ router.put(
             size: side_L,
             note: req.body.note_order_lens,
             prefix: req.body.prefixLeft,
+            date_examination: ngay_tao
           },
           {
             where: {
