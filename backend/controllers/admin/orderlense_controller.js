@@ -33,7 +33,6 @@ router.get("/", async (req, res) => {
     if (result) {
       let returnData = [];
       result.forEach((element) => {
-        let date = new Date(element.date_examination);
         if (element.right && element.left) {
           returnData.push({
             id: element.id,
@@ -50,6 +49,9 @@ router.get("/", async (req, res) => {
               od_size: element.right.size,
               note_order_lens: element.right.note,
               price: element.right.price,
+              paid: element.right.paid,
+              glass_money: element.right.glass_money,
+              amount: element.right.amount,
               status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
               prefix: element.prefix,
             },
@@ -61,6 +63,9 @@ router.get("/", async (req, res) => {
               os_size: element.left.size,
               note_order_lens: element.left.note,
               price: element.left.price,
+              paid: element.right.paid,
+              glass_money: element.right.glass_money,
+              amount: element.right.amount,
               status:element.left.status == 1 ? "Đã yêu cầu" : "Đã hủy",
               prefix: element.prefix,
             },
@@ -155,6 +160,13 @@ router.post(
           note: req.body.note_order_lens,
           side: "L",
           prefix: req.body.prefixLeft,
+          paid: req.body.paid,
+          glass_money: req.body.glass_money,
+          amount: req.body.amount,
+          paid: req.body.paid_L,
+          glass_money: req.body.glass_money_L,
+          amount: req.body.amount_L,
+          price: req.body.price_L 
         });
 
         let right = await Lense.create({
@@ -165,6 +177,10 @@ router.post(
           note: req.body.note_order_lens,
           side: "R",
           prefix: req.body.prefixRight,
+          paid: req.body.paid_R,
+          glass_money: req.body.glass_money_R,
+          amount: req.body.amount_R,
+          price: req.body.price_R
         });
         let todayStart = new Date().setHours(0, 0, 0, 0);
         let now = new Date();
@@ -201,9 +217,6 @@ router.post(
             id_lense_right: right.id,
             is_active: 1,
             order_number: order_number,
-            paid: req.body.paid,
-            glass_money: req.body.glass_money,
-            amount: req.body.amount,
           });
         }
         // commit
