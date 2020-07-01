@@ -329,7 +329,11 @@ router.put(
             size: side_L,
             note: req.body.note_order_lens,
             prefix: req.body.prefixLeft,
-            date_examination: ngay_tao
+            date_examination: ngay_tao,
+            paid: req.body.paid_L,
+            glass_money: req.body.glass_money_L,
+            amount: req.body.amount_L,
+            price: req.body.price_L
           },
           {
             where: {
@@ -346,6 +350,10 @@ router.put(
             size: side_R,
             note: req.body.note_order_lens,
             prefix: req.body.prefixRight,
+            paid: req.body.paid_R,
+            glass_money: req.body.glass_money_R,
+            amount: req.body.amount_R,
+            price: req.body.price_R
           },
           {
             where: {
