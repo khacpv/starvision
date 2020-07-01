@@ -51,28 +51,37 @@ class OrderLenseForm extends Component {
     }
 
     setData(data) {
-        this.setState({
-            lense_R: data.R.od_lense,
-            kcode_R: data.R.od_kcode,
-            power_R: data.R.od_power,
-            side_R: data.R.od_size,
-            lense_L: data.L.os_lense,
-            kcode_L: data.L.os_kcode,
-            power_L: data.L.os_power,
-            side_L: data.L.os_size,
-            note_order_lens: data.R.note_order_lens,
-            id_orderlense_R: data.R.id_order,
-            id_orderlense_L: data.L.id_order,
-            orderNumber: data.So_Don_Hang,
-            price_L: data.L.price,
-            price_R: data.R.price,
-            status_L: data.L.Status,
-            status_R: data.R.Status,
-            power_soft_L: data.L.os_power,
-            power_soft_R: data.R.od_power,
-            type: data.type === 'GOV' ? 'GOV' : 'SOFT',
-            ngay_tao: data.Ngay
-        })
+        if (data.R) {
+            this.setState({
+                lense_R: data.R.od_lense,
+                kcode_R: data.R.od_kcode,
+                power_R: data.R.od_power,
+                side_R: data.R.od_size,
+                note_order_lens: data.R.note_order_lens,
+                id_orderlense_R: data.R.id_order,
+                orderNumber: data.So_Don_Hang,
+                price_R: data.R.price,
+                status_R: data.R.Status,
+                power_soft_R: data.R.od_power,
+                type: data.type === 'GOV' ? 'GOV' : 'SOFT',
+                ngay_tao: moment(data.Ngay, 'DD/MM/YYYY').format('YYYY-MM-DD')
+            })
+        }
+        if (data.L) {
+            this.setState({
+                lense_L: data.L.os_lense,
+                kcode_L: data.L.os_kcode,
+                power_L: data.L.os_power,
+                side_L: data.L.os_size,
+                id_orderlense_L: data.L.id_order,
+                orderNumber: data.So_Don_Hang,
+                price_L: data.L.price,
+                status_L: data.L.Status,
+                power_soft_L: data.L.os_power,
+                type: data.type === 'GOV' ? 'GOV' : 'SOFT',
+                ngay_tao: moment(data.Ngay, 'DD/MM/YYYY').format('YYYY-MM-DD')
+            })
+        }
     }
 
     loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
@@ -92,22 +101,22 @@ class OrderLenseForm extends Component {
             side_L,
             power_R,
             note_order_lens,
-            ngay_tao,
+            ngay_tao: moment(ngay_tao, 'YYYY-MM-DD').format('DD/MM/YYYY'),
             mabacsi : doctorData.Mabacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
-            ngaykham : new Date(),
+            ngaykham : moment(new Date()).format('DD/MM/YYYY'),
             khid: this.props.customer.ID_KHACHHANG,
             type: 'GOV',
         } : {
             power_L: power_soft_L, power_R: power_soft_R,
-            ngay_tao,
+            ngay_tao: moment(ngay_tao, 'YYYY-MM-DD').format('DD/MM/YYYY'),
             note_order_lens,
             prefix: 'STV',
             mabacsi : doctorData.Mabacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
-            ngaykham : new Date(),
+            ngaykham : moment(new Date()).format('DD/MM/YYYY'),
             khid: this.props.customer.ID_KHACHHANG,
             type: 'SOFT',
         };
@@ -244,7 +253,7 @@ class OrderLenseForm extends Component {
                                         className="radius-border-input"
                                         dateFormat="dd/MM/yyyy"
                                         selected={this.state.ngay_tao ? new Date(this.state.ngay_tao) : null}
-                                        onChange={(date) => this.setState({ngay_tao: date})}
+                                        onChange={(date) => this.setState({ngay_tao: moment(new Date(date)).format('YYYY-MM-DD')})}
                                     />
                                 </div>
                             </FormGroup>

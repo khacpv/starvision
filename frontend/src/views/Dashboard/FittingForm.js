@@ -84,44 +84,50 @@ class FittingForm extends Component {
     }
 
     setData(data) {
-        this.setState({
-            referaction_sph_L: data.fitting_left.os_referaction_sph,
-            referaction_cyl_L: data.fitting_left.os_referaction_cyl,
-            referaction_ax_L: data.fitting_left.os_referaction_ax,
-            bcva_va_L: data.fitting_left.os_bcva_va,
-            bcva_sph_L: data.fitting_left.os_bcva_sph,
-            bcva_cyl_L: data.fitting_left.os_bcva_cyl,
-            bcva_ax_L: data.fitting_left.os_bcva_ax,
-            kcode_L: data.fitting_left.os_kcode,
-            power_L: data.fitting_left.os_power,
-            comment_size_L: data.fitting_left.os_comment_size,
-            comment_matbo_L: data.fitting_left.os_comment_matbo,
-            comment_vung_dieu_tri_L: data.fitting_left.os_comment_vung_dieu_tri,
-            comment_di_chuyen_L: data.fitting_left.os_comment_di_chuyen,
-            comment_ket_luan_L: data.fitting_left.os_comment_ket_luan,
-            video_L: data.fitting_left.os_video,
-            size_L: data.fitting_left.os_size,
-            thumb_L: data.fitting_left.os_thumb,
-            referaction_sph_R: data.fitting_right.od_referaction_sph,
-            referaction_cyl_R: data.fitting_right.od_referaction_cyl,
-            referaction_ax_R: data.fitting_right.od_referaction_ax,
-            bcva_va_R: data.fitting_right.od_bcva_va,
-            bcva_sph_R: data.fitting_right.od_bcva_sph,
-            bcva_cyl_R: data.fitting_right.od_bcva_cyl,
-            bcva_ax_R: data.fitting_right.od_bcva_ax,
-            kcode_R: data.fitting_right.od_kcode,
-            power_R: data.fitting_right.od_power,
-            comment_size_R: data.fitting_right.od_comment_size,
-            comment_matbo_R: data.fitting_right.od_comment_matbo,
-            comment_vung_dieu_tri_R: data.fitting_right.od_comment_vung_dieu_tri,
-            comment_di_chuyen_R: data.fitting_right.od_comment_di_chuyen,
-            comment_ket_luan_R: data.fitting_right.od_comment_ket_luan,
-            video_R: data.fitting_right.od_video,
-            size_R: data.fitting_right.od_size,
-            thumb_R: data.fitting_right.od_thumb,
-            id_left: data.fitting_left.id,
-            id_right: data.fitting_right.id,
-        });
+        if (data.fitting_left) {
+            this.setState({
+                referaction_sph_L: data.fitting_left.os_referaction_sph,
+                referaction_cyl_L: data.fitting_left.os_referaction_cyl,
+                referaction_ax_L: data.fitting_left.os_referaction_ax,
+                bcva_va_L: data.fitting_left.os_bcva_va,
+                bcva_sph_L: data.fitting_left.os_bcva_sph,
+                bcva_cyl_L: data.fitting_left.os_bcva_cyl,
+                bcva_ax_L: data.fitting_left.os_bcva_ax,
+                kcode_L: data.fitting_left.os_kcode,
+                power_L: data.fitting_left.os_power,
+                comment_size_L: data.fitting_left.os_comment_size,
+                comment_matbo_L: data.fitting_left.os_comment_matbo,
+                comment_vung_dieu_tri_L: data.fitting_left.os_comment_vung_dieu_tri,
+                comment_di_chuyen_L: data.fitting_left.os_comment_di_chuyen,
+                comment_ket_luan_L: data.fitting_left.os_comment_ket_luan,
+                video_L: data.fitting_left.os_video,
+                size_L: data.fitting_left.os_size,
+                thumb_L: data.fitting_left.os_thumb,
+                id_left: data.fitting_left.id,
+            });
+        }
+        if (data.fitting_right) {
+            this.setState({
+                referaction_sph_R: data.fitting_right.od_referaction_sph,
+                referaction_cyl_R: data.fitting_right.od_referaction_cyl,
+                referaction_ax_R: data.fitting_right.od_referaction_ax,
+                bcva_va_R: data.fitting_right.od_bcva_va,
+                bcva_sph_R: data.fitting_right.od_bcva_sph,
+                bcva_cyl_R: data.fitting_right.od_bcva_cyl,
+                bcva_ax_R: data.fitting_right.od_bcva_ax,
+                kcode_R: data.fitting_right.od_kcode,
+                power_R: data.fitting_right.od_power,
+                comment_size_R: data.fitting_right.od_comment_size,
+                comment_matbo_R: data.fitting_right.od_comment_matbo,
+                comment_vung_dieu_tri_R: data.fitting_right.od_comment_vung_dieu_tri,
+                comment_di_chuyen_R: data.fitting_right.od_comment_di_chuyen,
+                comment_ket_luan_R: data.fitting_right.od_comment_ket_luan,
+                video_R: data.fitting_right.od_video,
+                size_R: data.fitting_right.od_size,
+                thumb_R: data.fitting_right.od_thumb,
+                id_right: data.fitting_right.id,
+            });
+        }
     }
 
     createFitting() {
@@ -237,7 +243,7 @@ class FittingForm extends Component {
                 })
                 .catch((error) => alert(error.message));
         } else {
-            alert('Vui lòng điền đủ thông tin BVCA');
+            alert('Vui lòng điền đủ thông tin 2 mắt');
         }
     }
 
@@ -315,6 +321,30 @@ class FittingForm extends Component {
         for (let k = 0.1; k <= 1; k += 0.1) {
             bvcaVaList.push(<option key={k}>{k.toFixed(1)}</option>);
         }
+        let fixArea = [
+            <option/>,
+            <option>Rõ</option>,
+            <option>Mờ</option>,
+            <option>Rất mờ</option>,
+        ];
+        let beefEye = [
+            <option/>,
+            <option>Rõ nét</option>,
+            <option>Bình thường</option>,
+            <option>Mờ</option>,
+        ];
+        let sizeOptions = [
+            <option/>,
+            <option>Tốt</option>,
+            <option>To</option>,
+            <option>Bé</option>,
+        ];
+        let moveOptions = [
+            <option/>,
+            <option>Nhiều</option>,
+            <option>Vừa</option>,
+            <option>Ít</option>,
+        ];
         return (
             <div style={{marginTop: '20px'}}>
                 <div>
@@ -499,44 +529,52 @@ class FittingForm extends Component {
                                                                 'comment_vung_dieu_tri_L'
                                                             )
                                                         }
-                                                        type="text"
+                                                        type="select"
                                                         name="comment_vung_dieu_tri_L"
                                                         id="comment_vung_dieu_tri_L"
                                                         placeholder=""
-                                                    />
+                                                    >
+                                                        {fixArea}
+                                                    </Input>
                                                     <h5 style={{marginTop: 5}}>Mắt bò:</h5>
                                                     <Input
                                                         value={data.comment_matbo_L}
                                                         onChange={(event) =>
                                                             this.changeValue(event, 'comment_matbo_L')
                                                         }
-                                                        type="text"
+                                                        type="select"
                                                         name="comment_matbo_L"
                                                         id="comment_matbo_L"
                                                         placeholder=""
-                                                    />
+                                                    >
+                                                        {beefEye}
+                                                    </Input>
                                                     <h5 style={{marginTop: 5}}>Size:</h5>
                                                     <Input
                                                         value={data.comment_size_L}
                                                         onChange={(event) =>
                                                             this.changeValue(event, 'comment_size_L')
                                                         }
-                                                        type="text"
+                                                        type="select"
                                                         name="comment_size_L"
                                                         id="comment_size_L"
                                                         placeholder=""
-                                                    />
+                                                    >
+                                                        {sizeOptions}
+                                                    </Input>
                                                     <h5 style={{marginTop: 5}}>Di chuyển:</h5>
                                                     <Input
                                                         value={data.comment_di_chuyen_L}
                                                         onChange={(event) =>
                                                             this.changeValue(event, 'comment_di_chuyen_L')
                                                         }
-                                                        type="text"
+                                                        type="select"
                                                         name="comment_di_chuyen_L"
                                                         id="comment_di_chuyen_L"
                                                         placeholder=""
-                                                    />
+                                                    >
+                                                        {moveOptions}
+                                                    </Input>
                                                     <h5 style={{marginTop: 5}}>Kết luận:</h5>
                                                     <Input
                                                         value={data.comment_ket_luan_L}
@@ -757,44 +795,52 @@ class FittingForm extends Component {
                                                                 'comment_vung_dieu_tri_R'
                                                             )
                                                         }
-                                                        type="text"
+                                                        type="select"
                                                         name="comment_vung_dieu_tri_R"
                                                         id="comment_vung_dieu_tri_R"
                                                         placeholder=""
-                                                    />
+                                                    >
+                                                        {fixArea}
+                                                    </Input>
                                                     <h5 style={{marginTop: 5}}>Mắt bò:</h5>
                                                     <Input
                                                         value={data.comment_matbo_R}
                                                         onChange={(event) =>
                                                             this.changeValue(event, 'comment_matbo_R')
                                                         }
-                                                        type="text"
+                                                        type="select"
                                                         name="comment_matbo_R"
                                                         id="comment_matbo_R"
                                                         placeholder=""
-                                                    />
+                                                    >
+                                                        {beefEye}
+                                                    </Input>
                                                     <h5 style={{marginTop: 5}}>Size:</h5>
                                                     <Input
                                                         value={data.comment_size_R}
                                                         onChange={(event) =>
                                                             this.changeValue(event, 'comment_size_R')
                                                         }
-                                                        type="text"
+                                                        type="select"
                                                         name="comment_size_R"
                                                         id="comment_size_R"
                                                         placeholder=""
-                                                    />
+                                                    >
+                                                        {sizeOptions}
+                                                    </Input>
                                                     <h5 style={{marginTop: 5}}>Di chuyển:</h5>
                                                     <Input
                                                         value={data.comment_di_chuyen_R}
                                                         onChange={(event) =>
                                                             this.changeValue(event, 'comment_di_chuyen_R')
                                                         }
-                                                        type="text"
+                                                        type="select"
                                                         name="comment_di_chuyen_R"
                                                         id="comment_di_chuyen_R"
                                                         placeholder=""
-                                                    />
+                                                    >
+                                                        {moveOptions}
+                                                    </Input>
                                                     <h5 style={{marginTop: 5}}>Kết luận:</h5>
                                                     <Input
                                                         value={data.comment_ket_luan_R}
