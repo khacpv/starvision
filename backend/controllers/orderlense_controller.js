@@ -149,6 +149,9 @@ router.post(
     let result = null;
     let lense_price = await LensePrice.findOne({
       limit: 1,
+      where:{
+        type: req.body.type
+      },
       order: [["createdAt", "DESC"]],
       attributes: {
         exclude: ["id", "createdAt", "updatedAt", "status"],
