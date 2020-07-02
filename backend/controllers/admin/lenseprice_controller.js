@@ -7,6 +7,9 @@ const { check, validationResult } = require("express-validator");
 router.get("/", async (req, res) => {
   let result = await LensePrice.findOne({
     limit: 1,
+    where:{
+      type: req.query.type
+    },
     order: [["createdAt", "DESC"]],
     attributes: {
       exclude: ["id", "createdAt", "updatedAt", "status"],
@@ -15,7 +18,7 @@ router.get("/", async (req, res) => {
   if (result) {
     return res.send({ code: 200, msg: "success", data: result });
   }
-  return res.send({ code: 400, msg: "error" });
+  return res.send({ code: 400, msg: "error", data:"Khong tim thay gia tri"});
 });
 
 router.post("/", async (req, res) => {
@@ -30,6 +33,7 @@ router.post("/", async (req, res) => {
 
   let result = await LensePrice.create({
     price: req.body.price,
+    type: req.body.type
   });
   if (result) {
     return res.send({ code: 200, msg: "success" });
