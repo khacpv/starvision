@@ -9,6 +9,7 @@ const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
 const Op = require("../config/db").Sequelize.Op;
 const CONSTANT = require("../config/constants.json");
+const LensePrice = models.LensePrice;
 
 router.get("/", async (req, res) => {
   let customerId = req.query.khid;
@@ -146,7 +147,15 @@ router.post(
     let ngay_tao = req.body.ngay_tao;
 
     let result = null;
+    let lense_price = await LensePrice.findOne({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "status"],
+      },
+    });
 
+    let price = lense_price ? lense_price.price : 0;
     try {
       // get transaction
       transaction = await sequelize.transaction();
@@ -160,6 +169,7 @@ router.post(
         side: "L",
         prefix: req.body.prefixLeft,
         status: 1,
+        price: price
       });
 
       let right = await Lense.create({
@@ -171,6 +181,7 @@ router.post(
         side: "R",
         prefix: req.body.prefixRight,
         status: 1,
+        price: price
       });
       let todayStart = new Date().setHours(0, 0, 0, 0);
       let now = new Date();
