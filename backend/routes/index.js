@@ -5,6 +5,7 @@ const UserController = require("../controllers/user_controller");
 const CustomerOkController = require("../controllers/customerok_controller");
 const FittingController = require("../controllers/fitting_controller");
 //__INIT_CONTROLLER__
+const LensepriceController = require("../controllers/admin/lenseprice_controller");
 const DoctorsController = require("../controllers/doctors_controller");
 const NotificationsController = require("../controllers/notifications_controller");
 const OrderlenseController = require("../controllers/orderlense_controller");
@@ -14,10 +15,7 @@ const DeptController = require("../controllers/debt_controller");
 const AdminOrderlenseController = require("../controllers/admin/orderlense_controller");
 
 module.exports = (app) => {
-  app.use(
-    "/customer",
-    CustomerController
-  );
+  app.use("/customer", CustomerController);
   app.use(
     "/user",
     passport.authenticate("jwt", { session: false }),
@@ -58,11 +56,15 @@ module.exports = (app) => {
     FollowupController
   );
 
-
   // admin
   app.use(
     "/admin/orderlense",
     passport.authenticate("jwt", { session: false }),
     AdminOrderlenseController
+  );
+  app.use(
+    "/admin/lenseprice",
+    passport.authenticate("jwt", { session: false }),
+    LensepriceController
   );
 };
