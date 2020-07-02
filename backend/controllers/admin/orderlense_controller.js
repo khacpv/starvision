@@ -8,6 +8,7 @@ const { check, validationResult } = require("express-validator");
 const sequelize = require("../../config/db").sequelize;
 const Op = require("../../config/db").Sequelize.Op;
 const CONSTANT = require("../../config/constants.json");
+const LensePrice = models.LensePrice;
 
 router.get("/", async (req, res) => {
   if (req.user.role == "admin") {
@@ -37,8 +38,7 @@ router.get("/", async (req, res) => {
           returnData.push({
             id: element.id,
             is_active: element.is_active,
-            Ngay:
-            element.date_examination,
+            Ngay: element.date_examination,
             So_Don_Hang: element.order_number,
             type: element.type,
             R: {
@@ -66,7 +66,7 @@ router.get("/", async (req, res) => {
               paid: element.right.paid,
               glass_money: element.right.glass_money,
               amount: element.right.amount,
-              status:element.left.status == 1 ? "Đã yêu cầu" : "Đã hủy",
+              status: element.left.status == 1 ? "Đã yêu cầu" : "Đã hủy",
               prefix: element.prefix,
             },
           });
@@ -99,6 +99,8 @@ router.get("/:id", async (req, res) => {
     ],
   });
   if (result) {
+    result.left.status = result.left.status == 1 ? "Đã yêu cầu" : "Đã hủy";
+    result.right.status = result.right.status == 1 ? "Đã yêu cầu" : "Đã hủy";
     return res.send({ code: 200, msg: "success", items: result });
   }
   return res.send({
@@ -146,6 +148,15 @@ router.post(
       let power_R = req.body.power_R;
       let side_R = req.body.side_R;
       let ngay_tao = req.body.ngay_tao;
+      let lense_price = await LensePrice.findOne({
+        limit: 1,
+        order: [["createdAt", "DESC"]],
+        attributes: {
+          exclude: ["id", "createdAt", "updatedAt", "status"],
+        },
+      });
+
+      let price = lense_price ? lense_price.price : 0;
 
       let result = null;
       try {
@@ -166,7 +177,7 @@ router.post(
           paid: req.body.paid_L,
           glass_money: req.body.glass_money_L,
           amount: req.body.amount_L,
-          price: req.body.price_L 
+          price: price,
         });
 
         let right = await Lense.create({
@@ -180,7 +191,7 @@ router.post(
           paid: req.body.paid_R,
           glass_money: req.body.glass_money_R,
           amount: req.body.amount_R,
-          price: req.body.price_R
+          price: price,
         });
         let todayStart = new Date().setHours(0, 0, 0, 0);
         let now = new Date();
@@ -333,7 +344,7 @@ router.put(
             paid: req.body.paid_L,
             glass_money: req.body.glass_money_L,
             amount: req.body.amount_L,
-            price: req.body.price_L
+            price: req.body.price_L,
           },
           {
             where: {
@@ -353,7 +364,7 @@ router.put(
             paid: req.body.paid_R,
             glass_money: req.body.glass_money_R,
             amount: req.body.amount_R,
-            price: req.body.price_R
+            price: req.body.price_R,
           },
           {
             where: {
