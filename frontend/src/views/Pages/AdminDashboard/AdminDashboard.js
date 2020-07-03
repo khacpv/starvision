@@ -123,7 +123,6 @@ class AdminDashboard extends Component {
                         </tbody>
                     </Table>
                 </div>
-                <Paginations/>
             </div>
         );
     }

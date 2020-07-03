@@ -1,0 +1,6 @@
+{
+  "name": "LensePrice",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./LensePrice.js"
+}

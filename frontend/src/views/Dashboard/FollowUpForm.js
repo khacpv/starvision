@@ -56,8 +56,8 @@ class FollowUpForm extends Component {
                 id_right: data.R.A_TH_DUBAO,
                 thumb_R: data.R.od_thumb,
                 note: data.comment,
-                ngaykham: moment(data.ngaykham, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-                ngaytaikham: data.ngaytaikham ? moment(data.ngaytaikham, 'DD/MM/YYYY').format('YYYY-MM-DD') : null,
+                ngaykham: data.ngaykham,
+                ngaytaikham: data.ngaytaikham,
                 followup_no: data.followup_no
             })
         }
@@ -69,8 +69,8 @@ class FollowUpForm extends Component {
                 id_left: data.L.A_TH_DUBAO,
                 thumb_L: data.L.os_thumb,
                 note: data.comment,
-                ngaykham: moment(data.ngaykham, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-                ngaytaikham: data.ngaytaikham ? moment(data.ngaytaikham, 'DD/MM/YYYY').format('YYYY-MM-DD') : null,
+                ngaykham: data.ngaykham,
+                ngaytaikham: data.ngaytaikham,
                 followup_no: data.followup_no
             })
         }
@@ -83,8 +83,8 @@ class FollowUpForm extends Component {
         const {bcva_va_R, note, bcva_va_L, ngaykham, ngaytaikham} = this.state;
         const data = {
             ...this.state,
-            ngaykham: moment(ngaykham, 'YYYY-MM-DD').format('DD/MM/YYYY'),
-            ngaytaikham: ngaytaikham ? moment(ngaytaikham, 'YYYY-MM-DD').format('DD/MM/YYYY') : null,
+            ngaykham: this.props.isNew ? moment(ngaykham, 'YYYY-MM-DD').format('DD/MM/YYYY') : ngaykham,
+            ngaytaikham: ngaytaikham ? (this.props.isNew ? moment(ngaytaikham, 'YYYY-MM-DD').format('DD/MM/YYYY') : ngaytaikham) : null,
             mabacsi : doctorData.Mabacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
@@ -149,8 +149,8 @@ class FollowUpForm extends Component {
     render() {
         let data = this.state;
         let bvcaVaList = [<option/>];
-        for (let k = 0.1; k <= 1; k += 0.1) {
-            bvcaVaList.push(<option key={k}>{k.toFixed(1)}</option>);
+        for (let k = 1; k <= 10; k += 1) {
+            bvcaVaList.push(<option key={k}>{`${k.toString()}/10`}</option>);
         }
         return (
             <div style={{ marginTop: '50px'}}>
@@ -160,12 +160,14 @@ class FollowUpForm extends Component {
                             <FormGroup row style={{marginLeft: 5}}>
                                 <div>Ngày khám:</div>
                                 <div style={{ marginLeft: 25}}>
-                                    <DatePicker
-                                        className="radius-border-input"
-                                        dateFormat="dd/MM/yyyy"
-                                        selected={this.state.ngaykham ? new Date(this.state.ngaykham) : null}
-                                        onChange={(date) => this.setState({ngaykham: moment(new Date(date)).format('YYYY-MM-DD')})}
-                                    />
+                                    {
+                                        this.props.isNew ? <DatePicker
+                                            className="radius-border-input"
+                                            dateFormat="dd/MM/yyyy"
+                                            selected={this.state.ngaykham ? new Date(this.state.ngaykham) : null}
+                                            onChange={(date) => this.setState({ngaykham: moment(new Date(date)).format('YYYY-MM-DD')})}
+                                        /> : <div>{this.state.ngaykham}</div>
+                                    }
                                 </div>
                             </FormGroup>
                         </Col>
@@ -275,12 +277,14 @@ class FollowUpForm extends Component {
                             <FormGroup row style={{marginLeft: 5}}>
                                 <div>Ngày hẹn tái khám:</div>
                                 <div style={{ marginLeft: 25}}>
-                                    <DatePicker
-                                        className="radius-border-input"
-                                        dateFormat="dd/MM/yyyy"
-                                        selected={this.state.ngaytaikham ? new Date(this.state.ngaytaikham) : null}
-                                        onChange={(date) => this.setState({ngaytaikham: moment(new Date(date)).format('YYYY-MM-DD')})}
-                                    />
+                                    {
+                                        this.props.isNew ? <DatePicker
+                                            className="radius-border-input"
+                                            dateFormat="dd/MM/yyyy"
+                                            selected={this.state.ngaytaikham ? new Date(this.state.ngaytaikham) : null}
+                                            onChange={(date) => this.setState({ngaytaikham: moment(new Date(date)).format('YYYY-MM-DD')})}
+                                        /> : <div>{this.state.ngaytaikham}</div>
+                                    }
                                 </div>
                             </FormGroup>
                         </Col>

@@ -136,7 +136,7 @@ class FittingForm extends Component {
             mabacsi: doctorData.Mabacsi,
             idbacsi: doctorData.Id_bacsi,
             iddttc: doctorData.Id_Dttc,
-            ngaykham: new Date(),
+            ngaykham: moment(new Date()).format('DD/MM/YYYY'),
             khid: this.props.customer.ID_KHACHHANG,
         };
         const {
@@ -318,8 +318,8 @@ class FittingForm extends Component {
             refCylList.push(<option key={k}>{k.toFixed(2)}</option>);
         }
         let bvcaVaList = [<option/>];
-        for (let k = 0.1; k <= 1; k += 0.1) {
-            bvcaVaList.push(<option key={k}>{k.toFixed(1)}</option>);
+        for (let k = 1; k <= 10; k += 1) {
+            bvcaVaList.push(<option key={k}>{`${k.toString()}/10`}</option>);
         }
         let fixArea = [
             <option/>,

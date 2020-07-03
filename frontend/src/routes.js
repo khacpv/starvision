@@ -7,6 +7,7 @@ const DetailOrder = React.lazy(() => import( "./views/Pages/AdminLense/DetailOrd
 const Dashboard = React.lazy(() => import('./views/Dashboard'));
 const Notification = React.lazy(() => import('./views/Notifications/Notification'));
 const Summary = React.lazy(() => import('./views/Pages/Summary'));
+const LensePrice = React.lazy(() => import('./views/Pages/LensePrice'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -17,6 +18,7 @@ const routes = [
   { path: '/adminNotification', name: 'AdminNotification', component: AdminNotification },
   { path: '/adminLense', name: 'AdminLense', component: AdminLense },
   { path: '/detailOrderLense', name: 'detailOrderLense', component: DetailOrder },
+  { path: '/lensePrice', name: 'lensePrice', component: LensePrice },
 ];
 
 export default routes;

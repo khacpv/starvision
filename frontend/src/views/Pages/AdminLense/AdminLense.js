@@ -6,6 +6,7 @@ import {
 import {adminServices} from "../../../services";
 import moment from "moment";
 import Paginations from "../../Base/Paginations";
+const queryString = require('query-string');
 
 class AdminLense extends Component {
     constructor(props) {
@@ -24,9 +25,16 @@ class AdminLense extends Component {
         this.getOrderLense();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.location.search !== prevProps.location.search) {
+            this.getOrderLense();
+        }
+    }
+
     getOrderLense() {
+        const query = queryString.parse(this.props.location.search);
         this.setState({isLoading: true});
-        adminServices.getOrderLenseList()
+        adminServices.getOrderLenseList(query.limit || 10 , query.offset || 1)
             .then(result => {
                 if (result.status === 'success') {
                     this.setState({lenseList: result.data})
@@ -46,7 +54,7 @@ class AdminLense extends Component {
         })
     }
 
-    editDoctor(data) {
+    detailOrder(data) {
         this.props.history.push(`/detailOrderLense?id=${data.id}`);
     }
 
@@ -88,7 +96,7 @@ class AdminLense extends Component {
                                     </td>
                                     <td>
                                         <Row style={{justifyContent: 'center'}}>
-                                            <Button onClick={() => this.editDoctor(item)} style={{ marginLeft: 15}} color={'primary'}>Chi tiết</Button>
+                                            <Button onClick={() => this.detailOrder(item)} style={{ marginLeft: 15}} color={'primary'}>Chi tiết</Button>
                                             <Button onClick={() => this.setState({isShowModalDelete: true, lenseChoosing: item.id})} style={{ marginLeft: 15}} color={'danger'}>Xoá</Button>
                                         </Row>
                                     </td>
@@ -98,7 +106,7 @@ class AdminLense extends Component {
                         </tbody>
                     </Table>
                 </div>
-                <Paginations/>
+                <Paginations url={'adminLense'} limit={10} history={this.props.history}/>
             </div>
         );
     }

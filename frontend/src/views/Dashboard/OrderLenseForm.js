@@ -64,7 +64,7 @@ class OrderLenseForm extends Component {
                 status_R: data.R.Status,
                 power_soft_R: data.R.od_power,
                 type: data.type === 'GOV' ? 'GOV' : 'SOFT',
-                ngay_tao: moment(data.Ngay, 'DD/MM/YYYY').format('YYYY-MM-DD')
+                ngay_tao: data.Ngay
             })
         }
         if (data.L) {
@@ -79,7 +79,7 @@ class OrderLenseForm extends Component {
                 status_L: data.L.Status,
                 power_soft_L: data.L.os_power,
                 type: data.type === 'GOV' ? 'GOV' : 'SOFT',
-                ngay_tao: moment(data.Ngay, 'DD/MM/YYYY').format('YYYY-MM-DD')
+                ngay_tao: data.Ngay
             })
         }
     }
@@ -101,7 +101,7 @@ class OrderLenseForm extends Component {
             side_L,
             power_R,
             note_order_lens,
-            ngay_tao: moment(ngay_tao, 'YYYY-MM-DD').format('DD/MM/YYYY'),
+            ngay_tao: this.props.isNew ? moment(ngay_tao, 'YYYY-MM-DD').format('DD/MM/YYYY') : ngay_tao,
             mabacsi : doctorData.Mabacsi,
             idbacsi : doctorData.Id_bacsi,
             iddttc : doctorData.Id_Dttc,
@@ -110,7 +110,7 @@ class OrderLenseForm extends Component {
             type: 'GOV',
         } : {
             power_L: power_soft_L, power_R: power_soft_R,
-            ngay_tao: moment(ngay_tao, 'YYYY-MM-DD').format('DD/MM/YYYY'),
+            ngay_tao: this.props.isNew ? moment(ngay_tao, 'YYYY-MM-DD').format('DD/MM/YYYY') : ngay_tao,
             note_order_lens,
             prefix: 'STV',
             mabacsi : doctorData.Mabacsi,
@@ -249,12 +249,16 @@ class OrderLenseForm extends Component {
                             <FormGroup row style={{marginLeft: 5}}>
                                 <div>Ngày khám:</div>
                                 <div style={{ marginLeft: 25}}>
-                                    <DatePicker
-                                        className="radius-border-input"
-                                        dateFormat="dd/MM/yyyy"
-                                        selected={this.state.ngay_tao ? new Date(this.state.ngay_tao) : null}
-                                        onChange={(date) => this.setState({ngay_tao: moment(new Date(date)).format('YYYY-MM-DD')})}
-                                    />
+                                    {
+                                        this.props.isNew ? <DatePicker
+                                            className="radius-border-input"
+                                            dateFormat="dd/MM/yyyy"
+                                            selected={this.state.ngay_tao ? new Date(this.state.ngay_tao) : null}
+                                            onChange={(date) => this.setState({ngay_tao: moment(new Date(date)).format('YYYY-MM-DD')})}
+                                        /> : <div>
+                                            {this.state.ngay_tao}
+                                        </div>
+                                    }
                                 </div>
                             </FormGroup>
                         </Col>
@@ -314,7 +318,7 @@ class OrderLenseForm extends Component {
                                         !this.props.isNew && <tr>
                                             <td className='table-solid' colSpan={2}>
                                                 <h4>Giá tiền</h4>
-                                                <p>{data.price_L}</p>
+                                                <p>{data.price_L} nvđ</p>
                                             </td>
                                             <td className='table-solid' colSpan={2}>
                                                 <h4>Trạng thái</h4>
@@ -382,7 +386,7 @@ class OrderLenseForm extends Component {
                                         !this.props.isNew && <tr>
                                             <td className='table-solid' colSpan={2}>
                                                 <h4>Giá tiền</h4>
-                                                <p>{data.price_R}</p>
+                                                <p>{data.price_R} nvđ</p>
                                             </td>
                                             <td className='table-solid' colSpan={2}>
                                                 <h4>Trạng thái</h4>
