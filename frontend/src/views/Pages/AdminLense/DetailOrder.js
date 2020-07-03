@@ -110,7 +110,7 @@ class DetailOrder extends Component {
                                     <tr>
                                         <td className='table-solid' colSpan={2}>
                                             <h4>Giá tiền: </h4>
-                                            <p>{data.left.price}</p>
+                                            <p>{data.left.price} nvđ</p>
                                         </td>
                                         <td className='table-solid' colSpan={2}>
                                             <h4>Trạng thái: </h4>
@@ -158,7 +158,7 @@ class DetailOrder extends Component {
                                     <tr>
                                         <td className='table-solid' colSpan={2}>
                                             <h4>Giá tiền: </h4>
-                                            <p>{data.right.price}</p>
+                                            <p>{data.right.price} nvđ</p>
                                         </td>
                                         <td className='table-solid' colSpan={2}>
                                             <h4>Trạng thái: </h4>

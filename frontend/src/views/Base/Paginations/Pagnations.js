@@ -3,6 +3,12 @@ import {Card, CardBody, CardHeader, Pagination, PaginationItem, PaginationLink} 
 
 class Paginations extends Component {
 
+    navigateScreen(page) {
+        const {url, limit, history} = this.props;
+        history.push(`/${url}?limit=${limit}&&offset=${((page - 1) * limit) + 1}`);
+        // this.props.resetData();
+    }
+
     render() {
         return (
             <div className="animated fadeIn" style={{ marginTop: '30px'}}>
@@ -11,12 +17,12 @@ class Paginations extends Component {
                         <PaginationLink previous tag="button"/>
                     </PaginationItem>
                     <PaginationItem active>
-                        <PaginationLink tag="button">
+                        <PaginationLink onClick={() => this.navigateScreen(1)} tag="button">
                             1
                         </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
-                        <PaginationLink tag="button">
+                        <PaginationLink onClick={() => this.navigateScreen(2)} tag="button">
                             2
                         </PaginationLink>
                     </PaginationItem>

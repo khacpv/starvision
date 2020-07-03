@@ -29,8 +29,8 @@ class AdminServices {
         return this.axios.post('/notifications', data)
     }
 
-    getOrderLenseList() {
-        return this.axios.get(`/admin/orderlense`);
+    getOrderLenseList(limit, offset) {
+        return this.axios.get(`/admin/orderlense?limit=${limit}&offset=${offset}`);
     }
 
     deleteOrderLense(id) {
@@ -39,6 +39,16 @@ class AdminServices {
 
     getOrderDetail(id) {
         return this.axios.get(`/admin/orderlense/${id}`);
+    }
+
+    getLensePrice(type) {
+        return this.axios.get(`/admin/lenseprice?type=${type}`);
+    }
+
+    updateLensePrice(govPrice, softPrice) {
+        const requestOne = this.axios.post('/admin/lenseprice', govPrice);
+        const requestTwo = this.axios.post('/admin/lenseprice', softPrice);
+        return axios.all([requestOne, requestTwo])
     }
 }
 
