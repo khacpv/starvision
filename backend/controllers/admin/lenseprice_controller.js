@@ -17,6 +17,11 @@ router.get("/", async (req, res) => {
   });
   if (result) {
     return res.send({ code: 200, msg: "success", data: result });
+  }else{
+    return res.send({ code: 200, msg: "success", data: {
+      type: req.query.type,
+      price: 0
+    } });
   }
   return res.send({ code: 400, msg: "error", data:"Khong tim thay gia tri"});
 });

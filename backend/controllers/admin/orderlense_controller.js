@@ -12,6 +12,8 @@ const LensePrice = models.LensePrice;
 
 router.get("/", async (req, res) => {
   if (req.user.role == "admin") {
+    let total = await OrderLense.count({});
+
     let result = await OrderLense.findAll({
       // where: {
       //   is_active: 1,
@@ -72,7 +74,7 @@ router.get("/", async (req, res) => {
           });
         }
       });
-      return res.send({ status: "success", message: "", data: returnData });
+      return res.send({ status: "success", message: "", total:total,data: returnData });
     }
     return res.send({
       status: "error",
