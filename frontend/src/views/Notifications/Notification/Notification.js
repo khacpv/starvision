@@ -13,7 +13,13 @@ class Notification extends Component {
 
     componentDidMount() {
         customerService.getAllNotify().then(result => {
-            this.setState({notifications: result.data})
+            this.setState({notifications: result.data}, () => {
+                customerService.markReadAllNotify().then(result => {
+                    console.log(result);
+                }).catch(error => {
+                    console.log(error);
+                })
+            })
         }).catch(error => console.log(error))
     }
 

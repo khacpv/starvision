@@ -16,6 +16,7 @@ class AdminLense extends Component {
             lenseList: [],
             isShowModalDelete: false,
             lenseChoosing: null,
+            totalLense: 0
         };
     }
 
@@ -37,7 +38,7 @@ class AdminLense extends Component {
         adminServices.getOrderLenseList(query.limit || 10 , query.offset || 1)
             .then(result => {
                 if (result.status === 'success') {
-                    this.setState({lenseList: result.data})
+                    this.setState({lenseList: result.data, totalLense: result.total})
                 }
             }).catch(error => {
                 console.log(error);
@@ -106,7 +107,7 @@ class AdminLense extends Component {
                         </tbody>
                     </Table>
                 </div>
-                <Paginations url={'adminLense'} limit={10} history={this.props.history}/>
+                <Paginations url={'adminLense'} limit={10} history={this.props.history} total={this.state.totalLense}/>
             </div>
         );
     }

@@ -1,50 +1,42 @@
 import React, {Component} from 'react';
-import {Card, CardBody, CardHeader, Pagination, PaginationItem, PaginationLink} from 'reactstrap';
+import ReactPaginate from 'react-paginate';
+import './pagination.css';
 
 class Paginations extends Component {
 
-    navigateScreen(page) {
+    navigateScreen(data) {
         const {url, limit, history} = this.props;
-        history.push(`/${url}?limit=${limit}&&offset=${((page - 1) * limit) + 1}`);
-        // this.props.resetData();
+        history.push(`/${url}?limit=${limit}&&offset=${(data.selected * limit) + 1}`);
     }
 
     render() {
         return (
-            <div className="animated fadeIn" style={{ marginTop: '30px'}}>
-                <Pagination>
-                    <PaginationItem disabled>
-                        <PaginationLink previous tag="button"/>
-                    </PaginationItem>
-                    <PaginationItem active>
-                        <PaginationLink onClick={() => this.navigateScreen(1)} tag="button">
-                            1
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink onClick={() => this.navigateScreen(2)} tag="button">
-                            2
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink tag="button">
-                            3
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink tag="button">
-                            4
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink tag="button">
-                            5
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink next tag="button"/>
-                    </PaginationItem>
-                </Pagination>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                padding: 20,
+                boxSizing: 'border-box',
+                width: '100%',
+                height: '100%',
+                marginTop: '30px'
+            }}>
+                <ReactPaginate
+                    activeClassName={'item activePage '}
+                    breakClassName={'item break-me '}
+                    breakLabel={'...'}
+                    containerClassName={'pagination'}
+                    disabledClassName={'disabled-page'}
+                    marginPagesDisplayed={5}
+                    nextClassName={"item next "}
+                    nextLabel={'trang sau'}
+                    onPageChange={(data) => this.navigateScreen(data)}
+                    pageCount={this.props.total/this.props.limit}
+                    pageClassName={'item pagination-page '}
+                    pageRangeDisplayed={2}
+                    previousClassName={"item previous"}
+                    previousLabel={'trang trước'}
+                />
             </div>
         );
     }
