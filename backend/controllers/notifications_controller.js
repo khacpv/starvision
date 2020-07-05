@@ -6,6 +6,7 @@ const NotificationTokens = models.NotificationTokens;
 const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
 var admin = require("firebase-admin");
+const Doctors = models.Doctors;
 
 var serviceAccount = require("./../config/serviceAccountKey.json");
 admin.initializeApp({
@@ -65,6 +66,10 @@ router.get("/", async (req, res) => {
   let result = await Notifications.findAll({
     attributes: ["id", "title", "content", "send_at", "is_read"],
     order: [["send_at", "DESC"]],
+    limit: 50,
+    where: {
+      receiver_id: req.user.id,
+    },
   });
   if (result) {
     return res.send({
@@ -125,7 +130,7 @@ router.post("/read/all", async (req, res) => {
     },
     {
       where: {
-        receiver_id: req.body.user_id,
+        receiver_id: req.body.user_id ? req.body.user_id : req.user.id,
       },
     }
   );
@@ -188,10 +193,11 @@ router.post("/", async (req, res) => {
         } else {
           notice = await sendNotificationToDeviceAndroid(data, token.token);
         }
-      }else{
+      } else {
         return res.send({
           status: "error",
-          message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
+          message:
+            "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
           data: "",
         });
       }
@@ -209,6 +215,42 @@ router.post("/", async (req, res) => {
   }
   return res.send({
     status: "success",
+    data: "",
+  });
+});
+router.get("/admin", async (req, res) => {
+  let result = await Notifications.findAll({
+    include: [
+      {
+        model: Doctors,
+        as: "user",
+        attributes: [
+          "id",
+          "name",
+          "dttc_name",
+          "username",
+          "department_name",
+          "dttc_name",
+        ],
+      },
+    ],
+    attributes: ["id", "title", "content", "send_at", "is_read"],
+    order: [["send_at", "DESC"]],
+    limit: 100,
+    where: {
+      sender_id: req.user.id,
+    },
+  });
+  if (result) {
+    return res.send({
+      status: "success",
+      message: "",
+      data: result,
+    });
+  }
+  return res.send({
+    status: "error",
+    message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
     data: "",
   });
 });
