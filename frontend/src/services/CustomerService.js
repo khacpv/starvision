@@ -76,6 +76,10 @@ class CustomerService {
         return this.axios.get(`/notifications`);
     }
 
+    markReadAllNotify() {
+        return this.axios.post('/notifications/read/all');
+    }
+
     getUnreadNotify() {
         return this.axios.get(`/notifications/count_unread`);
     }
