@@ -5,14 +5,9 @@ const Notifications = models.Notifications;
 const NotificationTokens = models.NotificationTokens;
 const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
-var admin = require("firebase-admin");
 const Doctors = models.Doctors;
+var admin = require("./../config/firebase-notification");
 
-var serviceAccount = require("./../config/serviceAccountKey.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://starvision-e75c5.firebaseio.com",
-});
 router.post("/token", async (req, res) => {
   let user_id = req.body.user_id;
   let token = req.body.token;

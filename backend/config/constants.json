@@ -9,5 +9,8 @@
     },
     "UserRequest": {
         "FORGOT_PASSWORD": 1
+    },
+    "DAY":{
+        "ORDERLENSE_NOTIFICATION": 3
     }
 }
