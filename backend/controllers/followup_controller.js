@@ -71,13 +71,12 @@ router.get("/", async (req, res) => {
       let tmpSide = element.side;
       let date_examination = element.date_examination;
       if (!DateUtils.isValidDate(date_examination)) {
-        date_examination = new Date(date_examination);
-        date_examination = toDateString(date_examination);
+        date_examination = toDateString(new Date(date_examination));
       }
 
       let re_examination_date = element.re_examination_date;
       if (!DateUtils.isValidDate(re_examination_date)) {
-        re_examination_date = toDateString(re_examination_date);
+        re_examination_date = toDateString(new Date(re_examination_date));
       }
 
       returnData.push({
