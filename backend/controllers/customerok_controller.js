@@ -5,6 +5,7 @@ const CustomerOk = models.CustomerOk;
 const CustomerCheck = models.CustomerCheck;
 const { check, validationResult } = require("express-validator");
 const CONSTANT = require("../config/constants.json");
+var DateUtils = require("./../service/utils_service");
 
 router.get("/", async (req, res) => {
   let customerId = req.query.khid;
@@ -91,7 +92,7 @@ router.get("/", async (req, res) => {
               od_custom_ok_k_code: customerOkRight.k_code,
               od_custom_ok_power: customerOkRight.power,
               od_custom_ok_size: customerOkRight.size,
-              ngayfitting: customerOkRight.createdAt,
+              ngayfitting: DateUtils.toDateString(customerOkRight.createdAt),
             }
           : [];
       customOk_L =
@@ -112,7 +113,7 @@ router.get("/", async (req, res) => {
               os_custom_ok_k_code: customerOkLeft.k_code,
               os_custom_ok_power: customerOkLeft.power,
               os_custom_ok_size: customerOkLeft.size,
-              ngayfitting: customerOkLeft.createdAt,
+              ngayfitting: DateUtils.toDateString(customerOkLeft.createdAt),
             }
           : [];
 
@@ -151,7 +152,7 @@ router.get("/", async (req, res) => {
               hk: customerOkRight.original_k1,
               vk: customerOkRight.original_k2,
               power: customerOkRight.power,
-              ngayfitting: customerOkRight.createdAt,
+              ngayfitting: DateUtils.toDateString(customerOkRight.createdAt),
             }
           : [];
 
@@ -163,7 +164,7 @@ router.get("/", async (req, res) => {
               hk: customerOkLeft.original_k1,
               vk: customerOkLeft.original_k2,
               power: customerOkLeft.power,
-              ngayfitting: customerOkLeft.createdAt,
+              ngayfitting: DateUtils.toDateString(customerOkLeft.createdAt),
             }
           : []),
         (result = {

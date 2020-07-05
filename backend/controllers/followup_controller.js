@@ -7,6 +7,8 @@ const { check, validationResult } = require("express-validator");
 const sequelize = require("../config/db").sequelize;
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
+var DateUtils = require("./../service/utils_service");
+const { toDateString } = require("./../service/utils_service");
 
 router.get("/", async (req, res) => {
   let userId = req.query.userid;
@@ -66,13 +68,23 @@ router.get("/", async (req, res) => {
           os_thumb: element.left.thumb,
         };
       }
-
       let tmpSide = element.side;
+      let date_examination = element.date_examination;
+      if (!DateUtils.isValidDate(date_examination)) {
+        date_examination = new Date(date_examination);
+        date_examination = toDateString(date_examination);
+      }
+
+      let re_examination_date = element.re_examination_date;
+      if (!DateUtils.isValidDate(re_examination_date)) {
+        re_examination_date = toDateString(re_examination_date);
+      }
+
       returnData.push({
         followup_no: Number(index + 1),
         comment: element.note,
-        ngaykham: element.date_examination,
-        ngaytaikham: element.re_examination_date,
+        ngaykham: date_examination,
+        ngaytaikham: re_examination_date,
         ...(R != null && { R: R }),
         ...(L != null && { L: L }),
       });
@@ -152,7 +164,7 @@ router.post(
       (check_bcva_l != "" && (check_video_l == "" || check_image_l == "")) ||
       (check_bcva_l == "" && check_video_l == "" && check_image_l != "") ||
       ((check_bcva_l == "" || check_image_l == "") && check_video_l != "")
-    ){
+    ) {
       res.send({
         status: "error",
         message: "Mắt trái cần nhập đủ dữ liệu",
