@@ -10,6 +10,7 @@ const sequelize = require("../config/db").sequelize;
 const Op = require("../config/db").Sequelize.Op;
 const CONSTANT = require("../config/constants.json");
 const LensePrice = models.LensePrice;
+var DateUtils = require("./../service/utils_service");
 
 router.get("/", async (req, res) => {
   let customerId = req.query.khid;
@@ -77,10 +78,14 @@ router.get("/", async (req, res) => {
             prefix: element.prefix != null ? element.prefix : "",
           };
         }
-        let ngay_tao =
-          date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+        let ngay_tao = element.date_examination;
+
+        if (!DateUtils.isValidDate(ngay_tao)) {
+          ngay_tao = new Date(ngay_tao);
+          ngay_tao = DateUtils.toDateString(ngay_tao)
+        }
         returnData.push({
-          Ngay: element.date_examination,
+          Ngay: ngay_tao,
           So_Don_Hang: element.order_number,
           type: element.type,
           is_active: element.is_active,
@@ -149,8 +154,8 @@ router.post(
     let result = null;
     let lense_price = await LensePrice.findOne({
       limit: 1,
-      where:{
-        type: req.body.type
+      where: {
+        type: req.body.type,
       },
       order: [["createdAt", "DESC"]],
       attributes: {
@@ -172,7 +177,7 @@ router.post(
         side: "L",
         prefix: req.body.prefixLeft,
         status: 1,
-        price: price
+        price: price,
       });
 
       let right = await Lense.create({
@@ -184,7 +189,7 @@ router.post(
         side: "R",
         prefix: req.body.prefixRight,
         status: 1,
-        price: price
+        price: price,
       });
       let todayStart = new Date().setHours(0, 0, 0, 0);
       let now = new Date();
