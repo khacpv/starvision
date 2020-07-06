@@ -27,7 +27,7 @@ class DefaultHeader extends Component {
                                 <NavLink to="/admin" className="nav-link">Danh sách bác sĩ</NavLink>
                             </NavItem>
                             <NavItem className="px-3">
-                                <NavLink to="/adminNotification" className="nav-link">Gửi thông báo</NavLink>
+                                <NavLink to="/listNotification" className="nav-link">Danh sách thông báo</NavLink>
                             </NavItem>
                             <NavItem className="px-3">
                                 <NavLink to="/adminLense" className="nav-link">Order lense</NavLink>
