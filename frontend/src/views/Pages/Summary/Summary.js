@@ -29,7 +29,9 @@ class Summary extends Component {
     componentDidMount() {
         const doctorData = JSON.parse(localStorage.getItem('user'));
         customerService.getSummary(doctorData.Id_bacsi).then(result => {
-            console.log(result)
+            if (result.status === 'success') {
+                this.setState({data: result.data})
+            }
         }).catch(error => console.log(error))
     }
 
@@ -42,16 +44,16 @@ class Summary extends Component {
                     <h2>{moment(new Date()).format('DD/MM/YYYY')}</h2>
                 </Row>
                 <Row>
-                    <h3 style={{color: 'red'}}>Công nợ tháng trước: {data.cong_no_thang_truoc}</h3>
+                    <h3 style={{color: 'red'}}>Công nợ tháng trước: {data.cong_no_thang_truoc} vnđ</h3>
                 </Row>
                 <Row>
-                    <h3 style={{color: 'blue'}}>Phát sinh tháng nay: {data.phat_sinh_thang_nay} (Tiền kính: {data.tien_kinh}, Tiền VTTH: {data.tien_vtth})</h3>
+                    <h3 style={{color: 'blue'}}>Phát sinh tháng nay: {data.phat_sinh_thang_nay} vnđ (Tiền kính: {data.tien_kinh}, Tiền VTTH: {data.tien_vtth})</h3>
                 </Row>
                 <Row>
-                    <h3 style={{color: 'green'}}>Đã thanh toán: {data.da_thanh_toan}</h3>
+                    <h3 style={{color: 'green'}}>Đã thanh toán: {data.da_thanh_toan} vnđ</h3>
                 </Row>
                 <Row>
-                    <h2 style={{color: 'red'}}>Tiền phải thanh toán: {data.tien_phai_thanh_toan}</h2>
+                    <h2 style={{color: 'red'}}>Tiền phải thanh toán: {data.tien_phai_thanh_toan} vnđ</h2>
                 </Row>
             </div>
         );

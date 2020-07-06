@@ -50,6 +50,10 @@ class AdminServices {
         const requestTwo = this.axios.post('/admin/lenseprice', softPrice);
         return axios.all([requestOne, requestTwo])
     }
+
+    getAllNotifications() {
+        return this.axios.get('/notifications/admin')
+    }
 }
 
 export default AdminServices;

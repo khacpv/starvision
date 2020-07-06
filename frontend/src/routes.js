@@ -1,6 +1,7 @@
 import React from 'react';
 
 const AdminNotification = React.lazy(() => import("./views/Pages/AdminNotification/AdminNotification"));
+const ListNotifications = React.lazy(() => import("./views/Pages/AdminNotification/ListNotifications"));
 const AdminDashboard = React.lazy(() => import( "./views/Pages/AdminDashboard/AdminDashboard"));
 const AdminLense = React.lazy(() => import( "./views/Pages/AdminLense/AdminLense"));
 const DetailOrder = React.lazy(() => import( "./views/Pages/AdminLense/DetailOrder"));
@@ -16,6 +17,7 @@ const routes = [
   { path: '/summary', name: 'Summary', component: Summary },
   { path: '/admin', name: 'AdminDashboard', component: AdminDashboard },
   { path: '/adminNotification', name: 'AdminNotification', component: AdminNotification },
+  { path: '/listNotification', name: 'ListNotifications', component: ListNotifications },
   { path: '/adminLense', name: 'AdminLense', component: AdminLense },
   { path: '/detailOrderLense', name: 'detailOrderLense', component: DetailOrder },
   { path: '/lensePrice', name: 'lensePrice', component: LensePrice },
