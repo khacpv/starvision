@@ -11,18 +11,27 @@ const OrderLense = models.OrderLense;
 const Lense = models.Lense;
 const Op = require("../config/db").Sequelize.Op;
 const CONSTANT = require("../config/constants.json");
+const DateUtils = require("./utils_service");
 
 module.exports = async function sendNotificationJob() {
   let now = new Date();
 
   let orderLense = await OrderLense.findAll({});
-  cron.schedule("* * * * *", function () {
+  cron.schedule("00 30 9 * * *", function () {
     orderLense.forEach((odl) => {
       let odl_date = new Date(odl.createdAt);
       let day_after = now.getDate() - odl_date.getDate();
       if (day_after == CONSTANT.DAY.ORDERLENSE_NOTIFICATION) {
-        await send_notification(null, odl.doctor_id, "Thông báo", "Hẹn với bệnh nhân");
+        send_notification(
+          odl.doctor_id,
+          odl.doctor_id,
+          "Thông báo hệ thống",
+          "Hẹn với bệnh nhân ngày " + DateUtils.toDateString(odl.createdAt)
+        );
       }
+    },{
+      scheduled: true,
+      timeZone: 'Asia/Ho_Chi_Minh'
     });
   });
 };
