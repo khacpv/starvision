@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const models = require("../models/index");
 const Customer = models.Customer;
-
+const OrderLense = models.OrderLense;
+const Lense = models.Lense;
 const { check, validationResult } = require("express-validator");
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
@@ -22,6 +23,20 @@ router.get(
       });
     }
 
+    let dathanhtoan = 0;
+    let tienkinh = 0;
+    let orderLense = await OrderLense.findAll({
+      where: {
+        customer_id: doctorId,
+      },
+    });
+    orderLense.forEach((odl) => {
+      let amount = odl.amount ? odl.amount : 1;
+      let glass_money = odl.glass_money ? odl.glass_money : 0;
+      tienkinh += glass_money * amount;
+      dathanhtoan += odl.paid;
+    });
+
     let dept = {};
     dept = await Customer.findOne({
       where: {
@@ -39,16 +54,16 @@ router.get(
         dept.costs_incurred_this_month != null
           ? dept.costs_incurred_this_month
           : 0;
-      let dathanhtoan = dept.paid != null ? dept.paid : 0;
-      let tienkinh = dept.glass_money != null ? dept.glass_money : 0;
+      dathanhtoan = dathanhtoan;
+      tienkinh = tienkinh;
       let tienvtth = dept.vtth_money != null ? dept.vtth_money : 0;
 
       dept = {
-        congnothangtruoc: String(congnothangtruoc),
-        phatsinhthangnay: String(phatsinhthangnay),
-        dathanhtoan: String(dathanhtoan),
-        tienkinh: String(tienkinh),
-        tienvtth: String(tienvtth),
+        cong_no_thang_truoc: String(congnothangtruoc),
+        phat_sinh_thang_nay: String(phatsinhthangnay),
+        da_thanh_toan: String(dathanhtoan),
+        tien_kinh: String(tienkinh),
+        tien_vtth: String(tienvtth),
         tien_phai_thanh_toan: String(
           tienkinh +
             tienvtth +
