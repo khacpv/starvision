@@ -74,7 +74,12 @@ router.get("/", async (req, res) => {
           });
         }
       });
-      return res.send({ status: "success", message: "", total:total,data: returnData });
+      return res.send({
+        status: "success",
+        message: "",
+        total: total,
+        data: returnData,
+      });
     }
     return res.send({
       status: "error",
@@ -152,8 +157,8 @@ router.post(
       let ngay_tao = req.body.ngay_tao;
       let lense_price = await LensePrice.findOne({
         limit: 1,
-        where:{
-          type: req.body.type
+        where: {
+          type: req.body.type,
         },
         order: [["createdAt", "DESC"]],
         attributes: {
@@ -178,10 +183,9 @@ router.post(
           prefix: req.body.prefixLeft,
           paid: req.body.paid,
           glass_money: req.body.glass_money,
-          amount: req.body.amount,
           paid: req.body.paid_L,
           glass_money: req.body.glass_money_L,
-          amount: req.body.amount_L,
+          amount: req.body.amount_L ? req.body.amount_L : 1,
           price: price,
         });
 
@@ -195,7 +199,7 @@ router.post(
           prefix: req.body.prefixRight,
           paid: req.body.paid_R,
           glass_money: req.body.glass_money_R,
-          amount: req.body.amount_R,
+          amount: req.body.amount_R ? req.body.amount_R : 1,
           price: price,
         });
         let todayStart = new Date().setHours(0, 0, 0, 0);
@@ -348,7 +352,7 @@ router.put(
             date_examination: ngay_tao,
             paid: req.body.paid_L,
             glass_money: req.body.glass_money_L,
-            amount: req.body.amount_L,
+            amount: req.body.amount_L ? req.body.amount_L : 1,
             price: req.body.price_L,
           },
           {
@@ -368,7 +372,7 @@ router.put(
             prefix: req.body.prefixRight,
             paid: req.body.paid_R,
             glass_money: req.body.glass_money_R,
-            amount: req.body.amount_R,
+            amount: req.body.amount_R ? req.body.amount_R : 1,
             price: req.body.price_R,
           },
           {
