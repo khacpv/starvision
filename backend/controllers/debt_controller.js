@@ -50,10 +50,7 @@ router.get(
     if (dept) {
       let congnothangtruoc =
         dept.debt_last_month != null ? dept.debt_last_month : 0;
-      let phatsinhthangnay =
-        dept.costs_incurred_this_month != null
-          ? dept.costs_incurred_this_month
-          : 0;
+      let phatsinhthangnay = tienkinh + tienvtth;
       dathanhtoan = dathanhtoan;
       tienkinh = tienkinh;
       let tienvtth = dept.vtth_money != null ? dept.vtth_money : 0;
@@ -65,11 +62,7 @@ router.get(
         tien_kinh: String(tienkinh),
         tien_vtth: String(tienvtth),
         tien_phai_thanh_toan: String(
-          tienkinh +
-            tienvtth +
-            congnothangtruoc +
-            phatsinhthangnay -
-            dathanhtoan
+          congnothangtruoc + phatsinhthangnay - dathanhtoan
         ),
       };
 
