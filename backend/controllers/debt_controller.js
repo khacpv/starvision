@@ -48,12 +48,13 @@ router.get(
     });
 
     if (dept) {
+      let tienvtth = dept.vtth_money != null ? dept.vtth_money : 0;
+
       let congnothangtruoc =
         dept.debt_last_month != null ? dept.debt_last_month : 0;
       let phatsinhthangnay = tienkinh + tienvtth;
       dathanhtoan = dathanhtoan;
       tienkinh = tienkinh;
-      let tienvtth = dept.vtth_money != null ? dept.vtth_money : 0;
 
       dept = {
         cong_no_thang_truoc: String(congnothangtruoc),
