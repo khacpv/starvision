@@ -58,14 +58,31 @@ router.post("/token", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  let result = await Notifications.findAll({
-    attributes: ["id", "title", "content", "send_at", "is_read"],
-    order: [["send_at", "DESC"]],
-    limit: 50,
-    where: {
-      receiver_id: req.user.id,
-    },
-  });
+  let limit = req.query.limit;
+  let offset = req.query.offset;
+
+  let result;
+  if (limit && offset) {
+    result = await Notifications.findAll({
+      where: {
+        receiver_id: req.user.id,
+      },
+      attributes: ["id", "title", "content", "send_at", "is_read"],
+      order: [["send_at", "DESC"]],
+      limit: Number(limit),
+      offset: Number(offset),
+    });
+  } else {
+    result = await Notifications.findAll({
+      attributes: ["id", "title", "content", "send_at", "is_read"],
+      order: [["send_at", "DESC"]],
+      limit: 50,
+      where: {
+        receiver_id: req.user.id,
+      },
+    });
+  }
+
   if (result) {
     return res.send({
       status: "success",
@@ -183,11 +200,7 @@ router.post("/", async (req, res) => {
             receiver_id: String(customerId),
           },
         };
-        if (device_type == "ios") {
-          notice = await sendNotificationToDeviceIOS(data, token.token);
-        } else {
-          notice = await sendNotificationToDeviceAndroid(data, token.token);
-        }
+        notice = await sendNotificationToDevice(data, token.token);
       } else {
         return res.send({
           status: "error",
@@ -285,6 +298,47 @@ function sendNotificationToDeviceAndroid(data, token) {
   var message = {
     notification: data.notification,
     data: data.user,
+    android: {
+      ttl: 3600 * 1000,
+      notification: {
+        icon: "stock_ticker_update",
+        color: "#f45342",
+      },
+    },
+    token: token,
+  };
+  admin
+    .messaging()
+    .send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log("android");
+      console.log(response);
+      return response;
+    })
+    .catch((error) => {
+      //return error
+    });
+}
+
+function sendNotificationToDevice(data, token) {
+  let ios = {
+    headers: {
+      "apns-priority": "10", //mức độ ưu tiên khi push notification
+      "apns-expiration": "360000", // hết hạn trong 1h
+    },
+    payload: {
+      aps: {
+        badge: 1,
+        sound: "default",
+      },
+    },
+  };
+
+  var message = {
+    notification: data.notification,
+    data: data.user,
+    apns: ios,
     android: {
       ttl: 3600 * 1000,
       notification: {
