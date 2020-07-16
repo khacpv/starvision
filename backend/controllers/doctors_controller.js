@@ -12,7 +12,6 @@ const { Op } = Sequelize;
 
 router.get("/search", async (req, res) => {
   let doctorName = req.query.doctor_name;
-  console.log(doctorName);
   
   let result = await Doctors.findAll({
     where:{
