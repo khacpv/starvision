@@ -16,7 +16,8 @@ const passport = require("passport");
 router.get(
   "/",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  passport.authenticate("jwt", { session: false }),async (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     let doctorName = req.query.tenbacsi;
 
     let errors = validationResult(req);
@@ -74,8 +75,9 @@ router.get(
 router.get(
   "/search",
   [check("d_name", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  
-  passport.authenticate("jwt", { session: false }),async (req, res) => {
+
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     const doctorName = req.query.d_name;
     let customerName = req.query.c_name;
     let from = req.query.from;
@@ -156,7 +158,8 @@ router.get(
 router.get(
   "/history",
   [check("d_name", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  passport.authenticate("jwt", { session: false }),async (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     const doctorName = req.query.d_name;
     let customerName = req.query.c_name;
     let from = req.query.from;
@@ -240,7 +243,8 @@ router.post(
     check("iddttc", "IDDTTC không được bỏ trống.").not().isEmpty(),
     check("birthday", "Ngày sinh không được bỏ trống.").not().isEmpty(),
   ],
-  passport.authenticate("jwt", { session: false }),async (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     let data = req.body;
     let errors = validationResult(req);
     let count = (await Customer.count({})) + 1;
@@ -319,20 +323,19 @@ router.post(
     });
 
     if (user) {
-
       let doctor = await Doctor.findOne({
         user_id: user.id,
-        phone: phone
+        phone: phone,
       });
 
-      if (doctor){
+      if (doctor) {
         let user_request = await UserRequest.create({
           user_id: user.id,
           username: user.username,
           type: CONSTANT.UserRequest.FORGOT_PASSWORD,
           note: `Password: ${doctor.password}`,
         });
-      }else{
+      } else {
         res.send({
           status: "error",
           message: "Sai thông tin số điện thoại.",
@@ -358,7 +361,8 @@ router.post(
 router.get(
   "/not_customok",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  passport.authenticate("jwt", { session: false }),async (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -425,7 +429,10 @@ router.get(
 router.get(
   "/not_fitting",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  passport.authenticate("jwt", { session: false }),async (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    let from = req.query.from;
+    let to = req.query.to;
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -436,6 +443,8 @@ router.get(
     }
 
     let fitting = await Fitting.findAll({
+      offset: Number(from - 1),
+      limit: Number(to) - Number(from) + 1,
       include: [
         {
           model: Customer,
@@ -496,7 +505,10 @@ router.get(
 router.get(
   "/fitting",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  passport.authenticate("jwt", { session: false }),async (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    let from = req.query.from;
+    let to = req.query.to;
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -524,6 +536,8 @@ router.get(
     let fittingIdOkArr = Array.from(fittingIdOk);
 
     let customer = await Customer.findAll({
+      offset: Number(from - 1),
+      limit: Number(to) - Number(from) + 1,
       where: {
         doctor_name: req.query.tenbacsi,
         customer_name: {
@@ -562,7 +576,10 @@ router.get(
 router.get(
   "/not_customok_soft",
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-  passport.authenticate("jwt", { session: false }),async (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    let from = req.query.from;
+    let to = req.query.to;
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -593,6 +610,8 @@ router.get(
     let customerIdOkArr = Array.from(customerIdOk);
 
     let customer = await Customer.findAll({
+      offset: Number(from - 1),
+      limit: Number(to) - Number(from) + 1,
       where: {
         doctor_name: req.query.tenbacsi,
         id: {
