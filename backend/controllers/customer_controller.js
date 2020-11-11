@@ -101,8 +101,8 @@ router.get(
     let customer = {};
     if (from && to) {
       customer = await Customer.findAll({
-        offset: Number(from - 1),
-        limit: Number(to) - Number(from) + 1,
+        ...(from && { offset: Number(from - 1) }),
+        ...(from && to && { limit: Number(to) - Number(from) + 1 }),
         where: {
           [Op.and]: [
             {
@@ -183,8 +183,8 @@ router.get(
     let customer = {};
     if (from && to) {
       customer = await Customer.findAll({
-        offset: Number(from - 1),
-        limit: Number(to) - Number(from) + 1,
+        ...(from && { offset: Number(from - 1) }),
+        ...(from && to && { limit: Number(to) - Number(from) + 1 }),
         where: {
           [Op.and]: [
             {
@@ -441,10 +441,9 @@ router.get(
         data: "",
       });
     }
-
     let fitting = await Fitting.findAll({
-      offset: Number(from - 1),
-      limit: Number(to) - Number(from) + 1,
+      ...(from && { offset: Number(from - 1) }),
+      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
       include: [
         {
           model: Customer,
@@ -536,8 +535,8 @@ router.get(
     let fittingIdOkArr = Array.from(fittingIdOk);
 
     let customer = await Customer.findAll({
-      offset: Number(from - 1),
-      limit: Number(to) - Number(from) + 1,
+      ...(from && { offset: Number(from - 1) }),
+      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
       where: {
         doctor_name: req.query.tenbacsi,
         customer_name: {
@@ -610,8 +609,8 @@ router.get(
     let customerIdOkArr = Array.from(customerIdOk);
 
     let customer = await Customer.findAll({
-      offset: Number(from - 1),
-      limit: Number(to) - Number(from) + 1,
+      ...(from && { offset: Number(from - 1) }),
+      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
       where: {
         doctor_name: req.query.tenbacsi,
         id: {
