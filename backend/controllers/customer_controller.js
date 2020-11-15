@@ -19,7 +19,8 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     let doctorName = req.query.tenbacsi;
-
+    let from = req.query.from;
+    let to = req.query.to;
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -31,6 +32,8 @@ router.get(
 
     let customer = {};
     customer = await Customer.findAll({
+      ...(from && { offset: Number(from - 1) }),
+      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
       where: {
         [Op.and]: [
           {
@@ -363,6 +366,8 @@ router.get(
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    let from = req.query.from;
+    let to = req.query.to;
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({
@@ -392,6 +397,8 @@ router.get(
     let customerIdOkArr = Array.from(customerIdOk);
 
     let customer = await Customer.findAll({
+      ...(from && { offset: Number(from - 1) }),
+      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
       where: {
         doctor_name: req.query.tenbacsi,
         id: {
@@ -461,6 +468,8 @@ router.get(
     let fittingIdOkArr = Array.from(fittingIdOk);
 
     let customer = await Customer.findAll({
+      ...(from && { offset: Number(from - 1) }),
+      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
       where: {
         doctor_name: req.query.tenbacsi,
         id: {
