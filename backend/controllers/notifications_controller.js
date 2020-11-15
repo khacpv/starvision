@@ -58,19 +58,19 @@ router.post("/token", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  let limit = req.query.limit;
-  let offset = req.query.offset;
+  let from = req.query.from;
+  let to = req.query.to;
 
   let result;
-  if (limit && offset) {
+  if (from && to) {
     result = await Notifications.findAll({
       where: {
         receiver_id: req.user.id,
       },
       attributes: ["id", "title", "content", "send_at", "is_read"],
       order: [["send_at", "DESC"]],
-      limit: Number(limit),
-      offset: Number(offset),
+      offset: Number(from - 1),
+      limit: Number(to) - Number(from) + 1,
     });
   } else {
     result = await Notifications.findAll({
