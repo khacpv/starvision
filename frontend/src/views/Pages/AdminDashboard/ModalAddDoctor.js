@@ -104,12 +104,13 @@ class ModalAddDoctor extends Component {
     }
 
     render() {
+        const headerLabel = !this.state.username ? 'Thêm bác sĩ' : 'Thông tin bác sĩ';
         return (
             <Modal isOpen={this.props.isOpen} toggle={() => {}}>
                 <ModalHeader toggle={() => {
                     this.resetData();
                     this.props.closeModal()
-                }}>Thêm bác sĩ</ModalHeader>
+                }}>{headerLabel}</ModalHeader>
                 <ModalBody>
                     <Form>
                         <FormGroup>
