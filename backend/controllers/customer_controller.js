@@ -535,23 +535,26 @@ router.get(
       ],
     });
 
-    const fittingIdOk = new Set();
+    let fittingIdOk = new Set();
+
     fitting.forEach((element) => {
       if (element.customer) {
         fittingIdOk.add(element.customer.id);
       }
     });
-    let fittingIdOkArr = Array.from(fittingIdOk);
 
+    let fittingIdOkArr = Array.from(fittingIdOk);
     let customer = await Customer.findAll({
       ...(from && { offset: Number(from - 1) }),
       ...(from && to && { limit: Number(to) - Number(from) + 1 }),
       where: {
-        doctor_name: req.query.tenbacsi,
+        // doctor_name: `%${req.query.tenbacsi}%`,
         customer_name: {
           [Op.like]: `%${req.query.tenkhachhang}%`,
         },
-        id: fittingIdOkArr,
+        id: {
+          [Op.in]: fittingIdOkArr
+        }
       },
     });
     if (customer) {
