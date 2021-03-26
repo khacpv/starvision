@@ -23,18 +23,67 @@ router.get(
       });
     }
 
-    let dathanhtoan = 0;
-    let tienkinh = 0;
+    let totalPaid = 0;
+    let totalGlassMoney = 0;
+    let debtLastMonth = 0;
+    let debtThisMonth = 0;
+
+    const date = new Date();
+    const firstDayThisMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const lastDayThisMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    );
+
+    const firstDayLastMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() - 1,
+      1
+    );
+    const lastDayLastMonth = new Date(date.getFullYear(), date.getMonth(), 0);
+
     let orderLense = await OrderLense.findAll({
       where: {
         customer_id: doctorId,
       },
+      include: [
+        {
+          model: Lense,
+          as: "left",
+        },
+        {
+          model: Lense,
+          as: "right",
+        },
+      ],
     });
     orderLense.forEach((odl) => {
-      let amount = odl.amount ? odl.amount : 1;
-      let glass_money = odl.glass_money ? odl.glass_money : 0;
-      tienkinh += glass_money * amount;
-      dathanhtoan += odl.paid;
+      const leftAmount = odl.left ? odl.left.amount : 1;
+      const rightAmount = odl.right ? odl.right.amount : 1;
+
+      const leftGlassMoney = odl.left ? odl.left.glass_money : 0;
+      const rightGlassMoney = odl.right ? odl.right.glass_money : 0;
+
+      totalGlassMoney +=
+        leftAmount * leftGlassMoney + rightAmount * rightGlassMoney;
+      const leftPaid = odl.left ? odl.left.paid : 0;
+      const rightPaid = odl.right ? odl.right.paid : 0;
+
+      totalPaid += leftPaid + rightPaid;
+
+      if (odl.createdAt <= lastDayLastMonth) {
+        debtLastMonth +=
+          leftAmount * leftGlassMoney +
+          rightAmount * rightGlassMoney -
+          (leftPaid + rightPaid);
+      }
+      if (odl.createdAt >= firstDayThisMonth && odl.createdAt < new Date()) {
+        debtThisMonth +=
+          leftAmount * leftGlassMoney +
+          rightAmount * rightGlassMoney -
+          (leftPaid + rightPaid);
+      }
     });
 
     let dept = {};
@@ -48,22 +97,20 @@ router.get(
     });
 
     if (dept) {
-      let tienvtth = dept.vtth_money != null ? dept.vtth_money : 0;
+      let vtthMoney = dept.vtth_money != null ? dept.vtth_money : 0;
 
-      let congnothangtruoc =
-        dept.debt_last_month != null ? dept.debt_last_month : 0;
-      let phatsinhthangnay = tienkinh + tienvtth;
-      dathanhtoan = dathanhtoan;
-      tienkinh = tienkinh;
+      // let congnothangtruoc =
+      //   dept.debt_last_month != null ? dept.debt_last_month : 0;
+      // let phatsinhthangnay = tienkinh + tienvtth;
 
       dept = {
-        cong_no_thang_truoc: String(congnothangtruoc),
-        phat_sinh_thang_nay: String(phatsinhthangnay),
-        da_thanh_toan: String(dathanhtoan),
-        tien_kinh: String(tienkinh),
-        tien_vtth: String(tienvtth),
+        cong_no_thang_truoc: String(debtLastMonth),
+        phat_sinh_thang_nay: String(debtThisMonth + vtthMoney),
+        da_thanh_toan: String(totalPaid),
+        tien_kinh: String(totalGlassMoney),
+        tien_vtth: String(vtthMoney),
         tien_phai_thanh_toan: String(
-          congnothangtruoc + phatsinhthangnay - dathanhtoan
+          debtLastMonth + debtThisMonth + vtthMoney - totalPaid
         ),
       };
 

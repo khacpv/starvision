@@ -52,6 +52,7 @@ router.get("/", async (req, res) => {
               note_order_lens: element.right.note,
               price: element.right.price,
               paid: element.right.paid,
+              is_paid: element.right.is_paid,
               glass_money: element.right.glass_money,
               amount: element.right.amount,
               status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
@@ -66,6 +67,7 @@ router.get("/", async (req, res) => {
               note_order_lens: element.left.note,
               price: element.left.price,
               paid: element.right.paid,
+              paid: element.right.is_paid,
               glass_money: element.right.glass_money,
               amount: element.right.amount,
               status: element.left.status == 1 ? "Đã yêu cầu" : "Đã hủy",
@@ -172,7 +174,6 @@ router.post(
       try {
         // get transaction
         transaction = await sequelize.transaction();
-
         let left = await Lense.create({
           lense: lense_L,
           kcode: kcode_L,
@@ -181,7 +182,7 @@ router.post(
           note: req.body.note_order_lens,
           side: "L",
           prefix: req.body.prefixLeft,
-          paid: req.body.paid,
+          is_paid: req.body.is_paid,
           glass_money: req.body.glass_money,
           paid: req.body.paid_L,
           glass_money: req.body.glass_money_L,
@@ -196,6 +197,7 @@ router.post(
           size: side_R,
           note: req.body.note_order_lens,
           side: "R",
+          is_paid: req.body.is_paid,
           prefix: req.body.prefixRight,
           paid: req.body.paid_R,
           glass_money: req.body.glass_money_R,
@@ -351,6 +353,7 @@ router.put(
             prefix: req.body.prefixLeft,
             date_examination: ngay_tao,
             paid: req.body.paid_L,
+            is_paid: req.body.is_paid,
             glass_money: req.body.glass_money_L,
             amount: req.body.amount_L ? req.body.amount_L : 1,
             price: req.body.price_L,
@@ -371,6 +374,7 @@ router.put(
             note: req.body.note_order_lens,
             prefix: req.body.prefixRight,
             paid: req.body.paid_R,
+            is_paid: req.body.is_paid,
             glass_money: req.body.glass_money_R,
             amount: req.body.amount_R ? req.body.amount_R : 1,
             price: req.body.price_R,
@@ -386,6 +390,7 @@ router.put(
             {
               type: orderLenseType,
               paid: req.body.paid,
+              is_paid: req.body.is_paid,
               glass_money: req.body.glass_money,
               amount: req.body.amount,
             },

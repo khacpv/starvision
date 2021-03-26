@@ -78,7 +78,6 @@ router.get(
 router.get(
   "/search",
   [check("d_name", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
-
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const doctorName = req.query.d_name;
@@ -366,6 +365,7 @@ router.get(
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    const doctorName = req.query.tenbacsi;
     let from = req.query.from;
     let to = req.query.to;
     let errors = validationResult(req);
@@ -377,41 +377,48 @@ router.get(
       });
     }
 
-    let customerCheck = await CustomerCheck.findAll({
-      where: {
-        type: CONSTANT.CustomerOk.GOV,
-      },
-      include: [
-        {
-          model: Customer,
-          as: "customer",
+    if (Number(from) > Number(to)) {
+      res.send({
+        status: "error",
+        message: "Lỗi phân trang.",
+        data: "",
+      });
+    }
+    let customer = {};
+    if (from && to) {
+      customer = await Customer.findAll({
+        ...(from && { offset: Number(from - 1) }),
+        ...(from && to && { limit: Number(to) - Number(from) + 1 }),
+        where: {
+          [Op.and]: [
+            {
+              doctor_name: {
+                [Op.like]: `%${doctorName}%`,
+              },
+            },
+          ],
         },
-      ],
-    });
-    const customerIdOk = new Set();
-    customerCheck.forEach((element) => {
-      if (element.customer) {
-        customerIdOk.add(element.customer.id);
-      }
-    });
-    let customerIdOkArr = Array.from(customerIdOk);
+      });
+    } else {
+      customer = await Customer.findAll({
+        where: {
+          [Op.and]: [
+            {
+              doctor_name: {
+                [Op.like]: `%${doctorName}%`,
+              },
+            },
+          ],
+        },
+      });
+    }
 
-    let customer = await Customer.findAll({
-      ...(from && { offset: Number(from - 1) }),
-      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
-      where: {
-        doctor_name: req.query.tenbacsi,
-        id: {
-          [Op.notIn]: customerIdOkArr,
-        },
-      },
-    });
-    if (customer || customerCheck) {
+    if (customer) {
       let returnCustomer = [];
       customer.forEach((element) => {
         returnCustomer.push({
           ID_KHACHHANG: element.id,
-          NAMSINH: element.birthday,
+          NAMSINH: element.birthday != null ? element.birthday : "",
           TENKHACHHANG: element.customer_name,
           DIDONG: element.mobile,
           GIOITINH: element.gender,
@@ -419,12 +426,71 @@ router.get(
         });
       });
 
-      return res.send({
+      res.send({
         status: "success",
         message: "",
         data: returnCustomer,
       });
     }
+    // let from = req.query.from;
+    // let to = req.query.to;
+    // let errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.send({
+    //     status: "error",
+    //     message: errors.array()[0].msg,
+    //     data: "",
+    //   });
+    // }
+
+    // let customerCheck = await CustomerCheck.findAll({
+    //   where: {
+    //     type: CONSTANT.CustomerOk.GOV,
+    //   },
+    //   include: [
+    //     {
+    //       model: Customer,
+    //       as: "customer",
+    //     },
+    //   ],
+    // });
+    // const customerIdOk = new Set();
+    // customerCheck.forEach((element) => {
+    //   if (element.customer) {
+    //     customerIdOk.add(element.customer.id);
+    //   }
+    // });
+    // let customerIdOkArr = Array.from(customerIdOk);
+
+    // let customer = await Customer.findAll({
+    //   ...(from && { offset: Number(from - 1) }),
+    //   ...(from && to && { limit: Number(to) - Number(from) + 1 }),
+    //   where: {
+    //     doctor_name: req.query.tenbacsi,
+    //     id: {
+    //       [Op.notIn]: customerIdOkArr,
+    //     },
+    //   },
+    // });
+    // if (customer || customerCheck) {
+    //   let returnCustomer = [];
+    //   customer.forEach((element) => {
+    //     returnCustomer.push({
+    //       ID_KHACHHANG: element.id,
+    //       NAMSINH: element.birthday,
+    //       TENKHACHHANG: element.customer_name,
+    //       DIDONG: element.mobile,
+    //       GIOITINH: element.gender,
+    //       DIACHI: element.address,
+    //     });
+    //   });
+
+    //   return res.send({
+    //     status: "success",
+    //     message: "",
+    //     data: returnCustomer,
+    //   });
+    // }
     return res.send({
       status: "error",
       message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
@@ -438,6 +504,7 @@ router.get(
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    const doctorName = req.query.tenbacsi;
     let from = req.query.from;
     let to = req.query.to;
     let errors = validationResult(req);
@@ -448,35 +515,43 @@ router.get(
         data: "",
       });
     }
-    let fitting = await Fitting.findAll({
-      ...(from && { offset: Number(from - 1) }),
-      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
-      include: [
-        {
-          model: Customer,
-          as: "customer",
-        },
-      ],
-    });
 
-    const fittingIdOk = new Set();
-    fitting.forEach((element) => {
-      if (element.customer) {
-        fittingIdOk.add(element.customer.id);
-      }
-    });
-    let fittingIdOkArr = Array.from(fittingIdOk);
-
-    let customer = await Customer.findAll({
-      ...(from && { offset: Number(from - 1) }),
-      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
-      where: {
-        doctor_name: req.query.tenbacsi,
-        id: {
-          [Op.notIn]: fittingIdOkArr,
+    if (Number(from) > Number(to)) {
+      res.send({
+        status: "error",
+        message: "Lỗi phân trang.",
+        data: "",
+      });
+    }
+    let customer = {};
+    if (from && to) {
+      customer = await Customer.findAll({
+        ...(from && { offset: Number(from - 1) }),
+        ...(from && to && { limit: Number(to) - Number(from) + 1 }),
+        where: {
+          [Op.and]: [
+            {
+              doctor_name: {
+                [Op.like]: `%${doctorName}%`,
+              },
+            },
+          ],
         },
-      },
-    });
+      });
+    } else {
+      customer = await Customer.findAll({
+        where: {
+          [Op.and]: [
+            {
+              doctor_name: {
+                [Op.like]: `%${doctorName}%`,
+              },
+            },
+          ],
+        },
+      });
+    }
+
     if (customer) {
       let returnCustomer = [];
       customer.forEach((element) => {
@@ -490,18 +565,76 @@ router.get(
         });
       });
 
-      return res.send({
+      res.send({
         status: "success",
         message: "",
         data: returnCustomer,
       });
-    } else {
-      return res.send({
-        status: "success",
-        message: "",
-        data: [],
-      });
     }
+    // let from = req.query.from;
+    // let to = req.query.to;
+    // let errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.send({
+    //     status: "error",
+    //     message: errors.array()[0].msg,
+    //     data: "",
+    //   });
+    // }
+    // let fitting = await Fitting.findAll({
+    //   ...(from && { offset: Number(from - 1) }),
+    //   ...(from && to && { limit: Number(to) - Number(from) + 1 }),
+    //   include: [
+    //     {
+    //       model: Customer,
+    //       as: "customer",
+    //     },
+    //   ],
+    // });
+
+    // const fittingIdOk = new Set();
+    // fitting.forEach((element) => {
+    //   if (element.customer) {
+    //     fittingIdOk.add(element.customer.id);
+    //   }
+    // });
+    // let fittingIdOkArr = Array.from(fittingIdOk);
+
+    // let customer = await Customer.findAll({
+    //   ...(from && { offset: Number(from - 1) }),
+    //   ...(from && to && { limit: Number(to) - Number(from) + 1 }),
+    //   where: {
+    //     doctor_name: req.query.tenbacsi,
+    //     id: {
+    //       [Op.notIn]: fittingIdOkArr,
+    //     },
+    //   },
+    // });
+    // if (customer) {
+    //   let returnCustomer = [];
+    //   customer.forEach((element) => {
+    //     returnCustomer.push({
+    //       ID_KHACHHANG: element.id,
+    //       NAMSINH: element.birthday != null ? element.birthday : "",
+    //       TENKHACHHANG: element.customer_name,
+    //       DIDONG: element.mobile,
+    //       GIOITINH: element.gender,
+    //       DIACHI: element.address,
+    //     });
+    //   });
+
+    //   return res.send({
+    //     status: "success",
+    //     message: "",
+    //     data: returnCustomer,
+    //   });
+    // } else {
+    //   return res.send({
+    //     status: "success",
+    //     message: "",
+    //     data: [],
+    //   });
+    // }
     return res.send({
       status: "error",
       message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
@@ -515,6 +648,8 @@ router.get(
   [check("tenbacsi", "Chưa điền thông tin tên bác sĩ.").not().isEmpty()],
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    const doctorName = req.query.tenbacsi;
+    const customerName = req.query.tenkhachhang;
     let from = req.query.from;
     let to = req.query.to;
     let errors = validationResult(req);
@@ -526,37 +661,48 @@ router.get(
       });
     }
 
-    let fitting = await Fitting.findAll({
-      include: [
-        {
-          model: Customer,
-          as: "customer",
+    if (Number(from) > Number(to)) {
+      res.send({
+        status: "error",
+        message: "Lỗi phân trang.",
+        data: "",
+      });
+    }
+    let customer = {};
+    if (from && to) {
+      customer = await Customer.findAll({
+        ...(from && { offset: Number(from - 1) }),
+        ...(from && to && { limit: Number(to) - Number(from) + 1 }),
+        where: {
+          [Op.and]: [
+            {
+              doctor_name: {
+                [Op.like]: `%${doctorName}%`,
+              },
+              customer_name: {
+                [Op.like]: `%${customerName}%`,
+              },
+            },
+          ],
         },
-      ],
-    });
-
-    let fittingIdOk = new Set();
-
-    fitting.forEach((element) => {
-      if (element.customer) {
-        fittingIdOk.add(element.customer.id);
-      }
-    });
-
-    let fittingIdOkArr = Array.from(fittingIdOk);
-    let customer = await Customer.findAll({
-      ...(from && { offset: Number(from - 1) }),
-      ...(from && to && { limit: Number(to) - Number(from) + 1 }),
-      where: {
-        // doctor_name: `%${req.query.tenbacsi}%`,
-        customer_name: {
-          [Op.like]: `%${req.query.tenkhachhang}%`,
+      });
+    } else {
+      customer = await Customer.findAll({
+        where: {
+          [Op.and]: [
+            {
+              doctor_name: {
+                [Op.like]: `%${doctorName}%`,
+              },
+              customer_name: {
+                [Op.like]: `%${customerName}%`,
+              },
+            },
+          ],
         },
-        id: {
-          [Op.in]: fittingIdOkArr
-        }
-      },
-    });
+      });
+    }
+
     if (customer) {
       let returnCustomer = [];
       customer.forEach((element) => {
@@ -576,6 +722,67 @@ router.get(
         data: returnCustomer,
       });
     }
+    // let from = req.query.from;
+    // let to = req.query.to;
+    // let errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.send({
+    //     status: "error",
+    //     message: errors.array()[0].msg,
+    //     data: "",
+    //   });
+    // }
+
+    // let fitting = await Fitting.findAll({
+    //   include: [
+    //     {
+    //       model: Customer,
+    //       as: "customer",
+    //     },
+    //   ],
+    // });
+
+    // let fittingIdOk = new Set();
+
+    // fitting.forEach((element) => {
+    //   if (element.customer) {
+    //     fittingIdOk.add(element.customer.id);
+    //   }
+    // });
+
+    // let fittingIdOkArr = Array.from(fittingIdOk);
+    // let customer = await Customer.findAll({
+    //   ...(from && { offset: Number(from - 1) }),
+    //   ...(from && to && { limit: Number(to) - Number(from) + 1 }),
+    //   where: {
+    //     // doctor_name: `%${req.query.tenbacsi}%`,
+    //     customer_name: {
+    //       [Op.like]: `%${req.query.tenkhachhang}%`,
+    //     },
+    //     id: {
+    //       [Op.in]: fittingIdOkArr,
+    //     },
+    //   },
+    // });
+    // if (customer) {
+    //   let returnCustomer = [];
+    //   customer.forEach((element) => {
+    //     returnCustomer.push({
+    //       ID_KHACHHANG: element.id,
+    //       NAMSINH: element.birthday != null ? element.birthday : "",
+    //       TENKHACHHANG: element.customer_name,
+    //       DIDONG: element.mobile,
+    //       GIOITINH: element.gender,
+    //       DIACHI: element.address,
+    //     });
+    //   });
+
+    //   return res.send({
+    //     status: "success",
+    //     message: "",
+    //     data: returnCustomer,
+    //   });
+    // }
     return res.send({
       status: "error",
       message: "Có lỗi xảy ra. Vui lòng liên hệ với chúng tôi để được hỗ trợ!",
