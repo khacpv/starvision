@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     prefix: DataTypes.STRING,
     paid: DataTypes.DOUBLE,
+    is_paid: DataTypes.BOOLEAN,
     glass_money: DataTypes.DOUBLE,
     amount: DataTypes.DOUBLE
   }, {});
