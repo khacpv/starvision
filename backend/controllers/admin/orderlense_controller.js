@@ -36,9 +36,10 @@ router.get("/", async (req, res) => {
                 },
               },
             ],
+
           },
           attributes: ["name"],
-          required: false,
+          required: true,
         },
         {
           model: Lense,
@@ -51,7 +52,6 @@ router.get("/", async (req, res) => {
       ],
       order: [["date_examination", "DESC"]],
     });
-    console.log(result);
     if (result) {
       let returnData = [];
       result.forEach((element) => {
