@@ -44,7 +44,7 @@ class Summary extends Component {
                     <h2>{moment(new Date()).format('DD/MM/YYYY')}</h2>
                 </Row>
                 <Row>
-                    <h3 style={{color: 'red'}}>Công nợ tháng trước: {data.cong_no_thang_truoc} vnđ</h3>
+                    <h3 style={{color: 'red'}}>Công nợ: {data.cong_no_thang_truoc} vnđ</h3>
                 </Row>
                 <Row>
                     <h3 style={{color: 'blue'}}>Phát sinh tháng nay: {data.phat_sinh_thang_nay} vnđ (Tiền kính: {data.tien_kinh}, Tiền VTTH: {data.tien_vtth})</h3>
