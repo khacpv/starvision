@@ -4,6 +4,7 @@ const models = require("../../models/index");
 const OrderLense = models.OrderLense;
 const Lense = models.Lense;
 const Customer = models.Customer;
+const Doctors = models.Doctors;
 const { check, validationResult } = require("express-validator");
 const sequelize = require("../../config/db").sequelize;
 const Op = require("../../config/db").Sequelize.Op;
@@ -13,14 +14,33 @@ const LensePrice = models.LensePrice;
 router.get("/", async (req, res) => {
   if (req.user.role == "admin") {
     let total = await OrderLense.count({});
-
+    const startDate = req.body.RangDate ? new Date(req.body.RangDate[0]) : null;
+    const endDate = req.body.RangDate ? new Date(req.body.RangDate[1]) : null;
+    const name = req.body.doctorName ? req.body.doctorName : "";
     let result = await OrderLense.findAll({
-      // where: {
-      //   is_active: 1,
-      // },
+      where: {
+        ...(startDate &&
+          endDate && { createdAt: { [Op.between]: [startDate, endDate] } }),
+      },
       limit: Number(req.query.limit),
       offset: Number(req.query.offset),
       include: [
+        {
+          model: Doctors,
+          as: "customer",
+          where: {
+            [Op.and]: [
+              {
+                name: {
+                  [Op.like]: `%${name}%`,
+                },
+              },
+            ],
+
+          },
+          attributes: ["name"],
+          required: true,
+        },
         {
           model: Lense,
           as: "left",
@@ -32,7 +52,6 @@ router.get("/", async (req, res) => {
       ],
       order: [["date_examination", "DESC"]],
     });
-
     if (result) {
       let returnData = [];
       result.forEach((element) => {
@@ -43,6 +62,7 @@ router.get("/", async (req, res) => {
             Ngay: element.date_examination,
             So_Don_Hang: element.order_number,
             type: element.type,
+            customer: element.customer,
             R: {
               id_order: element.right.id,
               od_lense: element.right.lense,
