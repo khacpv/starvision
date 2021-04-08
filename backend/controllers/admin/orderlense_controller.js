@@ -13,17 +13,18 @@ const LensePrice = models.LensePrice;
 
 router.get("/", async (req, res) => {
   if (req.user.role == "admin") {
-    let total = await OrderLense.count({});
-    const startDate = req.body.RangDate ? new Date(req.body.RangDate[0]) : null;
-    const endDate = req.body.RangDate ? new Date(req.body.RangDate[1]) : null;
-    const name = req.body.doctorName ? req.body.doctorName : "";
+    const startDate = req.query.RangDate
+      ? new Date(req.query.RangDate[0])
+      : null;
+    const endDate = req.query.RangDate ? new Date(req.query.RangDate[1]) : null;
+    const name = req.query.doctorName ? req.query.doctorName : "";
     let result = await OrderLense.findAll({
       where: {
         ...(startDate &&
           endDate && { createdAt: { [Op.between]: [startDate, endDate] } }),
       },
-      limit: Number(req.query.limit),
-      offset: Number(req.query.offset),
+      ...(req.query.limit && { limit: Number(req.query.limit) }),
+      ...(req.query.offset && { offset: Number(req.query.offset) }),
       include: [
         {
           model: Doctors,
@@ -36,7 +37,6 @@ router.get("/", async (req, res) => {
                 },
               },
             ],
-
           },
           attributes: ["name"],
           required: true,
@@ -52,16 +52,53 @@ router.get("/", async (req, res) => {
       ],
       order: [["date_examination", "DESC"]],
     });
+    let total = await OrderLense.count({
+      include: [
+        {
+          model: Doctors,
+          as: "customer",
+          where: {
+            [Op.and]: [
+              {
+                name: {
+                  [Op.like]: `%${name}%`,
+                },
+              },
+            ],
+          },
+          attributes: ["name"],
+          required: true,
+        },
+        {
+          model: Lense,
+          as: "left",
+        },
+        {
+          model: Lense,
+          as: "right",
+        },
+      ],
+    });
     if (result) {
       let returnData = [];
       result.forEach((element) => {
         if (element.right && element.left) {
+          const rightGlassMoney = element.right.glass_money
+            ? element.right.glass_money
+            : 0;
+          const leftGlassMoney = element.left.glass_money
+            ? element.left.glass_money
+            : 0;
+          const rightAmount = element.left.amount ? element.left.amount : 1;
+          const leftAmount = element.left.amount ? element.left.amount : 1;
           returnData.push({
             id: element.id,
             is_active: element.is_active,
             Ngay: element.date_examination,
             So_Don_Hang: element.order_number,
             type: element.type,
+            order_value:
+              rightGlassMoney * rightAmount + leftAmount * leftGlassMoney,
             customer: element.customer,
             R: {
               id_order: element.right.id,
@@ -75,7 +112,7 @@ router.get("/", async (req, res) => {
               is_paid: element.right.is_paid,
               glass_money: element.right.glass_money,
               amount: element.right.amount,
-              status: element.right.status == 1 ? "Đã yêu cầu" : "Đã hủy",
+              status: element.right.status == 0 ? "Đã hủy" : "Đã yêu cầu",
               prefix: element.prefix,
             },
             L: {
@@ -90,7 +127,7 @@ router.get("/", async (req, res) => {
               paid: element.right.is_paid,
               glass_money: element.right.glass_money,
               amount: element.right.amount,
-              status: element.left.status == 1 ? "Đã yêu cầu" : "Đã hủy",
+              status: element.left.status == 0 ? "Đã hủy" : "Đã yêu cầu",
               prefix: element.prefix,
             },
           });
