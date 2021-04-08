@@ -13,10 +13,10 @@ const LensePrice = models.LensePrice;
 
 router.get("/", async (req, res) => {
   if (req.user.role == "admin") {
-    const startDate = req.query.RangDate
-      ? new Date(req.query.RangDate[0])
+    const startDate = req.query.startDate
+      ? new Date(req.query.startDate)
       : null;
-    const endDate = req.query.RangDate ? new Date(req.query.RangDate[1]) : null;
+    const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
     const name = req.query.doctorName ? req.query.doctorName : "";
     let result = await OrderLense.findAll({
       where: {
