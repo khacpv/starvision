@@ -112,7 +112,8 @@ router.get("/", async (req, res) => {
               is_paid: element.right.is_paid,
               glass_money: element.right.glass_money,
               amount: element.right.amount,
-              status: element.right.status == 0 ? "Đã hủy" : "Đã yêu cầu",
+              // status: element.right.status == 0 ? "Đã hủy" : "Đã yêu cầu",
+              status: element.right.status ? element.right.status : 0,
               prefix: element.prefix,
             },
             L: {
@@ -127,7 +128,8 @@ router.get("/", async (req, res) => {
               paid: element.right.is_paid,
               glass_money: element.right.glass_money,
               amount: element.right.amount,
-              status: element.left.status == 0 ? "Đã hủy" : "Đã yêu cầu",
+              // status: element.left.status == 0 ? "Đã hủy" : "Đã yêu cầu",
+              status: element.left.status ? element.left.status : 0,
               prefix: element.prefix,
             },
           });
@@ -165,8 +167,8 @@ router.get("/:id", async (req, res) => {
     ],
   });
   if (result) {
-    result.left.status = result.left.status == 1 ? "Đã yêu cầu" : "Đã hủy";
-    result.right.status = result.right.status == 1 ? "Đã yêu cầu" : "Đã hủy";
+    result.left.status = result.left.status ? result.left.status : 0;
+    result.right.status = result.right.status ? result.right.status : 0;
     return res.send({ code: 200, msg: "success", items: result });
   }
   return res.send({
