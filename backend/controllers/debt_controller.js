@@ -122,6 +122,12 @@ router.get(
           message: "",
           data: dept,
         });
+      } else {
+        return res.send({
+          status: "error",
+          message: "Không tìm thấy bác sĩ",
+          data: "",
+        });
       }
     } catch (error) {
       return res.send({
