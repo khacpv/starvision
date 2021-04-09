@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
               },
             ],
           },
-          attributes: ["name"],
+          attributes: ["id", "name"],
           required: true,
         },
         {
@@ -66,7 +66,7 @@ router.get("/", async (req, res) => {
               },
             ],
           },
-          attributes: ["name"],
+          attributes: ["id", "name"],
           required: true,
         },
         {
