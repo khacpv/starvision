@@ -242,7 +242,6 @@ router.post(
           side: "L",
           prefix: req.body.prefixLeft,
           is_paid: req.body.is_paid,
-          glass_money: req.body.glass_money,
           paid: req.body.paid_L,
           glass_money: req.body.glass_money_L,
           amount: req.body.amount_L ? req.body.amount_L : 1,
