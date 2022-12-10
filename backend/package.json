@@ -15,7 +15,7 @@
     "cors": "^2.8.5",
     "cron": "^1.8.2",
     "debug": "~2.6.9",
-    "express": "~4.16.1",
+    "express": "~4.17.3",
     "express-validator": "^6.4.0",
     "faker": "^4.1.0",
     "firebase-admin": "^8.12.1",
